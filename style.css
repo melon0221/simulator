@@ -1,0 +1,188 @@
+/* Global Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #F4F6F9;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    width: 90%;
+    max-width: 900px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 50px;
+}
+
+.welcome-container {
+    text-align: center;
+    padding: 20px;
+}
+
+.button-group button {
+    background-color: #1976D2;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    margin: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.button-group button:hover {
+    background-color: #1565C0;
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+p {
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+/* Header Styles */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #003366;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 10;
+    box-sizing: border-box;
+}
+
+.exam-info {
+    font-size: 14px;
+}
+
+.timer {
+    font-size: 14px;
+    text-align: right;
+}
+
+#time-remaining {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* Question Section */
+.question {
+    font-size: 20px;
+    margin-bottom: 20px;
+    line-height: 1.6;
+    word-wrap: break-word;
+}
+
+/* Answer Options */
+.answers {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.answers li {
+    padding: 15px;
+    margin: 10px 0;
+    background-color: #F9FAFB;
+    border: 1px solid #D1D8E3;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.answers li:hover {
+    background-color: #E3F2FD;
+    border-color: #90CAF9;
+}
+
+.answers li.selected {
+    background-color: #1976D2;
+    color: white;
+    border-color: #1565C0;
+}
+
+/* Footer Styles */
+.footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
+.left-buttons, .right-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.footer button {
+    padding: 10px 20px;
+    background-color: #1976D2;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 14px;
+    width: 150px;
+}
+
+.footer button:hover {
+    background-color: #1565C0;
+}
+
+.footer button:disabled {
+    background-color: #B0B8C1;
+    cursor: not-allowed;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .container {
+        width: 100%;
+        padding: 15px;
+    }
+
+    .button-group button {
+        width: 100%;
+    }
+
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .header .timer {
+        margin-top: 10px;
+    }
+
+    .footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .footer button {
+        font-size: 12px;
+        padding: 8px 15px;
+        width: auto;
+    }
+
+    .footer .right-buttons {
+        flex-direction: column;
+    }
+}

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NBME Exam Simulator</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script>
+</head>
+<body>
+
+    <div class="header">
+        <div class="exam-info">
+            <div id="exam-section">Exam Section 1: Item 1 of 50</div>
+        </div>
+        <div class="timer" id="timer">
+            <div>Time Remaining:</div>
+            <div id="time-remaining">5 hr 15 min 00 sec</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="question" id="question-text">Loading question...</div>
+        <ul class="answers" id="answer-options"></ul>
+
+        <div class="footer">
+            <div class="left-buttons">
+                <button id="prev-button" disabled>Previous</button>
+                <button id="next-button">Next</button>
+            </div>
+            <div class="right-buttons">
+                <button id="calculator-button">Calculator</button>
+                <button id="review-button">Review</button>
+                <button id="pause-button">Pause</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentQuestionIndex = 0;
+        let selectedAnswer = null;
+        let questions = [];
+        let timerInterval = null;
+        let questionResults = [];  // To store individual question results
+        let examResults = {};      // To store exam summary
+
+        // Load the questions from JSON based on the selected question bank
+        const urlParams = new URLSearchParams(window.location.search);
+        const questionBank = urlParams.get('bank');
+        if (!questionBank) {
+            alert("No question bank selected! Redirecting to the welcome page.");
+            window.location.href = "index.html";
+        }
+
+        function loadQuestions(questionBank) {
+            fetch(`./questionBanks/${questionBank}.json`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Failed to load: ${questionBank}.json (Status: ${response.status})`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    questions = data;
+                    displayQuestion();
+                })
+                .catch(error => {
+                    console.error('Error loading question bank:', error);
+                    document.getElementById('question-text').textContent = "Error loading questions. Please try again.";
+                });
+        }
+
+        // Update the exam section and question number display
+        const questionTextElement = document.getElementById('question-text');
+        const answerOptionsElement = document.getElementById('answer-options');
+        const prevButton = document.getElementById('prev-button');
+        const nextButton = document.getElementById('next-button');
+        const timerElement = document.getElementById('time-remaining');
+        const examSectionElement = document.getElementById('exam-section');
+
+        function updateExamSection() {
+            examSectionElement.textContent = `Exam Section 1: Item ${currentQuestionIndex + 1} of ${questions.length}`;
+        }
+
+        // Display a question
+        function displayQuestion() {
+            const question = questions[currentQuestionIndex];
+            questionTextElement.textContent = question.question;
+            answerOptionsElement.innerHTML = ''; // Clear previous answers
+
+            question.options.forEach((option, index) => {
+                const li = document.createElement('li');
+                li.textContent = option;
+                li.onclick = () => selectAnswer(index, li);
+                answerOptionsElement.appendChild(li);
+            });
+
+            // Reset selection if there's no answer yet
+            if (selectedAnswer !== null) {
+                const selectedItem = answerOptionsElement.querySelectorAll('li')[selectedAnswer];
+                if (selectedItem) {
+                    selectedItem.classList.add('selected');
+                }
+            }
+
+            // Disable "Previous" button on the first question and "Next" button on the last one
+            prevButton.disabled = currentQuestionIndex === 0;
+            nextButton.disabled = currentQuestionIndex === questions.length - 1;
+            updateExamSection();
+        }
+
+        // Handle answer selection
+        function selectAnswer(index, liElement) {
+            // Deselect previous answer
+            if (selectedAnswer !== null) {
+                const prevItem = answerOptionsElement.querySelectorAll('li')[selectedAnswer];
+                if (prevItem) prevItem.classList.remove('selected');
+            }
+
+            selectedAnswer = index;
+            liElement.classList.add('selected');
+        }
+
+        // Handle Next and Previous buttons
+        function navigate(direction) {
+            // Store answer result
+            storeQuestionResult();
+
+            currentQuestionIndex += direction;
+            if (currentQuestionIndex < 0) currentQuestionIndex = 0;
+            if (currentQuestionIndex >= questions.length) currentQuestionIndex = questions.length - 1;
+            displayQuestion();
+        }
+
+        prevButton.onclick = () => navigate(-1);
+        nextButton.onclick = () => navigate(1);
+
+        // Timer functionality (countdown simulation)
+        let time = 60 * 60 * 5 + 15 * 60; // 5 hours 15 minutes in seconds
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                if (time > 0) {
+                    time--;
+                    const minutes = Math.floor(time / 60);
+                    const seconds = time % 60;
+                    const hours = Math.floor(minutes / 60);
+                    const remainingMinutes = minutes % 60;
+
+                    // Update the timer display in "X hr Y min Z sec" format
+                    timerElement.textContent = `${hours} hr ${remainingMinutes} min ${String(seconds).padStart(2, '0')} sec`;
+                } else {
+                    clearInterval(timerInterval); // Stop the timer after it reaches zero
+                    alert('Time is up!');
+                    saveResults(); // Save results when time is up
+                }
+            }, 1000);
+        }
+
+        // Store individual question results
+        function storeQuestionResult() {
+            const question = questions[currentQuestionIndex];
+            const correctAnswerIndex = question.correct;  // Assume correctAnswerIndex is provided in the JSON
+
+            const result = {
+                questionId: `${questionBank}-B${question.block}-Q${currentQuestionIndex + 1}`,
+                questionText: question.question,
+                userAnswer: selectedAnswer,
+                correctAnswer: correctAnswerIndex,
+                isCorrect: selectedAnswer === correctAnswerIndex
+            };
+
+            questionResults.push(result);
+        }
+
+        // Generate Excel file for question results
+        function saveQuestionResults() {
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.json_to_sheet(questionResults);
+            XLSX.utils.book_append_sheet(wb, ws, "Question Results");
+            XLSX.writeFile(wb, "question_results.xlsx");
+        }
+
+        // Save the overall exam results
+        function saveExamResults() {
+            const correctAnswers = questionResults.filter(result => result.isCorrect).length;
+            const passingRate = (correctAnswers / questionResults.length) * 100;
+            examResults = {
+                dateTime: new Date().toLocaleString(),
+                totalQuestions: questions.length,
+                correctAnswers: correctAnswers,
+                passingRate: passingRate
+            };
+
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.json_to_sheet([examResults]);
+            XLSX.utils.book_append_sheet(wb, ws, "Exam Summary");
+            XLSX.writeFile(wb, "exam_summary.xlsx");
+        }
+
+        // Final function to save results when time is up or when the exam is finished
+        function saveResults() {
+            saveQuestionResults();
+            saveExamResults();
+        }
+
+        // Initialize the exam by loading questions from a selected question bank
+        loadQuestions(questionBank);
+        startTimer(); // Start the countdown timer as soon as questions are loaded
+    </script>
+
+</body>
+</html>
