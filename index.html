@@ -1,32 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NBME Exam Simulator</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>NBME Exam Simulator</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="welcome-container">
-        <h1>Welcome to the NBME Exam Simulator</h1>
-        <p>Please select a Question Bank to begin:</p>
-        <div class="button-group">
-            <button onclick="startExam('25')">Question Bank 25</button>
-            <button onclick="startExam('26')">Question Bank 26</button>
-            <button onclick="startExam('27')">Question Bank 27</button>
-            <button onclick="startExam('28')">Question Bank 28</button>
-            <button onclick="startExam('29')">Question Bank 29</button>
-            <button onclick="startExam('30')">Question Bank 30</button>
-            <button onclick="startExam('31')">Question Bank 31</button>
-            <button onclick="startExam('mix')">Mix (Random)</button>
-        </div>
-    </div>
+  <h1>NBME Exam Simulator</h1>
+  <p>Select a Question Bank:</p>
 
-    <script>
-        // Function to start the exam by selecting a question bank
-        function startExam(questionBank) {
-            window.location.href = `exam.html?bank=${questionBank}`; // Redirect to the exam page with the selected question bank
-        }
-    </script>
+  <!-- 例子：Bank 25 -->
+  <div>
+    <h3>Bank 25</h3>
+    <button onclick="startExam('25', true)">Start New Exam</button>
+    <button onclick="startExam('25', false)">Resume Last Exam</button>
+  </div>
+
+  <!-- 例子：Bank 26 -->
+  <div>
+    <h3>Bank 26</h3>
+    <button onclick="startExam('26', true)">Start New Exam</button>
+    <button onclick="startExam('26', false)">Resume Last Exam</button>
+  </div>
+
+  <!-- 如果有更多题库，可以继续加 -->
+
+  <script>
+    function startExam(bank, reset) {
+      if (reset) {
+        localStorage.removeItem(`nbme_state_${bank}`);
+      }
+      window.location.href = `exam.html?bank=${bank}`;
+    }
+  </script>
 </body>
 </html>
