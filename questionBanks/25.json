@@ -367,20 +367,10 @@
   },
 
 
-
-
-
-
-
-
-
-
-
-
   {
     "question": "Lysosomes present in hepatocytes of patients with mucolipidosis II (I-cell disease)contain abnormal enzyme activities resulting from an inability of these cells to do which of the following?",
     "options": ["Glycosylate secretory proteins", "Recycle lysosomes", "Recycle mannose 6-phosphate receptors from the plasma membrane", "Synthesize lysosomal enzymes", "Synthesize mannose 6-phosphate residues on proteins"],
-    "correct": 2,
+    "correct": 4,
     "block": 2,
     "question_number": 1
   },
@@ -396,7 +386,8 @@
     "options": ["2,3-Bisphosphoglycerate concentration", "Body temperature", "Fetal hemoglobin concentration", "CO concentration", "Pco₂"],
     "correct": 2,
     "block": 2,
-    "question_number": 3
+    "question_number": 3,
+    "image": "images/25/53.png"
   },
   {
     "question": "Which of the following abnormalities is the most likely cause of polyhydramnios in a fetus with esophageal obstruction?",
@@ -415,9 +406,10 @@
   {
     "question": "Which of the following curves best describes variation of follicle-stimulating hormone concentration during the menstrual cycle?",
     "options": ["Curve A", "Curve B", "Curve C", "Curve D", "Curve E"],
-    "correct": 2,
+    "correct": 1,
     "block": 2,
-    "question_number": 6
+    "question_number": 6,
+    "image": "images/25/56.png"
   },
   {
     "question": "A 60-year-old man has two-pillow orthopnea:severe dyspnea and edema of the lower extremities.The onset of these symptoms was preceded by an episode of prolonged substernal chest pain 5days ago.Which of the following additional findings on examination of the neck is most consistent with these findings?",
@@ -436,9 +428,10 @@
   {
     "question": "An 18-year-old man has a 1-hour history of wheezing;chest tightness,and shortness of breath.He weighs 60kg (132lb).Minute ventilation is 14L/min (N=5-10L/min).Which of the following sets of arterial blood gas findings is most likely present in this patient?",
     "options": ["pH 7.30, Pco₂ 70, Po₂ 50", "pH 7.30, Pco₂ 39, Po₂ 103", "pH 7.40, Pco₂ 30, Po₂ 75", "pH 7.40, Pco₂ 39, Po₂ 103", "pH 7.48, Pco₂ 30, Po₂ 75"],
-    "correct": 0,
+    "correct": 4,
     "block": 2,
-    "question_number": 9
+    "question_number": 9,
+    "image": "images/25/59.png"
   },
   {
     "question": "A 45-year-old man with mild hypertension uses a nasal spray.After 4 days the spray no longer relieves his symptoms.Which of the following best describes the action of this drug?",
@@ -450,264 +443,275 @@
   {
     "question": "A 36-year-old man who is seropositive for HIV has had fever and shortness of breath for 2days.An x-ray of the chest shows a diffuse interstitial infiltrate.A lung biopsy is shown.Which of the following organisms is most likely involved?",
     "options": ["Cryptococcus neoformans", "Cytomegalovirus", "Epstein-Barr virus", "Histoplasma capsulatum", "Influenza A", "Mycobacterium avium-intracellulare", "Pneumocystis jirovecii"],
-    "correct": 6,
+    "correct": 1,
     "block": 2,
-    "question_number": 11
+    "question_number": 11,
+    "image": "images/25/61.png"
   },
   {
-    "question": "A study compares asthma patients receiving a new drug vs placebo.After 12 weeks,mean scores are 2.8 ± 0.1 (n=103) vs 3.1 ± 0.1 (n=100);p=0.035.Which best describes the p-value?",
-    "options": ["3.5 % of treated patients had asthma scores lower than controls", "96.5 % of treated patients had asthma scores lower than controls", "The drug worked in 3.5 % of patients", "If the drug truly has no effect,there is a 3.5 % chance of observing an average difference of 0.3 or greater", "If the drug truly has no effect,there is a 96.5 % chance of observing an average difference of 0.3 or greater"],
-    "correct": 3,
+    "question": "A study is conducted on patients with asthma to compare a new asthma treatment with a placebo.After 12weeks of treatment the mean (±standard error of the mean)scores are 2.8±0.1in the treated group (n =103)and 3.1±0.1in the placebo group (n =100).The p-value is 0.035.Which of the following best describes the meaning of the p-value?",
+    "options": ["3.5% of the treated patients had asthma scores lower (better)than the mean score of the controls", "96.5% of the treated patients had asthma scores lower (better)than the mean score of the controls", "The drug worked in 3.5% of the patients", "If the drug really does not work,there is a 3.5% chance of finding an average difference of 0.3 or greater", "If the drug really does not work,there is a 96.5% chance of finding an average difference of 0.3 or greater"],
+    "correct": 4,
     "block": 2,
     "question_number": 12
   },
   {
-    "question": "A 7-day-old female newborn is brought to the physician because of bleeding since birth.Which of the following biochemical reactions is most likely defective?",
+    "question": "A 7-day-old female newborn is brought to the physician because of bleeding since birth.Which of the following biochemical reactions is most likely defective since birth?",
     "options": ["Cross-linking of collagen and elastin", "Hydroxylation of proline", "Post-translational carboxylation of glutamate residues", "Synthesis of thymidylate"],
     "correct": 2,
     "block": 2,
     "question_number": 13
   },
   {
-    "question": "A 29-year-old man has a left testicular mass.A biopsy shows seminoma.Which of the following provides the greatest risk factor associated with this condition?",
+    "question": "A 29-year-old man has a left testicular mass.A biopsy specimen obtained during a planned orchiectomy shows a seminoma.Which of the following provides the greatest risk factor associated with this condition?",
     "options": ["Alcohol abuse", "Cryptorchidism", "Mumps orchitis", "Varicocele", "Vasectomy"],
     "correct": 1,
     "block": 2,
     "question_number": 14
   },
   {
-    "question": "An 18-year-old man is brought to the physician by his parents because he believes some people can read his mind.He is reclusive,has \"weird ideas,\"and still wants to live at home.He is cooperative but has poor eye contact.Which personality disorder is most likely?",
+    "question": "An 18-year-old man is brought to the physician by his parents because he believes some people can read his mind.He is reclusive,has \"weird ideas,\"and still wants to live at home.He is cooperative but has poor eye contact.Which of the following personality disorders is most likely?",
     "options": ["Borderline", "Dependent", "Histrionic", "Narcissistic", "Schizoid", "Schizotypal"],
     "correct": 5,
     "block": 2,
     "question_number": 15
   },
   {
-    "question": "In a sample of 100 individuals,the mean leukocyte count is 7500/mm³ with a standard deviation of 1500/mm³.What percentage of individuals will have a leukocyte count <5500/mm³?",
-    "options": ["1 %", "2.5 %", "5 %", "10 %", "16.5 %"],
-    "correct": 4,
+    "question": "In a sample of 100 individuals,the mean leukocyte count is 7500/mm³ with a standard deviation of 1500/mm³.What percentage of individuals will have a leukocyte count lower than 5500/mm³?",
+    "options": ["1%", "2.5%", "5%", "10%", "16.5%"],
+    "correct": 1,
     "block": 2,
     "question_number": 16
   },
   {
-    "question": "A 45-year-old government employee develops severe dyspnea,bronchoconstriction,nausea,vomiting,diarrhea,lacrimation,and diaphoresis shortly after entering his office building;20 coworkers are similarly affected and 2 die.Which is the most likely cause?",
+    "question": "A 45-year-old man who works in a government building is brought to the emergency department because of a 2-hour history of severe shortness of breath with obvious bronchoconstriction and cough productive of copious secretions.He also has had nausea,vomiting,and diarrhea.At least 20other people in his office building were affected by similar symptoms at approximately the same time.Two of these coworkers died on the way to the hospital.Only a few of the affected employees ate together in the government cafeteria that day.His respirations are 36/min.Physical examination shows excessive lacrimation.Which of the following is the most likely cause of the sudden disease outbreak?",
     "options": ["Anthrax infection", "Anticholinesterase poisoning", "Botulinum toxin poisoning", "Staphylococcus endotoxin poisoning", "Viral pneumonitis and gastroenteritis"],
     "correct": 1,
     "block": 2,
     "question_number": 17
   },
   {
-    "question": "A 53-year-old woman has chest pain radiating to the back 2 hours after PCI;CK-MB and troponin I rise.Which mechanism best explains the lab findings?",
-    "options": ["Cell shrinkage", "Formation of apoptotic bodies", "Liquefactive necrosis of the myocardium", "Membrane lipid peroxidation", "Protease inactivation by cytoplasmic free calcium"],
-    "correct": 2,
+    "question": "A 53-year-old woman is brought to the emergency department because of a 2-hour history of shortness of breath and chest pain that radiates to her back between the shoulder blades.Her respirations are 28/min.Physical examination shows diaphoresis.An ECG shows no abnormalities.Coronary angiography shows occlusion of the marginal branch of the left anterior descending coronary artery.A percutaneous coronary revascularization is done.Subsequent to the stent's placement,her serum concentrations of myocardial creatine kinase (CK-MB)and troponin I are increased.Which of the following mechanisms best explains these laboratory findings?",
+    "options": ["Cell shrinkage", "Formation of apoptotic bodies", "Liquefactive necrosis of the myocardium", "Membrane lipid peroxidation", "Protease inactivation by cytoplasmic free calcium ions"],
+    "correct": 3,
     "block": 2,
     "question_number": 18
   },
   {
-    "question": "A 42-year-old investment banker has chronic epigastric pain worsened by eating and stress;upper endoscopy is negative.Which is the most likely diagnosis?",
+    "question": "A 42-year-old man conies to the physician because of chronic abdominal pain for 3months.He describes his symptom as boring epigastric pain that is occasionally exacerbated by eating.He is an investment banker and describes his job as extremely stressful.Use of an over-the-counter histaminergic H₂-receptor antagonist has mixed results.Vital signs are normal.Physical examination and upper endoscopy show no abnormalities.Which of the following is the most likely diagnosis?",
     "options": ["Gastric lymphoma", "Generalized anxiety disorder", "Irritable bowel syndrome", "Major depressive disorder", "Nonulcer dyspepsia"],
     "correct": 4,
     "block": 2,
     "question_number": 19
   },
   {
-    "question": "An e-mail survey is sent to all physicians in a health system to assess attitudes toward workplace drug screening.Which sampling technique is used?",
+    "question": "An investigator working in a large health care system wishes to determine the attitude of physicians toward drug screening in the workplace.To collect the information,physicians in the health system are invited to respond to an e-mail survey that is distributed on the health system's network.Which of the following most closely describes this type of sampling technique?",
     "options": ["Convenience", "Random", "Referral", "Stratified"],
     "correct": 0,
     "block": 2,
     "question_number": 20
   },
   {
-    "question": "A 62-year-old man with hyperuricemia and acute gout is treated with allopurinol.Which purine synthesis step is directly inhibited by allopurinol?",
-    "options": ["Conversion of IMP to AMP", "Conversion of IMP to GMP", "Conversion of xanthine to uric acid", "Conversion of PRPP to phosphoribosylamine", "Conversion of ribose-5-phosphate to PRPP"],
-    "correct": 2,
+    "question": "A 62-year-old man conies to the physician because of a swollen,painful left great toe that awakened him from sleep this morning.Examination of the toe shows erythema,swelling,and exquisite tenderness.Laboratory studies show hyperuricemia.Treatment with colchicine resolves the acute symptoms.Long-term therapy with allopurinol is begun.This treatment results in decreased urate biosynthesis.A diagram of purine synthesis is shown.Which of the following labeled steps is directly inhibited by allopurinol as a result of this therapy?",
+    "options": ["Step A", "Step B", "Step C", "Step D", "Step E", "Step F", "Step G"],
+    "correct": 6,
     "block": 2,
-    "question_number": 21
+    "question_number": 21,
+    "image": "images/25/71.png"
   },
   {
-    "question": "A 70-year-old man punches and yells while asleep without awakening;neurologic exam is normal.Which finding is most likely?",
+    "question": "A 70-year-old man conies to the physician with his wife because of a 6-month history of abnormal behavior during sleep.His wife says,\"He suddenly punches at the air and yells as if he were acting out his dreams,but he doesn't wake up.\"As a result of his agitation,he has fallen on the floor several times.Neurologic examination shows no abnormalities.Which of the following additional findings is most likely in this patient?",
     "options": ["Absent muscle atonia during REM sleep", "Anterior cingulate mass lesion", "Evidence of major depressive disorder with psychotic features", "Left temporal lobe spikes on EEG", "Nocturnal hypoglycemia"],
     "correct": 0,
     "block": 2,
     "question_number": 22
   },
   {
-    "question": "A 25-year-old woman presents with fatigue,heat intolerance,20-lb weight loss,tachycardia,and goiter.Which is most likely decreased?",
-    "options": ["Iodide uptake by the thyroid gland", "Number of TSH receptors", "Peripheral T₄→T₃ conversion", "Recycling of intrathyroid iodide", "TRH concentration"],
+    "question": "A 25-year-old woman comes to the physician because of a 9-month history of fatigue,excessive sweating,heat intolerance,palpitations,and nervousness;she has had a 9-kg (20-lb)weight loss during this period.Her pulse is 105/min.Physical examination shows moist skin and a goiter.Which of the following is most likely decreased in this patient?",
+    "options": ["Iodide uptake by the thyroid gland", "Number of thyroid-stimulating hormone receptors", "Peripheral conversion of thyroxine (T₄)to triiodothyronine (T₃)", "Recycling of intrathyroid iodide", "Thyrotropin-releasing hormone concentration"],
     "correct": 4,
     "block": 2,
     "question_number": 23
   },
   {
-    "question": "A 25-year-old woman with axillary lymphadenopathy after kitten scratches tests positive for Bartonella henselae.Which histologic pattern is most likely?",
+    "question": "A 25-year-old woman comes to the physician 2days after noticing a mass in her right axilla.She also has a 1-week history of malaise,headaches,and night sweats.The patient says that she recently adopted a kitten and has sustained several bite and scratch marks.Her temperature is 37.8°C (100°F).Physical examination shows edema and tenderness of the right axillary lymph node.The skin over the node is erythematous,tough,and warm.There are scratches and bite marks of various ages over the upper extremities and hands.The result of an indirect fluorescent antibody test for Bartonella henselae is positive.A biopsy specimen of this lymph node is most likely to show which of the following histologic patterns?",
     "options": ["Diffuse neutrophil infiltration", "Granulomas containing stellate microabscesses", "Large activated lymphocytes with occasional plasma cells", "Serous inflammation with abundant intravascular fibrin and few inflammatory cells", "Vascular proliferation with fibrosis"],
     "correct": 1,
     "block": 2,
     "question_number": 24
   },
   {
-    "question": "A 3-year-old boy with aspirin use develops vomiting,stupor,seizures,hyperammonemia,and elevated transaminases.Which organelle dysfunction is most likely?",
+    "question": "A 3-year-old boy is brought to the emergency department by his mother 1hour after having a generalized tonic-clonic seizure.He has had frequent vomiting and progressive stupor during the past 24hours.His mother says that she gave him aspirin 2days ago because of a temperature of 39.5°C (103.1°F).Physical examination shows hepatomegaly with no jaundice.Serum studies show an increased ammonia concentration and increased AST and ALT activities.Dysfunction of which of the following is the most likely cause of this patient's disorder?",
     "options": ["Glutamate transporters", "Golgi complex", "Microtubules", "Mitochondria", "Rough endoplasmic reticulum"],
     "correct": 3,
     "block": 2,
-    "question_number": 25
+    "question_number": 25,
+    "image": "images/25/75.png"
   },
   {
-    "question": "A 42-year-old thin smoker has total cholesterol 350 mg/dL,HDL 40,LDL 280,triglycerides 150.Which defect most likely explains elevated LDL?",
+    "question": "A 42-year-old man conies to the physician for an examination prior to beginning an exercise program at a local health club.He has smoked 1pack of cigarettes daily for 20years.He is 183cm (6ft)tall and weighs 70kg (155lb);BMI is 21kg/m².His blood pressure is 130/80mm Hg.Physical examination shows no other abnormalities.Serum studies show:Cholesterol,total 350mg/dL,HDL-cholesterol 40mg/dL,LDL-cholesterol 280mg/dL,Triglycerides 150mg/dL.Which of the following defects is the most likely cause of this patient's increased serum LDL-cholesterol concentration?",
     "options": ["Decreased ability to convert cholesterol to bile acids", "Decreased clearance of cholesterol by the liver", "Increased absorption of cholesterol in the gut", "Increased production of cholesterol by adipose tissue", "Increased production of cholesterol by the liver"],
     "correct": 1,
     "block": 2,
-    "question_number": 26
+    "question_number": 26,
+    "image": "images/25/76.png"
   },
   {
-    "question": "A 19-year-old man with right humeral and tibial fractures in casts.After 10 weeks,which deep tendon reflex will be strongest?",
+    "question": "A 19-year-old man is admitted to the hospital following a motor vehicle collision.Physical examination shows a penetrating wound to the right cerebral cortex with complete paralysis of the left lower extremity,fracture of the right mid humerus with severing of the radial nerve,and a fracture of the right tibia.Treatment includes cast immobilization of the right upper extremity and right knee and ankle.After 10weeks,the casts are scheduled to be removed from the right upper and lower extremities.At this point,the deep tendon reflex is most likely to be strongest in which of the following locations in this patient?",
     "options": ["Left Achilles tendon", "Left biceps tendon", "Right brachioradialis tendon", "Right patellar tendon"],
-    "correct": 3,
+    "correct": 0,
     "block": 2,
     "question_number": 27
   },
   {
-    "question": "A 65-year-old golfer has a 1-cm pearly pink nodule on the neck,always wears a hat,uses sunscreen inconsistently.The lesion most likely originated in which layer?",
+    "question": "A 65-year-old man conies to the physician 2weeks after noticing a lesion on his neck.He is an avid golfer,and he always wears a hat but does not always use sunscreen while playing.Examination of the neck shows a 10-mm,pearly pink,raised nodule.This patient's condition most likely originated in which of the following?",
     "options": ["Epidermis", "Papillary dermis", "Reticular dermis", "Subcutaneous tissue", "Deep fascia"],
     "correct": 0,
     "block": 2,
     "question_number": 28
   },
   {
-    "question": "When the concentration of Drug X is 100× its Km,the reaction velocity is best described as:",
-    "options": ["First-order kinetics governs the rate", "Further metabolism of Drug X is inhibited", "Metabolism involves covalent bonding of the enzyme", "Velocity is proportional to the concentration of Drug X", "A zero-order rate of metabolism governs the reaction"],
+    "question": "The formula shown describes the rate of metabolism of Drug X where v is the rate of metabolism,Vmax is the maximal rate of metabolism,and Km is the Michaelis constant.If the plasma concentration of Drug X is 100times greater than the Km of the metabolic enzyme for Drug X,which of the following conclusions is most appropriate?",
+    "options": ["First-order kinetics governs the rate of the reaction", "Further metabolism of Drug X is inhibited", "Metabolism of Drug X involves covalent bonding of the enzyme", "The velocity of the reaction is proportional to the concentration of Drug X", "A zero-order rate of metabolism governs the reaction"],
     "correct": 4,
     "block": 2,
-    "question_number": 29
+    "question_number": 29,
+    "image": "images/25/79.png"
   },
   {
-    "question": "An 82-year-old woman has a right pleural effusion.While sitting up and leaning forward,where should the catheter be inserted for thoracentesis?",
+    "question": "An 82-year-old woman is admitted to the hospital for treatment of a small right pleural effusion.Physical examination shows dullness to percussion at the level of the 7th rib and below on the right.A thoracentesis is done.The patient is sitting up,supported by leaning against a bedside table.After preparing the skin and delivering a local anesthetic,into which of the following locations on the right is it most appropriate to insert the catheter?",
     "options": ["Above the 5th rib in the midscapular line", "Above the 5th rib just to the right of the sternum", "Above the 7th rib in the paravertebral region", "Above the 9th rib in the midscapular line", "Below the 5th rib in the midaxillary line", "Below the 5th rib in the midclavicular line", "Below the 9th rib in the midscapular line"],
-    "correct": 4,
+    "correct": 3,
     "block": 2,
     "question_number": 30
   },
   {
     "question": "Which of the following mechanisms best explains how metformin decreases hepatic glucose production?",
-    "options": ["Inactivating a tyrosine kinase", "Increasing glucokinase activity", "Increasing GLUT-2 expression", "Increasing the ATP:ADP ratio", "Inhibiting the target of rapamycin (TOR)protein kinase", "Stimulating the hydrolysis of phosphoinositide"],
-    "correct": 4,
+    "options": ["Inactivating a tyrosine kinase", "Increasing glucokinase activity", "Increasing glucose transporter-2(GLUT-2)expression", "Increasing the ATP:ADP ratio", "Inhibiting the target of rapamycin (TOR)protein kinase", "Stimulating the hydrolysis of phosphoinositide"],
+    "correct": 3,
     "block": 2,
     "question_number": 31
   },
   {
-    "question": "At 10 weeks' gestation,which combination of findings on maternal serum screening most increases the risk for Down syndrome?",
+    "question": "At 10weeks' gestation,which combination of findings on maternal serum screening most increases the risk for Down syndrome?",
     "options": ["↓PAPP-A, ↑free β-hCG", "↑PAPP-A, ↓free β-hCG", "↓PAPP-A, ↓free β-hCG", "↑PAPP-A, ↑free β-hCG", "Normal PAPP-A, ↑free β-hCG"],
-    "correct": 0,
+    "correct": 1,
     "block": 2,
-    "question_number": 32
+    "question_number": 32,
+    "image": "images/25/82.png"
   },
   {
-    "question": "Tumor cells lacking class I MHC are tested for killing by CD8⁺ T cells, CD4⁺ T cells, and NK cells.Which killing pattern is expected?",
-    "options": ["CD8⁺ T cells kill, CD4⁺ T cells kill, NK cells kill", "CD8⁺ T cells kill, CD4⁺ T cells no kill, NK cells kill", "CD8⁺ T cells no kill, CD4⁺ T cells kill, NK cells kill", "CD8⁺ T cells no kill, CD4⁺ T cells no kill, NK cells kill", "CD8⁺ T cells kill, CD4⁺ T cells kill, NK cells no kill"],
-    "correct": 3,
+    "question": "An investigator is studying a tumor cell line in an experimental animal model in which the expression of class I MHC is completely inhibited.The cell line is assayed as a target for cell-mediated immune response by CD8⁺ T lymphocytes,CD4⁺ T lymphocytes,or natural killer cells.Which of the following sets of findings is most likely (+=killing: -=no killing)?",
+    "options": ["CD8⁺ T Lymphocytes: +, CD4⁺ T Lymphocytes: +, Natural Killer Cells: +", "CD8⁺ T Lymphocytes: +, CD4⁺ T Lymphocytes: -, Natural Killer Cells: +", "CD8⁺ T Lymphocytes: -, CD4⁺ T Lymphocytes: +, Natural Killer Cells: +", "CD8⁺ T Lymphocytes: -, CD4⁺ T Lymphocytes: -, Natural Killer Cells: +"],
+    "correct": 4,
     "block": 2,
-    "question_number": 33
+    "question_number": 33,
+    "image": "images/25/83.png"
   },
   {
-    "question": "A 55-year-old alcoholic man has epigastric pain,weight loss,foul-smelling stools,pancreatic calcifications.Which deficiency is most likely responsible for his symptoms?",
+    "question": "A 55-year-old man with alcoholism comes to the physician because of a 2-month history of increasingly severe stomach pain and increased volumes of foul-smelling stool;he also has had a 9-kg (20-lb)weight loss during this period.He has a history of multiple visits to the emergency department because of severe abdominal pain.He has consumed one bottle of red wine daily for 5years.His temperature is 37°C (98.6°F).Physical examination shows epigastric tenderness.His fasting serum glucose concentration is 150mg/dL.A CT scan of the abdomen shows pancreatic calcifications.The most likely cause of this patient's current symptoms is a decrease in which of the following?",
     "options": ["Bile acid synthesis", "Colonic bacteria", "Duodenal pH", "Fecal elastase", "7α-Hydroxylase activity"],
-    "correct": 3,
+    "correct": 2,
     "block": 2,
     "question_number": 34
   },
   {
-    "question": "In an experiment,chlorothiazide inhibits Na⁺ entry into isolated epithelial cells.From which nephron segment were these cells most likely obtained?",
+    "question": "In an experiment on ion transport in epithelial cells,chlorothiazide inhibits Na⁺ entry into one group of cells.These cells were most likely obtained from which of the following regions?",
     "options": ["Cortical collecting tubule", "Distal convoluted tubule", "Proximal tubule", "Thick ascending limb of the loop of Henle", "Thin descending limb of the loop of Henle"],
     "correct": 1,
     "block": 2,
     "question_number": 35
   },
   {
-    "question": "A 43-year-old man complains that his physician is \"arrogant and insensitive\" and wants to register a complaint.Which is the most appropriate immediate response by the ED physician?",
-    "options": ["Reassure the patient that such behavior is not unusual", "Encourage the patient to make an appointment to discuss concerns", "Explain how to file a complaint with the state medical board", "Provide the patient with a copy of the Patients' Bill of Rights", "Telephone the patient's physician to relay the dissatisfaction"],
+    "question": "A 43-year-old man comes to the emergency department because of a 1-year history of low back pain.Before the examination,the patient says,\"My physician is arrogant and insensitive.He never returns my phone calls,I always have to wait forever to be seen,the tests he orders are painful and unnecessary,and he can never tell me what is causing my back pain or how to treat it.\"Which of the following is the most appropriate response by the emergency department physician about this patient's complaints?",
+    "options": ["Reassure the patient that his physician's behavior is not unusual and that low back pain can be difficult to assess", "Encourage the patient to make an appointment with his physician to communicate his concerns", "Explain to the patient how he may register a complaint against his physician with the state medical licensing board", "Provide the patient with a copy of the Patients' Bill of Rights", "Telephone the patient's physician to make him aware that the patient is very dissatisfied with treatment"],
     "correct": 1,
     "block": 2,
     "question_number": 36
   },
   {
-    "question": "A 5-month-old boy with pallor,jaundice,hepatosplenomegaly,hemoglobin 6 g/dL,indirect hyperbilirubinemia,peripheral smear shown,HbF only,HbA₂ increased.Which molecular defect is most likely?",
+    "question": "A 5-month-old boy is brought to the physician by his parents because of a 1-week history of weakness.His parents are first cousins.Physical examination shows pallor,jaundice,and hepatosplenomegaly.His hemoglobin concentration is 6g/dL,hematocrit is 19%,and serum bilirubin concentration is 4.2mg/dL(mostly indirect).A photomicrograph of a peripheral blood smear is shown.Hemoglobin electrophoresis shows HbF,no HbA,and an increased concentration of HbA2.Which of the following is the most likely molecular cause of this patient's condition?",
     "options": ["Deletion of one or more α-globin genes", "Deletion of one or more β-globin genes", "Mutation of the α-globin gene inherited from each parent", "Mutation of the α-globin gene inherited from one parent", "Mutation of the β-globin gene inherited from each parent", "Mutation of the β-globin gene inherited from one parent"],
     "correct": 4,
     "block": 2,
-    "question_number": 37
+    "question_number": 37,
+    "image": "images/25/87.png"
   },
   {
-    "question": "A 63-year-old alcoholic man with hepatic encephalopathy receives lactulose via nasogastric tube.The effectiveness of this intervention requires which mechanism?",
-    "options": ["Absorbed lactulose binding alcohol in the blood", "Lactulose binding alcohol within the colonic lumen", "Metabolism to glucose and galactose", "Osmotic diarrhea flushing alcohol", "Trapping of ammonia by acidic metabolites"],
+    "question": "A 63-year-old man with alcoholism is diagnosed with hepatic encephalopathy.Treatment with lactulose therapy via nasogastric tube is begun.The effectiveness of this intervention requires which of the following mechanisms?",
+    "options": ["Absorbed lactulose binding alcohol in the blood,decreasing blood alcohol concentrations", "Lactulose binding of ingested alcohol within the colonic lumen for excretion", "Metabolism to glucose and galactose,increasing serum glucose concentrations", "Osmotic diarrhea,flushing out ingested alcohol from the gut", "Trapping of ammonia in the colon by acidic metabolites of lactulose"],
     "correct": 4,
     "block": 2,
     "question_number": 38
   },
   {
-    "question": "A 23-year-old pregnant woman with SLE at 12 weeks is concerned about pregnancy complications.Which autoantibody most increases her risk?",
+    "question": "A 23-year-old woman,gravida 4,para 0,aborts 3,with systemic lupus erythematosus comes to the physician at 12weeks'gestation for an initial prenatal examination.She is concerned that she will not be able to carry her current pregnancy to term.The presence of which of the following is most likely increasing the risk for complications during pregnancy in this patient?",
     "options": ["Antimitochondrial antibodies", "Antineutrophil cytoplasmic antibodies", "Antiphospholipid antibodies", "Antistreptolysin O antibodies", "Rheumatoid factor"],
     "correct": 2,
     "block": 2,
     "question_number": 39
   },
   {
-    "question": "A 35-year-old woman presents with abdominal cramps,nausea,vomiting,rhinorrhea,lacrimation,diaphoresis,piloerection,dilated pupils,tremor,restlessness,yawning.Which substance withdrawal is most likely?",
+    "question": "A 35-year-old woman comes to the emergency department because of abdominal cramps,nausea,and vomiting for 3hours.Her pulse is 106/min and regular and blood pressure is 140/96mm Hg.Physical examination shows rhinorrhea,excessive lacrimation,and diaphoresis.There is piloerection over most of the skin.The pupils are dilated,equal in size,and responsive to direct and indirect light.There is a resting tremor involving both upper extremities.During the examination,the patient is restless and yawns constantly.This patient is most likely experiencing withdrawal symptoms from which of the following substances?",
     "options": ["Cannabis", "Cocaine", "Diazepam", "Ethanol", "Heroin", "Phenobarbital"],
     "correct": 4,
     "block": 2,
     "question_number": 40
   },
   {
-    "question": "A 55-year-old woman with shoulder pain after weightlifting.Exam shows tenderness over humeral head,pain on resisted abduction at 90° with thumb down.Which tendon is injured?",
+    "question": "A 55-year-old woman comes to the physician because of a 3-day history of persistent right shoulder pain.She began a weight-training program 6weeks ago.She says that the pain intensified after she increased the amount of weight that she had been lifting above her head.She rates the pain as 8on a 10-point scale.Examination of the right shoulder shows point tenderness just lateral to the acromion,over the humeral head.Passive motion of the shoulder is full.Pain is reproduced with resisted abduction of the shoulder when the shoulder is abducted 90degrees and the arm is giving the \"thumbs down\"sign.Sensation is intact over the right upper extremity.Which of the following tendons is most likely injured in this patient?",
     "options": ["Deltoid", "Infraspinatus", "Subscapularis", "Supraspinatus", "Teres major", "Teres minor"],
     "correct": 3,
     "block": 2,
     "question_number": 41
   },
   {
-    "question": "A 35-year-old woman with springtime tearing and itching eyes improves with antihistamine.Which aspect of host response is most affected?",
+    "question": "A 35-year-old woman comes to the physician in the spring because of a 2-week history of tearing and itching of her eyes.She has a 10-year history of similar symptoms during this time of year.She attributes her condition to an allergy to pollen and grasses.Her symptoms improve when she takes an over-the-counter antihistamine.The antihistamine therapy most likely affects which of the following aspects of the host response in this patient?",
     "options": ["Chemotaxis", "IgE–mast cell binding", "Leukocyte adhesion", "Phagocytosis", "Vascular permeability"],
     "correct": 4,
     "block": 2,
     "question_number": 42
   },
   {
-    "question": "A 43-year-old man with fever,abdominal pain,myalgias,HTN 150/94,elevated ESR 105 mm/h,UA 3+ blood 2+ protein,muscle biopsy shows segmental transmural necrotizing arteritis.Which diagnosis is most likely?",
+    "question": "A previously healthy 43-year-old man comes to the physician because of a 1-week history of fever,vague,migratory abdominal pain,and generalized muscle pain and weakness.He has no history of a similar illness.His temperature is 38.2°C (100.8°F),pulse is 73/min,respirations are 16/min,and blood pressure is 150/94mm Hg.Pulmonary examination shows no abnormalities.Abdominal examination shows diffuse tenderness with no organomegaly.There is generalized muscle weakness and tenderness to palpation of various muscle groups.Laboratory studies show: Hemoglobin 15g/dL, Hematocrit 45%, Leukocyte count 22,000/mm³, Platelet count 550,000/mm³, Erythrocyte sedimentation rate 105mm/h.Urine: Blood 3+, Protein 2+.Blood cultures are negative.Examination of a muscle biopsy specimen from this patient shows segmental transmural necrotizing arteritis.Which of the following is the most likely diagnosis?",
     "options": ["Churg-Strauss syndrome", "Giant cell arteritis", "Polyarteritis nodosa", "Takayasu arteritis", "Wegener granulomatosis"],
     "correct": 2,
     "block": 2,
-    "question_number": 43
+    "question_number": 43,
+    "image": "images/25/93.png"
   },
   {
-    "question": "A 37-year-old woman 3 months post cadaveric renal transplant presents with creatinine rise from 1.4 to 2 mg/dL,low drug levels,biopsy shows lymphocytes in tubules & arterial walls.Which process is occurring?",
-    "options": ["Acute antibody-mediated rejection", "Acute T-lymphocyte–mediated rejection", "Adverse effects of immunosuppressants", "Chronic allograft rejection", "Hyperacute rejection"],
+    "question": "A 37-year-old woman comes to the physician for a follow-up examination 3months after receiving a kidney transplant from a cadaver donor.She feels well and her condition has been stable since the transplant.She receives standard immunosuppressive medications.Her temperature is 37°C (98.6°F),pulse is 84/min,respirations are 14/min,and blood pressure is 150/90mm Hg.Physical examination shows a well-healed surgical scar over the lower abdomen.Serum studies show a creatinine concentration of 2mg/dL;baseline creatinine concentration was 1.4mg/dL 1week post transplant and 2weeks ago.Serum concentrations of the immunosuppressive drugs are in the low therapeutic range.Examination of a renal biopsy specimen shows lymphocytes in the tubules and arterial walls.Which of the following best explains these findings?",
+    "options": ["Acute antibody-mediated rejection", "Acute T-lymphocyte–mediated rejection", "Adverse effects of immunosuppressant medications", "Chronic allograft rejection", "Hyperacute rejection"],
     "correct": 1,
     "block": 2,
     "question_number": 44
   },
   {
-    "question": "A plasmid cannot replicate in bacteria after a mutation.Which plasmid region is most likely affected?",
+    "question": "A plasmid has acquired a mutation that prevents it from replicating in bacteria.This mutation most likely affects which of the following regions within the plasmid?",
     "options": ["Antibiotic resistance gene", "TetA promoter", "Multiple cloning site", "Origin of DNA synthesis", "Ribosome binding site", "Transposable genetic element"],
     "correct": 3,
     "block": 2,
     "question_number": 45
   },
   {
-    "question": "A 36-year-old woman with severe HTN 210/120 mm Hg has renal artery aneurysm on CT angiogram.Which is the most likely cause?",
+    "question": "A 36-year-old woman comes to the physician for a follow-up examination 1week after being diagnosed with severe hypertension.Her blood pressure is 210/120mm Hg.Physical examination shows no other abnormalities.A CT scan of the abdomen shows a renal artery aneurysm.A renal angiogram obtained from a femoral approach is shown.Which of the following is the most likely cause of these findings?",
     "options": ["Atherosclerotic renal artery disease", "Calcific nephrosclerosis", "Fibromuscular dysplasia", "Polyarteritis nodosa", "Polycystic kidney disease"],
     "correct": 2,
     "block": 2,
-    "question_number": 46
+    "question_number": 46,
+    "image": "images/25/96.png"
   },
   {
-    "question": "A 45-year-old woman with chronic hepatitis C and hepatosplenomegaly presents with fatigue,joint pain, Raynaud phenomenon,proteinuria,palpable purpura.Which serum finding is most likely?",
+    "question": "A 45-year-old woman with chronic hepatitis C and hepatosplenomegaly presents with fatigue,joint pain,Raynaud phenomenon,palpable purpura.Which serum finding is most likely?",
     "options": ["Cholesterol", "Complement", "Creatine kinase", "Cryoglobulin", "D-dimer"],
     "correct": 3,
     "block": 2,
-    "question_number": 47
+    "question_number": 47,
+    "image": "images/25/97.png"
   },
   {
-    "question": "A 39-year-old woman with type 1 diabetes has hypoglycemic episodes without warning.Which drug mechanism is most appropriate for acute rescue?",
+    "question": "A 39-year-old woman with type 1 diabetes mellitus comes to the physician because of episodes of fainting during the past 3weeks.The patient's insulin monitoring has shown that the episodes occur when she becomes hypoglycemic.In the past her hypoglycemic episodes were characterized by increased sweating,heart rate,and shaking of her hands,but now she loses consciousness without warning.Current medications are insulin,lisinopril,and simvastatin.Her pulse is 72/min and blood pressure is 128/70mm Hg.Physical examination shows no abnormalities.It is most appropriate for this patient to receive an injection of a drug with which of the following mechanisms of action during these episodes?",
     "options": ["Decreased intestinal absorption of glucose", "Enhanced metabolism of insulin", "Promotion of peripheral insulin uptake", "Promotion of skeletal muscle glucose release", "Stimulation of hepatic glucose production"],
     "correct": 4,
     "block": 2,
@@ -716,17 +720,20 @@
   {
     "question": "An allergic reaction after wearing a new watch is most likely which type of reaction?",
     "options": ["Adverse effect of drug", "Cat allergy", "Contact dermatitis", "Tinea corporis", "Toxic shock syndrome"],
-    "correct": 2,
+    "correct": 0,
     "block": 2,
-    "question_number": 49
+    "question_number": 49,
+    "image": "images/25/99.png"
   },
   {
-    "question": "A 70-year-old woman dies after massive myocardial infarction with cardiogenic shock.Autopsy shows extensive necrosis.Which cellular component is most lacking and prevents heart muscle repair?",
-    "options": ["Myoglobin", "Sarcolemma", "Sarcoplasmic reticulum", "Satellite cells", "T tubules"],
-    "correct": 3,
+    "question": "An investigator studying nerve regeneration after crush injury finds axons lost distal to the lesion.Which cellular structure acts as path-finding guide for regenerating axons?",
+    "options": ["Axon hillock", "Dendritic spine", "Myelin sheath", "Nissl substance", "Terminal bouton"],
+    "correct": 0,
     "block": 2,
-    "question_number": 50
+    "question_number": 50,
+    "image": "images/25/100.png"
   },
+
 
   {
     "question": "In a breast-fed infant,lipase has an integral role in the digestion of which of the following?",
@@ -738,21 +745,22 @@
   {
     "question": "Patients with hyperuricemia are most likely to have a deficiency of which of the following enzymes?",
     "options": ["Adenosine deaminase", "Adenine phosphoribosyltransferase", "Adenylate deaminase", "Hypoxanthine-guanine phosphoribosyltransferase", "Xanthine oxidase"],
-    "correct": 4,
+    "correct": 3,
     "block": 3,
     "question_number": 2
   },
   {
     "question": "A 33-year-old woman comes to the physician because of primary amenorrhea.She has no axillary or pubic hair and no breast development.Serum studies show increased concentrations of luteinizing hormone and testosterone.Which of the following is the most likely diagnosis?",
     "options": ["Adrenogenital syndrome", "Androgen insensitivity syndrome", "Fragile X syndrome", "Maternal exposure to oral progestins", "SRY gene translocation"],
-    "correct": 1,
+    "correct": 4,
     "block": 3,
-    "question_number": 3
+    "question_number": 3,
+    "image": "images/25/103.png"
   },
   {
     "question": "A 30-year-old woman has had episodic palpitations and syncope since childhood.Physical examination shows cyanosis and clubbing of the fingers.Electrocardiography shows right axis deviation and right ventricular hypertrophy.Echocardiography shows a large ventricular septal defect with right-to-left shunting and overriding aorta.The patient most likely has which of the following morphologic changes?",
     "options": ["Basophilic cell hyperplasia of the pituitary gland", "β-Cell adenoma of the pancreas", "Eosinophilic adenoma of the pituitary gland", "Hyperplasia of the adrenal zona fasciculata", "Hyperplasia of the pancreatic islet cells"],
-    "correct": 0,
+    "correct": 4,
     "block": 3,
     "question_number": 4
   },
@@ -768,12 +776,13 @@
     "options": ["Decreases the dose of chloroquine needed", "Decreases the duration of chloroquine needed", "Produces more rapid resolution of symptoms", "Treats chloroquine-resistant parasites", "Treats exoerythrocytic parasites"],
     "correct": 4,
     "block": 3,
-    "question_number": 6
+    "question_number": 6,
+    "image": "images/25/106.png"
   },
   {
     "question": "A 30-year-old man who is seropositive for HIV has had watery diarrhea for 2weeks.He has a 10-year history of intravenous drug use.His temperature is 38.5°C (101.3°F).Physical examination shows mild diffuse abdominal pain with no guarding or rebound tenderness.Acid-fast staining of stool shows numerous acid-fast organisms.Which of the following is the most likely causal organism?",
     "options": ["Clostridium difficile", "Cryptosporidium species", "Enterococcus species", "Escherichia coli O157:H7", "Helicobacter pylori", "Mycobacterium avium-intracellulare", "Pseudomonas species", "Shigella dysenteriae", "Toxoplasma gondii", "Vibrio cholerae"],
-    "correct": 5,
+    "correct": 1,
     "block": 3,
     "question_number": 7
   },
@@ -796,7 +805,8 @@
     "options": ["Decrease in the rate of enzyme synthesis", "Increase in the rate of enzyme degradation", "Mutation in the enzyme that decreases Vmax", "Mutation in the enzyme that increases Km", "Presence of a noncompetitive inhibitor in cells", "Presence of an irreversible inhibitor in cells"],
     "correct": 3,
     "block": 3,
-    "question_number": 10
+    "question_number": 10,
+    "image": "images/25/110.png"
   },
   {
     "question": "Which of the following is most likely to be found in decreased concentration in the synovial fluid of patients with rheumatoid arthritis?",
@@ -808,42 +818,45 @@
   {
     "question": "A 40-year-old man receives an intravenous injection of insulin to induce hypoglycemia.The graph shows serum concentrations of catecholamines at baseline and at the nadir of serum glucose.Which of the following most likely underlies the different magnitude of the epinephrine and norepinephrine responses?",
     "options": ["Activation of catechol-O-methyltransferase", "Failure of monoamine oxidase to metabolize epinephrine", "Increased stability of circulating epinephrine", "Reuptake of norepinephrine into sympathetic synapses", "Selective activation of medullary epinephrine release"],
-    "correct": 4,
+    "correct": 0,
     "block": 3,
-    "question_number": 12
+    "question_number": 12,
+    "image": "images/25/112.png"
   },
   {
     "question": "An analysis of patients admitted to a specific hospital finds that the risk for myocardial infarction is higher in men with chronic obstructive pulmonary disease (COPD)than in men without COPD (odds ratio 5.4,95%confidence interval:1.4–10.1).These results can most reasonably be generalized to which of the following populations?",
     "options": ["Men with COPD and myocardial infarction", "Men with COPD in the hospital", "Men with COPD living at home", "Men with myocardial infarction in the hospital", "All patients with COPD and myocardial infarction", "All patients with COPD in the hospital", "All patients with COPD living at home", "All patients with myocardial infarction"],
-    "correct": 2,
+    "correct": 4,
     "block": 3,
-    "question_number": 13
+    "question_number": 13,
+    "image": "images/25/113.png"
   },
   {
     "question": "The following data about cancer prevalence and mortality are collected in a small city for a calendar year:Population: Males 43,000; Females 47,000; Total 90,000. Number of women with ovarian cancer: 8; Deaths from ovarian cancer: 5.Which of the following is the period prevalence of ovarian cancer in women in this city in this calendar year?",
     "options": ["5/183", "5/407", "5/47,000", "5/90,000", "8/183", "8/407", "8/47,000", "8/90,000"],
-    "correct": 6,
+    "correct": 1,
     "block": 3,
     "question_number": 14
   },
   {
-    "question": "A 34-year-old man is brought to the emergency department semiconscious and combative.In addition to sedation,a short-acting neuromuscular blocking agent is administered for intubation to prevent aspiration.Within a few seconds after administration of the drug,he has transient muscle fasciculations in his face:he develops generalized paralysis within 1minute.Forty-five minutes after completion of the procedure ,he is still paralyzed.A genetic abnormality of which of the following enzymes is the most likely cause of his unusually slow recovery from paralysis?",
+    "question": "A 34-year-old man is brought to the emergency department semiconscious and combative.In addition to sedation,a short-acting neuromuscular blocking agent is administered for intubation to prevent aspiration.Within a few seconds after administration of the drug,he has transient muscle fasciculations in his face;he develops generalized paralysis within 1minute.Forty-five minutes after completion of the procedure ,he is still paralyzed.A genetic abnormality of which of the following enzymes is the most likely cause of his unusually slow recovery from paralysis?",
     "options": ["Angiotensin-converting enzyme", "Choline O-acetyltransferase", "Monoamine oxidase", "Phenylethanolamine N-methyltransferase", "Pseudocholinesterase", "Tyrosine hydroxylase"],
-    "correct": 4,
+    "correct": 6,
     "block": 3,
-    "question_number": 15
+    "question_number": 15,
+    "image": "images/25/115.png"
   },
   {
     "question": "A 42-year-old man conies to the physician because of progressive weakness of his hands during the past 10months.Physical examination shows atrophy of the hand muscles with fasciculations.There are also fasciculations of the tongue and trapezius muscles.Electromyography confirms the diagnosis of amyotrophic lateral sclerosis.Which of the following initial statements by the physician is most appropriate?",
     "options": ["\"You have amyotrophic lateral sclerosis,also called Lou Gehrig disease,which is a terminal illness.You will eventually need to go on a respirator.Have you thought about advance directives?\"", "\"You have an incurable illness.I'm sorry to say there is nothing I can do for you.Are you religious?\"", "\"You have Lou Gehrig disease.Have you ever heard anything about this disease before?\"", "\"You have a mild case of amyotrophic lateral sclerosis,also called Lou Gehrig disease.We'll check it every few months just to see if it is progressing.\"", "\"You may have amyotrophic lateral sclerosis.We'll check every few months and if it progresses,then we'll know for sure.\""],
-    "correct": 2,
+    "correct": 4,
     "block": 3,
     "question_number": 16
   },
   {
     "question": "A 50-year-old woman comes to the physician because of progressive shortness of breath during the past 2years .Her respirations are 20/min.Physical examination shows cyanosis and ankle edema .Her pulmonary artery pressure,pulmonary vascular resistance,and right atrial pressure are increased;her pulmonary capillary wedge pressure is 9.3mm Hg (N=8–16).Her ventilation improves when inhaled nitric oxide is administered.Treatment with oral bosentan is begun for long-term therapy.Which of the following mediators of pulmonary resistance in this patient will most likely be antagonized by this drug?",
     "options": ["Adenosine", "Calcitonin gene-related peptide", "C-reactive protein", "Endothelin", "Prostacyclin (PGI₂)"],
-    "correct": 3,
+    "correct": 2,
     "block": 3,
     "question_number": 17
   },
@@ -864,35 +877,37 @@
   {
     "question": "A 69-year-old woman comes to the physician because she has had weakness of her left leg since awakening that morning.Physical examination shows weakness of the extremity.A Babinski sign is present on the left.Sensory testing shows decreased somatic sensation in the left foot,agraphesthesia on the plantar surfaces of the toes;and decreased position sense in the toes.An MRI of the brain shows an edematous area in the cerebral cortex of the right hemisphere .The most likely cause of this condition is a lesion located at which of the following labeled areas in the photographs of normal brains shown?",
     "options": ["Area A", "Area B", "Area C", "Area D", "Area E", "Area F", "Area G", "Area H"],
-    "correct": 2,
+    "correct": 5,
     "block": 3,
-    "question_number": 20
+    "question_number": 20,
+    "image": "images/25/120.png"
   },
   {
     "question": "A 43-year-old man with a 10-year history of alcoholism comes to the physician because of a change in skin color.The patient says that he has been taking two extra-strength acetaminophen tablets every 4to 6hours for the past 3days for a severe headache.Physical examination shows jaundice.Laboratory studies show an increased prothrombin time and a markedly increased serum AST activity.Alteration in which of the following metabolites within hepatocytes is most likely associated with his illness?",
     "options": ["Decreased glucuronide conjugates", "Decreased glutathione", "Decreased NAD⁺", "Decreased NADH", "Increased glucuronide conjugates", "Increased glutathione", "Increased NAD⁺", "Increased NADH"],
-    "correct": 1,
+    "correct": 6,
     "block": 3,
-    "question_number": 21
+    "question_number": 21,
+    "image": "images/25/121.png"
   },
   {
     "question": "A 55-year-old woman is brought to the emergency department by police 1hour after she was found wandering around the city park at midnight,appearing confused.She told the police that she is a prominent physician and a member of the city council.She is unwashed,malodorous,and disheveled.She is 160cm (5ft 3in)tall and weighs 55kg (121lb);BMI is 21kg/m².Her pulse is 82/min,and blood pressure is 110/82mm Hg.Physical examination shows a broad-based gait and nystagmus.She is not oriented to person,place,or time,but she is pleasant and cooperative.Results of alcohol and drug screening are negative.An MRI of the brain is most likely to show atrophy of which of the following?",
     "options": ["Amygdala", "Hippocampus", "Hypothalamus", "Mammillary bodies", "Parietal lobe"],
-    "correct": 3,
+    "correct": 1,
     "block": 3,
     "question_number": 22
   },
   {
     "question": "A 25-year-old woman comes to the physician because of a 3-month history of difficulty falling and remaining asleep.She says that she has been under stress and anxious during this period.Physical examination shows no abnormalities.Nocturnal polysomnography shows normal sleep architecture;including normal volumes and latencies of all non-REM and REM sleep stages.There is no evidence of sleep-disordered breathing or other sleep-fragmenting disorder.Compared with this patient's non-REM stage 3to 4(deep)sleep,which of the following is most likely to be increased in her REM sleep?",
     "options": ["Cerebral blood flow", "Delta wave EEG activity", "Intercostal muscle activity", "Serum growth hormone concentrations", "Thermoregulation"],
-    "correct": 0,
+    "correct": 3,
     "block": 3,
     "question_number": 23
   },
   {
-    "question": "An investigator is studying the relationship between cigarette smoking and bladder cancer.In 10,000 patients with bladder cancer,6750 had a smoking history;in 10,000 patients without bladder cancer,1250 had a smoking history.Which study design is best described?",
+    "question": "An investigator is studying the relationship between a history of cigarette smoking and the development of transitional cell carcinoma.In 10,000 patients with transitional cell carcinoma of the bladder,6750had a history of cigarette smoking;in 10,000 patients without transitional cell carcinoma,1250had a history of cigarette smoking.Which of the following best describes this study design?",
     "options": ["Case-control study", "Case series study", "Cohort study", "Cross-sectional study", "Randomized controlled study"],
-    "correct": 0,
+    "correct": 1,
     "block": 3,
     "question_number": 24
   },
@@ -906,14 +921,14 @@
   {
     "question": "A 65-year-old man is brought to the emergency department 12hours after the onset of chest pain.He dies 5days later of cardiogenic shock.At autopsy,examination of the heart shows blockage of the coronary arteries and massive amounts of ventricular necrosis.A lack of which of the following best explains the inability of this patient's heart muscle to repair itself?",
     "options": ["Myoglobin", "Sarcolemma", "Sarcoplasmic reticulum", "Satellite cells", "T tubules"],
-    "correct": 3,
+    "correct": 1,
     "block": 3,
     "question_number": 26
   },
   {
     "question": "A 50-year-old man is admitted to the hospital after being diagnosed with a pulmonary embolus.Treatment is started with intravenous heparin.Twenty-four hours later warfarin is added.On day 2,his partial thromboplastin time is 52seconds (control 26sec)and prothrombin time is 12seconds (control 12.1sec,INR=1).Which of the following is the best explanation for the normal prothrombin time and INR measurements in this patient?",
     "options": ["Heparin-warfarin interaction", "Hereditary resistance to heparin", "Hereditary resistance to warfarin", "Long half-life of factor II (prothrombin)", "Too low a dose of heparin", "Too low a dose of warfarin", "Undetected liver disease"],
-    "correct": 3,
+    "correct": 4,
     "block": 3,
     "question_number": 27
   },
@@ -932,149 +947,155 @@
     "question_number": 29
   },
   {
-    "question": "A study evaluates pulmonary surfactant changes in lung carcinoma patients.Bronchoalveolar lavage is performed.To access the lingular bronchus,the bronchoscope must pass through which bronchus?",
+    "question": "A study is conducted to examine the effects of polychemotherapy on patients with lung carcinoma.Bronchoalveolar lavage samples taken before and after treatment with methotrexate,doxorubicin,cyclophosphamide,and lomustine are examined for changes in pulmonary surfactant.In order to access a lingular bronchus for lavage,the bronchoscope must pass through which of the following bronchi?",
     "options": ["Left lower lobe", "Left upper lobe", "Right lower lobe", "Right middle lobe", "Right upper lobe"],
-    "correct": 1,
+    "correct": 2,
     "block": 3,
     "question_number": 30
   },
   {
-    "question": "A 7-year-old boy has cramping abdominal pain,blood in urine,and petechial rash on extensor surfaces after pharyngitis.Renal biopsy shows mesangial IgA deposits.Which diagnosis is most likely?",
+    "question": "A 7-year-old boy is brought to the physician because of a 3-day history of cramping abdominal pain,blood in his urine,and a rash on his arms,legs,and buttocks.He had pharyngitis 2weeks ago.Physical examination shows a hemorrhagic rash involving the extensor surfaces of the upper and lower extremities and feet.There is generalized abdominal tenderness.Test of the stool for occult blood is positive.A renal biopsy specimen shows an increased mesangial matrix that stains positive for IgA on immunofluorescence.Which of the following is the most likely diagnosis?",
     "options": ["Diabetic glomerulosclerosis", "Focal segmental glomerulosclerosis", "Henoch-Schönlein purpura", "Minimal change disease", "Nephroblastoma (Wilms tumor)", "Poststreptococcal glomerulonephritis", "Renal amyloidosis"],
-    "correct": 2,
+    "correct": 0,
     "block": 3,
     "question_number": 31
   },
   {
-    "question": "A 33-year-old nulligravid woman with 13-month infertility.Endometrial biopsy shows secretory glands and decidualized stroma.Which hormonal change underlies this pattern?",
-    "options": ["Decreased FSH from the pituitary", "Decreased LH from the pituitary", "Decreased adrenal testosterone", "Increased estradiol from the follicle", "Increased β-hCG from theca cells", "Increased progesterone from the corpus luteum"],
-    "correct": 5,
+    "question": "A 33-year-old nulligravid woman comes to the physician with her 35-year-old husband because she has not been able to conceive for 13months.Previous evaluation of the husband showed no abnormalities.Physical and pelvic examinations show no abnormalities.Examination of an endometrial biopsy specimen shows secretory glands and a decidualized stroma.Which of the following hormonal changes underlies the maturation of this patient's endometrium?",
+    "options": ["Decreased follicle-stimulating hormone from the pituitary gland", "Decreased luteinizing hormone from the pituitary gland", "Decreased production of testosterone from the adrenal cortical cells", "Increased estradiol from the follicle", "Increased β-human chorionic gonadotropin from the ovarian theca cells", "Increased progesterone from the corpus luteum"],
+    "correct": 2,
     "block": 3,
     "question_number": 32
   },
   {
-    "question": "A 1-year-old girl has recurrent bacterial infections,white hair,pale skin,blue irides,neutropenia,giant granules in neutrophils.Which mechanism is most likely?",
+    "question": "A 1-year-old girl is brought to the physician because of multiple bacterial infections since birth.She is at the 40th percentile for length and 40th percentile for weight.She has white hair,pale skin,blue irides,and prominent red pupils.A complete blood count shows neutropenia.A peripheral smear shows giant granules in the neutrophils.This patient's disorder is most likely due to which of the following pathogenetic mechanisms?",
     "options": ["Bone marrow suppression", "Defect in leukocyte adhesion", "Defect in phagolysosome function", "Myeloperoxidase deficiency", "NADPH oxidase deficiency"],
-    "correct": 2,
+    "correct": 5,
     "block": 3,
     "question_number": 33
   },
   {
-    "question": "A 25-year-old woman with stress-related insomnia.Normal polysomnography.Which parameter is most increased in REM vs non-REM stage 3–4?",
+    "question": "A 25-year-old woman comes to the physician because of a 3-month history of difficulty falling and remaining asleep.She says that she has been under stress and anxious during this period.Physical examination shows no abnormalities.Nocturnal polysomnography shows normal sleep architecture;including normal volumes and latencies of all non-REM and REM sleep stages.There is no evidence of sleep-disordered breathing or other sleep-fragmenting disorder.Compared with this patient's non-REM stage 3to 4(deep)sleep,which of the following is most likely to be increased in her REM sleep?",
     "options": ["Cerebral blood flow", "Delta wave EEG activity", "Intercostal muscle activity", "Serum growth hormone concentrations", "Thermoregulation"],
-    "correct": 0,
+    "correct": 1,
     "block": 3,
     "question_number": 34
   },
   {
-    "question": "An adrenergic drug is a potent α-receptor agonist in vitro but lowers BP in trauma patients.The drug is most likely a:",
+    "question": "During ligand-binding experiments,a new adrenergic drug displays potent binding to α-adrenergic receptors.In healthy volunteers,the drug causes a significant increase in blood pressure.However,when used in the emergency department to increase blood pressure in trauma victims,the drug decreases blood pressure.This drug is most likely from which of the following classes?",
     "options": ["Competitive antagonist", "Full agonist", "Inverse agonist", "Noncompetitive antagonist", "Partial agonist"],
-    "correct": 4,
-    "block": 3,
-    "question_number": 35
-  },
-  {
-    "question": "A 70-year-old man died of CAD and had a cerebral infarction.Which deficit is most likely?",
-    "options": ["Dysmetria on the left", "Dysmetria on the right", "Loss of joint position sense in the left extremities", "Loss of joint position sense in the right extremities", "Spastic hemiparesis on the left", "Spastic hemiparesis on the right"],
-    "correct": 5,
-    "block": 3,
-    "question_number": 36
-  },
-  {
-    "question": "A 14-year-old girl has 15-cm growth spurt,fatigue,palpitations,long thin face,dislocated lenses,aortic root enlargement,mitral prolapse.Which genetic mechanism explains the findings?",
-    "options": ["Anticipation", "Heterogeneity", "Paternal disomy", "Pleiotropy", "Polygenes"],
     "correct": 3,
+    "block": 3,
+    "question_number": 35,
+    "image": "images/25/135.png"
+  },
+  {
+    "question": "A 70-year-old man dies of coronary artery disease.He had a cerebral infarction.Which deficit is most likely to be present in this patient after his cerebral infarction?",
+    "options": ["Dysmetria on the left", "Dysmetria on the right", "Loss of joint position sense in the left extremities", "Loss of joint position sense in the right extremities", "Spastic hemiparesis on the left", "Spastic hemiparesis on the right"],
+    "correct": 0,
+    "block": 3,
+    "question_number": 36,
+    "image": "images/25/136.png"
+  },
+  {
+    "question": "A 14-year-old girl is brought to the physician because of a recent growth spurt of 15cm (6in)during the past year.She also has had increasing fatigue and palpitations during this period.Her father is 193cm (6ft 4in).Her paternal aunt has a history of palpitations and severe myopia.The patient is at the 95th percentile for height and 50th percentile for weight.Physical examination shows a long,thin face.Ophthalmologic examination shows dislocated lenses.Cardiac examination shows a hyperdynamic precordium with early click and systolic murmur.Echocardiography shows an enlarged aortic root and mitral valve prolapse.Which of the following genetic mechanisms best explains the findings in this family?",
+    "options": ["Anticipation", "Heterogeneity", "Paternal disomy", "Pleiotropy", "Polygenes"],
+    "correct": 2,
     "block": 3,
     "question_number": 37
   },
   {
-    "question": "Esophagectomy for mid-esophageal squamous cell carcinoma requires ligation of arterial branches of which vessel?",
+    "question": "A 46-year-old man receives the diagnosis of squamous cell carcinoma of the esophagus.A barium swallow is shown.Esophagectomy at the region indicated by the arrows is most likely to involve ligation of arterial branches of which of the following vessels?",
     "options": ["Aorta", "Internal thoracic arteries", "Pulmonary arteries", "Superior mesenteric artery", "Thyrocervical trunk"],
-    "correct": 0,
+    "correct": 3,
     "block": 3,
-    "question_number": 38
+    "question_number": 38,
+    "image": "images/25/138.png"
   },
   {
-    "question": "A 72-year-old man with multiple myeloma receives chemotherapy.Southern blot of B-cell DNA shows 1.5-kb band;T-cell DNA shows 6-kb band with same Ig J-region probe.The 6-kb band most likely represents:",
-    "options": ["Constant region gene rearrangement", "D to J gene rearrangement", "V to D gene rearrangement", "V to J gene rearrangement", "Unrearranged immunoglobulin gene"],
-    "correct": 4,
+    "question": "A male newborn is delivered with ambiguous genitalia;ultrasound shows no gonads,serum 17-hydroxyprogesterone is markedly elevated.Which enzyme deficiency is most likely?",
+    "options": ["11β-Hydroxylase", "17α-Hydroxylase", "21-Hydroxylase", "3β-Hydroxysteroid dehydrogenase", "Aromatase"],
+    "correct": 3,
     "block": 3,
-    "question_number": 39
+    "question_number": 39,
+    "image": "images/25/139.png"
   },
   {
-    "question": "A 6-month-old girl with vomiting,lethargy,serum ammonia ↑,citrulline ↓,glutamine ↑,urine orotic acid ↑.Which enzyme deficiency is most likely?",
-    "options": ["Arginase", "Argininosuccinase", "Argininosuccinate synthetase", "Carbamoyl phosphate synthetase", "Ornithine transcarbamylase"],
-    "correct": 4,
+    "question": "A 4-year-old girl is brought to the physician by her parents 2days after the mother noticed streaks of blood on the child's stools.Her father has pigmented macules on his lips.A paternal aunt had breast cancer.Physical examination shows several 2- to 3-mm pigmented macules on the lips and buccal mucosa.Rectal examination shows no abnormalities.Test of the stool for occult blood is positive.Colonoscopy is done and three polyps are removed,the largest measuring 1×1×1cm.This patient's polyps are most likely which of the following types?",
+    "options": ["Adenomatous", "Hamartomatous", "Hyperplastic", "Inflammatory", "Lymphoid"],
+    "correct": 3,
     "block": 3,
     "question_number": 40
   },
   {
-    "question": "A 53-year-old woman with breast cancer on doxorubicin presents with dyspnea on exertion,crackles,cardiomegaly,EF 30%.Which mechanism underlies the cardiomyopathy?",
-    "options": ["Decreased oxidative phosphorylation", "Impaired β-oxidation of fatty acids", "Inhibition of acetylcholinesterase", "Inhibition of metal-dependent enzyme synthesis", "Lipid peroxidation of myocyte membranes"],
+    "question": "An 80-year-old woman is brought to the emergency department by police 30minutes after she was found wandering in the street,confused and disoriented.She says that she has no medical conditions and takes no medications.During history taking,she becomes annoyed and agitated;saying:\"Stop being so nosey!There's nothing wrong with me!I feel fine and I just want to go home.\"She appears frail but alert.Her vital signs are within normal limits.Physical examination shows mildly dry mucous membranes.There is no evidence of trauma.She is oriented to person but not to place or time.She is able to provide her home address.Which of the following is the most appropriate action by the physician?",
+    "options": ["Attempt to contact the patient's family to find out more information", "Arrange for transportation to take the patient home", "Arrange for the patient to be transferred to a skilled nursing care facility", "Administer a sedative-hypnotic medication", "Admit the patient to a psychiatric inpatient facility"],
     "correct": 4,
     "block": 3,
-    "question_number": 41
+    "question_number": 41,
+    "image": "images/25/141.png"
   },
   {
-    "question": "A 14-year-old boy with palpitations after snorting cocaine.Which mechanism is most likely responsible?",
-    "options": ["Agonist action at ligand-gated Ca²⁺ channels", "Agonist action at ligand-gated Na⁺-K⁺ channels", "Inhibition of cardiac M²-receptor channels", "Inhibition of norepinephrine reuptake", "Inhibition of phosphodiesterase"],
-    "correct": 3,
+    "question": "A 73-year-old man conies to the physician because of a 4-month history of localized mid-back pain.He has hypertension and type 2diabetes mellitus.He is in mild discomfort but is able to walk without problems.There is pain with percussion over the lower thoracic spine.Neurologic examination shows no focal findings.Serum studies show:Ca²⁺ 9.2mg/dL,Phosphorus 3.9mg/dL,Total bilirubin 0.5mg/dL,Alkaline phosphatase 1145U/L,AST 34U/L,ALT 23U/L.Which of the following best describes the primary underlying pathophysiologic mechanism of this patient's condition?",
+    "options": ["Decreased number and activity of osteoblasts", "Decreased production of interleukin-6(IL-6)", "Decreased synthesis and secretion of intact parathyroid hormone", "Increased number and activity of osteoclasts", "Increased production of IL-12"],
+    "correct": 0,
     "block": 3,
     "question_number": 42
   },
   {
-    "question": "During cholecystectomy for thickened gallbladder wall and stones,which organ can the surgeon inspect directly?",
-    "options": ["Ileum", "Jejunum", "Pancreas", "Stomach", "Transverse colon"],
-    "correct": 2,
+    "question": "A 5-year-old boy is brought to the physician by his mother because of progressive clumsiness and fatigue during the past 6months.He says that his legs are tired.He was delivered at term after an uncomplicated pregnancy.He has met all developmental milestones,although there was some delay compared with other children his age.He is alert.He has difficulty rising from the chair:he uses his arms to push himself into a standing position.He is unable to jump with both feet together.Physical examination shows hypertrophy of the calf muscles.This patient most likely has weak hip adduction as a result of dysfunction of the muscle inserting onto the femur from which of the following locations?",
+    "options": ["Anterior sacrum", "Iliac crest", "Iliac spine", "Ischium", "Lateral ilium"],
+    "correct": 1,
     "block": 3,
     "question_number": 43
   },
   {
-    "question": "A 4-year-old girl has blood-streaked stools;father and aunt have Peutz-Jeghers features.Colonoscopy removes 3 small pigmented polyps.Which polyp type is most likely?",
-    "options": ["Adenomatous", "Hamartomatous", "Hyperplastic", "Inflammatory", "Lymphoid"],
-    "correct": 1,
+    "question": "During an experiment,Drug X is administered to treat trematode and cestode infestations.Results show that Drug X increases the permeability of the cell membranes to calcium,causing paralysis,dislodgement,and death of the parasite.Drug X most closely resembles which of the following?",
+    "options": ["Albendazole", "Bithionol", "Diethylcarbamazine", "Niclosamide", "Praziquantel"],
+    "correct": 2,
     "block": 3,
     "question_number": 44
   },
   {
-    "question": "An 80-year-old woman found wandering,disoriented,refuses help.Which is the most appropriate next action?",
-    "options": ["Attempt to contact family", "Arrange transport home", "Transfer to skilled nursing facility", "Administer sedative-hypnotic", "Admit to psychiatric facility"],
-    "correct": 0,
+    "question": "In an experiment on renal ischemia,tubular cell death is most likely to be observed in which of the following areas?",
+    "options": ["Cortical collecting duct", "Distal convoluted tubule", "Loop of Henle", "Papilla", "Proximal convoluted tubule"],
+    "correct": 4,
     "block": 3,
     "question_number": 45
   },
   {
-    "question": "A 73-year-old man with mid-back pain,HTN,DM,elevated alkaline phosphatase.X-ray shows vertebral cortical thickening.Which mechanism is primary?",
-    "options": ["Decreased osteoblast number/activity", "Decreased IL-6 production", "Decreased intact PTH secretion", "Increased osteoclast activity", "Increased IL-12 production"],
-    "correct": 3,
+    "question": "A 33-year-old man with neck mass expresses anxiety.Which initial physician statement is most appropriate?",
+    "options": ["\"Let your fiancée come for the biopsy\"", "\"I’ll walk you through each step;let’s schedule a biopsy\"", "\"Only a biopsy can tell if it’s cancer—here’s the referral\"", "\"Don’t worry until we get results\"", "\"Whatever it is,you’ll have support\""],
+    "correct": 1,
     "block": 3,
     "question_number": 46
   },
   {
-    "question": "A 5-year-old boy with clumsiness,fatigue,hypertrophic calves,Gowers sign.Weak hip adduction is due to dysfunction of muscle inserting from:",
-    "options": ["Anterior sacrum", "Iliac crest", "Iliac spine", "Ischium", "Lateral ilium"],
+    "question": "An investigator studying pulmonary lymph flow wants to increase it in ventilated animals.Which intervention is most effective?",
+    "options": ["Endothelin-1 into pulmonary artery", "Phenylephrine into pulmonary artery", "Decrease inspired O₂ from 21% to 10%", "Increase inspired CO₂ from 0.3% to 3%", "IV 0.9% saline for 5 min", "IV 20% albumin for 5 min"],
     "correct": 3,
     "block": 3,
     "question_number": 47
   },
   {
-    "question": "Drug X increases membrane Ca²⁺ permeability causing paralysis in trematodes/cestodes.Drug X resembles:",
-    "options": ["Albendazole", "Bithionol", "Diethylcarbamazine", "Niclosamide", "Praziquantel"],
-    "correct": 4,
+    "question": "Thyroid hormone receptor binds chromatin with or without T₃; absence represses, presence activates.Binding of T₃ decreases affinity for complex 1,increases for complex 2.Complex 1/2 most likely contain:",
+    "options": ["C1: Deiodinase; C2: Thyroxine peroxidase", "C1: Histone deacetylase; C2: Histone acetyltransferase", "C1: Restriction endonuclease; C2: DNA ligase", "C1: Restriction endonuclease; C2: DNA ligase", "C1: Tyrosine kinase; C2: Protein tyrosine phosphatase", "C1: Ubiquitin ligase; C2: SUMO ligase"],
+    "correct": 1,
     "block": 3,
     "question_number": 48
   },
   {
-    "question": "In renal ischemia model,which tubular segment most likely shows cell death?",
-    "options": ["Cortical collecting duct", "Distal convoluted tubule", "Loop of Henle", "Papilla", "Proximal convoluted tubule"],
-    "correct": 4,
+    "question": "A 78-year-old Vietnam War veteran has 3-month low back pain radiating down left leg,night sweats,fever,weight loss 20 lb,CT shows lytic lesions.Which left hip motion is likely most painful?",
+    "options": ["Abduction", "Adduction", "Extension", "External rotation", "Flexion", "Internal rotation"],
+    "correct": 0,
     "block": 3,
-    "question_number": 49
+    "question_number": 49,
+    "image": "images/25/149.png"
   },
   {
-    "question": "A 33-year-old anxious man with neck mass.Which initial physician statement is most appropriate?",
-    "options": ["\"Let your fiancée come for the biopsy\"", "\"I’ll walk you through each step;let’s schedule a biopsy\"", "\"Only a biopsy can tell if it’s cancer—here’s the referral\"", "\"Don’t worry until we get results\"", "\"Whatever it is,you’ll have support\""],
-    "correct": 1,
+    "question": "An investigator studying nerve regeneration after crush injury finds axons lost distal to the lesion.Which structure acts as path-finding guide for regenerating axons?",
+    "options": ["Axon hillock", "Dendritic spine", "Myelin sheath", "Nissl substance", "Terminal bouton"],
+    "correct": 2,
     "block": 3,
     "question_number": 50
   },
@@ -1084,7 +1105,8 @@
     "options": ["History of analgesic abuse", "Hypocomplementemia", "Long-standing hyperglycemia", "Malignant hypertension", "Sickle cell trait"],
     "correct": 2,
     "block": 4,
-    "question_number": 1
+    "question_number": 1,
+    "image": "images/25/151.png"
   },
   {
     "question": "A 1-year-old girl has recurrent and chronic suppurative infections caused by staphylococci and some gram-negative rods.She recovers normally from viral infections.Examination of serum shows normal concentrations of complement components and immunoglobulins.Studies of leukocyte function are most likely to show defects in which of the following mechanisms?",
@@ -1096,7 +1118,7 @@
   {
     "question": "A 50-year-old man has had progressive dyspnea on exertion over the past 6months.He now has dyspnea at rest.He has had a persistent dry cough since having an upper respiratory tract bacterial infection 1year ago.Examination of lung tissue obtained on biopsy shows chronic inflammation and fibrous thickening of the alveolar septa.Which of the following is the most likely diagnosis?",
     "options": ["Chronic bronchitis", "Diffuse alveolar damage", "Emphysema", "Sarcoidosis", "Usual interstitial pneumonitis"],
-    "correct": 4,
+    "correct": 3,
     "block": 4,
     "question_number": 3
   },
@@ -1110,154 +1132,162 @@
   {
     "question": "A 25-year-old woman at 12weeks' gestation asks for prenatal counseling.Her husband has a clinically variable autosomal dominant disorder with 100%penetrance that is evident within the first year of life and for which linkage analysis is available.They have two unaffected daughters 3and 5years old.A pedigree is shown.A single polymorphic marker has a recombination fraction of 0.1(10%)and is informative.Alleles 1and 2for this marker are indicated in the pedigree.Which of the following is the risk that this fetus will have this disorder?",
     "options": ["1%", "10%", "50%", "90%", "99%"],
-    "correct": 2,
+    "correct": 4,
     "block": 4,
-    "question_number": 5
+    "question_number": 5,
+    "image": "images/25/155.png"
   },
   {
     "question": "A 24-year-old woman comes to the clinic because of facial flushing and diffuse pruritus..The symptoms began shortly after she ingested a new nutritional supplement from a health food store.Examination shows erythema of the face and upper portion of the neck.The remainder of the skin shows no gross abnormalities.There is no perioral or neck edema.Findings on lung examination are normal.Which of the following nutritional supplements is the most likely cause of her symptoms?",
     "options": ["Ascorbic acid", "Folic acid", "Lipoic acid", "Nicotinic acid", "Pantothenic acid"],
     "correct": 3,
     "block": 4,
-    "question_number": 6
+    "question_number": 6,
+    "image": "images/25/156.png"
   },
   {
     "question": "A 2-week-old boy is brought to the physician because of persistent cyanosis.Hemoglobin concentration and erythrocyte morphology are normal.An x-ray of the chest and an echocardiogram disclose no abnormalities.Which of the following is the most likely cause of the cyanosis?",
     "options": ["Hemolytic anemia", "Megaloblastic anemia", "Methemoglobinemia", "α-Thalassemia", "β-Thalassemia"],
-    "correct": 2,
+    "correct": 3,
     "block": 4,
     "question_number": 7
   },
   {
-    "question": "A 60-year-old woman has had weakness and fatigue for the past 3months.She has not had abdominal pain or a change in bowel habits.Findings on physical examination are unremarkable.Laboratory studies show: Hemoglobin 9.5g/dL, Hematocrit 29%, Mean corpuscular volume 70fL, Mean corpuscular hemoglobin 20pg/cell. Adenocarcinoma of the colon is suspected.Which of the following best describes the most likely location of the primary tumor in the large intestine?",
+    "question": "A 60-year-old woman has had weakness and fatigue for the past 3months.She has not had abdominal pain or a change in bowel habits.Findings on physical examination are unremarkable.Laboratory studies show: Hemoglobin 9.5g/dL, Hematocrit 29%, Mean corpuscular volume 70fL, Mean corpuscular hemoglobin 20pg/cell.Adenocarcinoma of the colon is suspected.Which of the following best describes the most likely location of the primary tumor in the large intestine?",
     "options": ["Ascending", "Descending", "Rectum", "Splenic flexure", "Synchronous multiple sites", "Transverse"],
-    "correct": 0,
+    "correct": 2,
     "block": 4,
     "question_number": 8
   },
   {
     "question": "A 62-year-old woman has an abdominal aortic aneurysm repaired.Forty-eight hours after surgery,her right distal leg is dusky and cool,and there are dark purple-to-black necrotic lesions on several toes as shown.A biopsy of one of the lesions would most likely show occluded small arteries with needle-shaped clefts.Which of the following is the most likely cause of the lesions?",
     "options": ["Arteriolar narrowing", "Cholesterol emboli", "Septic emboli", "Vasospasm", "Venous thrombosis"],
-    "correct": 1,
+    "correct": 0,
     "block": 4,
-    "question_number": 9
+    "question_number": 9,
+    "image": "images/25/159.png"
   },
   {
     "question": "A 72-year-old man comes to the physician because of a 1-month history of discoloration of his legs.He lives alone and his diet consists mostly of oatmeal and prepared meats.Physical examination shows ecchymoses of the lower extremities,splinter hemorrhages of the nailbeds,perifollicular purpura,and corkscrew hairs.A deficiency of which of the following vitamins is most likely responsible for these findings?",
     "options": ["Vitamin A", "Vitamin B₁ (thiamine)", "Vitamin B₆ (pyridoxine)", "Vitamin C", "Vitamin E"],
-    "correct": 3,
+    "correct": 1,
     "block": 4,
-    "question_number": 10
+    "question_number": 10,
+    "image": "images/25/160.png"
   },
   {
     "question": "A 30-year-old woman is being evaluated for infertility.Menarche occurred at age 12years;and she had regular menses until approximately 3years ago.At that time,she noticed increased spacing between her menstrual periods and decreasing flow.Physical examination shows no abnormalities.Laboratory findings show normal serum testosterone and prolactin concentrations and an increased serum follicle-stimulating hormone concentration.Which of the following is the most likely cause of the amenorrhea?",
     "options": ["Endometriosis", "Hypothyroidism", "Pituitary tumor", "Polycystic ovarian syndrome", "Premature ovarian failure"],
-    "correct": 4,
+    "correct": 3,
     "block": 4,
     "question_number": 11
   },
   {
     "question": "A study is conducted to assess the effectiveness of injections of lidocaine into \"trigger points\" of pain symptoms in patients with fibromyalgia.Fifty patients are randomly assigned to biweekly trigger-point injections with 0.9%saline only or 0.9%saline plus lidocaine.The graph shows daily self-reported pain scores in relation to the injections.Which of the following is the most likely explanation for these findings?",
     "options": ["Placebo effect", "Regression to the mean", "Selection bias", "Type II error", "Uncontrolled confounding"],
-    "correct": 0,
+    "correct": 4,
     "block": 4,
     "question_number": 12
   },
   {
     "question": "A 34-year-old woman comes to the burn unit where her 14-year-old son was admitted 2weeks ago after he injured his hand while lighting firecrackers with his friends.In preparation for his discharge,the woman is taught to change the dressing and apply cream to the burn.She says that she feels revulsion when viewing the affected area and changing the dressing,but she tries to look cheerful for the sake of her son.Which of the following best describes this mother's defense mechanism?",
     "options": ["Denial", "Displacement", "Dissociation", "Isolation of affect", "Repression", "Splitting", "Suppression"],
-    "correct": 6,
+    "correct": 4,
     "block": 4,
     "question_number": 13
   },
   {
     "question": "A 17-year-old boy comes to the physician for a follow-up examination.One year ago,he sustained a deep laceration to his right lower extremity in a motorcycle collision.He underwent operative repair of a severed neurovascular bundle below the popliteal fossa.During the next 10months,he received regular physical therapy.Physical examination now shows no apparent atrophy of the right lower extremity.Motor and sensory functions are intact.Which of the following changes is most likely in the muscle fibers of the patient's right foot?",
     "options": ["Chronic inflammation", "Degeneration", "Fibrosis", "Grouping by fiber type", "Pseudohypertrophy"],
-    "correct": 3,
+    "correct": 0,
     "block": 4,
-    "question_number": 14
+    "question_number": 14,
+    "image": "images/25/164.png"
   },
   {
     "question": "The initial event in muscle contraction is the release of Ca²⁺ from the sarcoplasmic reticulum.Which of the following is most likely responsible for buffering the concentration of calcium ion in the sarcoplasmic reticulum?",
     "options": ["Calcium-dependent protein kinase", "Calmodulin", "Calsequestrin", "Myosin light chain", "Troponin"],
-    "correct": 2,
+    "correct": 6,
     "block": 4,
     "question_number": 15
   },
   {
     "question": "A study is conducted to assess the relationship between a history of cigarette smoking and the development of transitional cell carcinoma.In 10,000 patients with transitional cell carcinoma of the bladder,6750had a history of cigarette smoking;in 10,000 patients without transitional cell carcinoma,1250had a history of cigarette smoking.Which of the following best describes this study design?",
     "options": ["Case-control study", "Case series study", "Cohort study", "Cross-sectional study", "Randomized controlled study"],
-    "correct": 0,
+    "correct": 3,
     "block": 4,
     "question_number": 16
   },
   {
-    "question": "A 65-year-old man is brought to the emergency department because of a 4-hour history of vomiting bright red blood;he also has had dizziness and nausea during this period.His pulse is 140/min and blood pressure is 70/30mm Hg.Physical examination shows pale,clammy skin,diaphoresis,and decreased capillary refill time.A diagnosis of hypovolemic shock is made.Placement of a catheter in the internal jugular vein for blood transfusions is planned.Improper insertion of the catheter is most likely to result in damage to which of the following sets of underlying structures?",
-    "options": ["Common carotid artery and pulmonary artery", "Esophagus and common carotid artery", "Esophagus and pulmonary artery", "Lung and common carotid artery", "Lung and esophagus"],
-    "correct": 1,
+    "question": "A 4-year-old boy undergoes radiographic imaging studies of the urinary tract after having two bacterial urinary infections during the past year.His left kidney is found to be abnormally small and nonfunctional.The right kidney appears normal.He undergoes a left nephrectomy and ureterectomy.A photograph of the resected specimen is shown.Which of the following disorders most likely accounts for the pathologic changes in this kidney?",
+    "options": ["Arteriolonephrosclerosis", "Hypospadias", "Panhypopituitarism", "Renal papillary necrosis", "Ureteral obstruction"],
+    "correct": 2,
     "block": 4,
     "question_number": 17
   },
   {
-    "question": "A 57-year-old woman comes to the emergency department because of a 7-week history of fever,night sweats,and nonproductive cough;she also has had a 6.8-kg (15-lb)weight loss during this period.She is currently receiving pharmacotherapy for Crohn disease but does not remember the name of the medication.Her temperature is 38.2°C (100.8°F);pulse is 90/min;respirations are 23/min;and blood pressure is 130/80mm Hg.Amphoric breath sounds are heard over the right upper lung field.A chest x-ray is shown.This patient is most likely being treated with a monoclonal antibody targeted against which of the following?",
-    "options": ["CD3", "CD20", "Complement protein C5", "IgE", "Tumor necrosis factor-α"],
-    "correct": 4,
+    "question": "A 65-year-old man is brought to the emergency department 12hours after the onset of chest pain.He dies 5days later of cardiogenic shock.At autopsy,examination of the heart shows blockage of the coronary arteries and massive amounts of ventricular necrosis.A lack of which of the following best explains the inability of this patient's heart muscle to repair itself?",
+    "options": ["Myoglobin", "Sarcolemma", "Sarcoplasmic reticulum", "Satellite cells", "T tubules"],
+    "correct": 0,
     "block": 4,
     "question_number": 18
   },
   {
-    "question": "A 22-year-old woman comes to the physician for a follow-up examination.One year ago,she was diagnosed with a pulmonary embolism.Two years ago,she delivered a female stillborn at 23weeks' gestation.Physical examination today shows no abnormalities.Laboratory studies show a platelet count of 250,000/mm³,a prothrombin time within the reference range,and an increased partial thromboplastin time.The findings in this patient are most consistent with which of the following conditions?",
-    "options": ["Antiphospholipid antibody syndrome", "Factor V Leiden mutation", "Increased factor VIII concentration", "Protein C deficiency", "Prothrombin G20210A mutation"],
-    "correct": 0,
+    "question": "A 50-year-old man is admitted to the hospital after being diagnosed with a pulmonary embolus.Treatment is started with intravenous heparin.Twenty-four hours later warfarin is added.On day 2,his partial thromboplastin time is 52seconds (control 26sec)and prothrombin time is 12seconds (control 12.1sec,INR=1).Which of the following is the best explanation for the normal prothrombin time and INR measurements in this patient?",
+    "options": ["Heparin-warfarin interaction", "Hereditary resistance to heparin", "Hereditary resistance to warfarin", "Long half-life of factor II (prothrombin)", "Too low a dose of heparin", "Too low a dose of warfarin", "Undetected liver disease"],
+    "correct": 4,
     "block": 4,
-    "question_number": 19
+    "question_number": 19,
+    "image": "images/25/169.png"
   },
   {
-    "question": "A 16-year-old boy is brought to the emergency department because of a 3-day history of episodes of sharp chest pain on the left that lasts for a few seconds.When the patient is asked to indicate the location of the pain,he points to the 4th rib on the left.The pain is not associated with change in position and it does not radiate.There is no history of trauma.The patient appears anxious.His pulse is 90/min and regular.The left anteromedial area of the 4th rib is tender to palpation.Cardiac and pulmonary examinations show no abnormalities.Which of the following is the most likely diagnosis?",
-    "options": ["Anxiety", "Costochondritis", "Pericarditis", "Pneumonia", "Rib fracture"],
-    "correct": 1,
+    "question": "A 35-year-old man comes to the physician because of progressive abnormal curvature of the penis and shortening on erection.Physical examination of the penis shows a subcutaneous plaque on the dorsal surface.Which of the following is the most likely diagnosis?",
+    "options": ["Desmoid tumor", "Dupuytren contracture", "Keloids", "Nodular fasciitis", "Peyronie disease"],
+    "correct": 3,
     "block": 4,
     "question_number": 20
   },
   {
-    "question": "A married couple and their 12-year-old son come to the emergency department because of a 2-hour history of nausea,vomiting,and diarrhea.They all ate lunch at a company picnic 6hours ago.The physician suspects staphylococcal food poisoning and notifies the local health department.The health department contacts other picnic attendees to collect data on which foods they consumed at the event.Based on the investigation,ice cream is suspected as the source of the toxin.Among those who ate the ice cream,96became ill and 24did not experience symptoms.Among those who did not eat the ice cream,3became ill and 27did not experience symptoms.Which of the following is the relative risk for illness in those who ate the ice cream compared with those who did not?",
-    "options": ["0.125", "0.7", "8", "32", "36"],
-    "correct": 2,
+    "question": "A 27-year-old man is admitted to the hospital because of fever,fatigue,malaise,anemia,and lymphadenopathy.He is a marine and had been stationed in Saudi Arabia.He has a history of a lesion that developed at the site of a sand fly bite 2weeks before his current symptoms began.Blood cultures are negative.A biopsy specimen of a skin lesion shows enlarged macrophages containing numerous intracellular organisms.Which of the following is the most likely causal organism?",
+    "options": ["Dracunculus medinensis", "Leishmania tropica", "Onchocerca volvulus", "Plasmodium ovale", "Trypanosoma brucei"],
+    "correct": 3,
     "block": 4,
     "question_number": 21
   },
   {
-    "question": "A 53-year-old man conies to the physician because of a 2-week history of severe chest pain when climbing stairs.He does not have chest pain at rest.The diagnosis of angina pectoris is made.Nitroglycerin is prescribed for this patient because of which of the following mechanisms of action?",
-    "options": ["Decreases cAMP", "Decreases cGMP", "Decreases inositol 1,4,5-trisphosphate", "Increases cAMP", "Increases cGMP", "Increases inositol 1,4,5-trisphosphate"],
+    "question": "A study is conducted to examine the effects of polychemotherapy on patients with lung carcinoma.Bronchoalveolar lavage samples taken before and after treatment with methotrexate,doxorubicin,cyclophosphamide,and lomustine are examined for changes in pulmonary surfactant.In order to access a lingular bronchus for lavage,the bronchoscope must pass through which of the following bronchi?",
+    "options": ["Left lower lobe", "Left upper lobe", "Right lower lobe", "Right middle lobe", "Right upper lobe"],
     "correct": 4,
     "block": 4,
     "question_number": 22
   },
   {
-    "question": "A 45-year-old man conies to the physician because of a 2-week history of pain of his left testis.Six weeks ago,he had a vasectomy.Physical examination shows a bead-like mass of the left testis.Excision of the mass is done.Microscopic examination of the mass shows sheets of extravasated spermatozoa engulfed by histiocytes,many with prominent enlarged nuclei.This patient's lesion is most likely the result of which of the following processes?",
-    "options": ["Adaptation", "Autoimmunity", "Hemorrhage", "Infection", "Neoplasia"],
+    "question": "A 7-year-old boy is brought to the physician because of a 3-day history of cramping abdominal pain,blood in his urine,and a rash on his arms,legs,and buttocks.He had pharyngitis 2weeks ago.Physical examination shows a hemorrhagic rash involving the extensor surfaces of the upper and lower extremities and feet.There is generalized abdominal tenderness.Test of the stool for occult blood is positive.A renal biopsy specimen shows an increased mesangial matrix that stains positive for IgA on immunofluorescence.Which of the following is the most likely diagnosis?",
+    "options": ["Diabetic glomerulosclerosis", "Focal segmental glomerulosclerosis", "Henoch-Schönlein purpura", "Minimal change disease", "Nephroblastoma (Wilms tumor)", "Poststreptococcal glomerulonephritis", "Renal amyloidosis"],
     "correct": 1,
     "block": 4,
     "question_number": 23
   },
   {
-    "question": "A 2-year-old boy is brought to the physician because of chronic bacterial respiratory infections since birth.He is currently asymptomatic.Physical examination shows no abnormalities.T and B-lymphocyte counts and serum antibody concentrations are within the reference ranges.Natural killer cell count and function are normal.Analysis of cellular expression of human leukocyte antigen by flow cytometry shows absence of class I MHC-expressing cells.A diagnosis of bare lymphocyte syndrome,type I,is made.This patient most likely has mutations in the genes encoding which of the following?",
-    "options": ["Adenosine deaminase", "Fas ligand (CD178)", "Interleukin-2 receptor α chain (CD25)", "Peptide transporter (TAP)"],
-    "correct": 3,
+    "question": "A 33-year-old nulligravid woman comes to the physician with her 35-year-old husband because she has not been able to conceive for 13months.Previous evaluation of the husband showed no abnormalities.Physical and pelvic examinations show no abnormalities.Examination of an endometrial biopsy specimen shows secretory glands and a decidualized stroma.Which of the following hormonal changes underlies the maturation of this patient's endometrium?",
+    "options": ["Decreased follicle-stimulating hormone from the pituitary gland", "Decreased luteinizing hormone from the pituitary gland", "Decreased production of testosterone from the adrenal cortical cells", "Increased estradiol from the follicle", "Increased β-human chorionic gonadotropin from the ovarian theca cells", "Increased progesterone from the corpus luteum"],
+    "correct": 1,
     "block": 4,
     "question_number": 24
   },
   {
-    "question": "A 30-year-old woman and her 35-year-old husband come to the physician for genetic counseling prior to conception.They have a 2-year-old daughter with an isolated ventricular septal defect.The wife's sister had a heart defect for which she underwent operative repair.Previous evaluation of the couple,including echocardiography,showed no abnormalities.Which of the following best represents this couple's risk for having another child with a congenital heart defect?",
-    "options": ["0%", "3%", "25%", "50%", "100%"],
-    "correct": 1,
+    "question": "A 1-year-old girl is brought to the physician because of multiple bacterial infections since birth.She is at the 40th percentile for length and 40th percentile for weight.She has white hair,pale skin,blue irises,and prominent red pupils.A complete blood count shows neutropenia.A peripheral smear shows giant granules in the neutrophils.This patient's disorder is most likely due to which of the following pathogenetic mechanisms?",
+    "options": ["Bone marrow suppression", "Defect in leukocyte adhesion", "Defect in phagolysosome function", "Myeloperoxidase deficiency", "NADPH oxidase deficiency"],
+    "correct": 2,
     "block": 4,
-    "question_number": 25
+    "question_number": 25,
+    "image": "images/25/175.png"
   },
+
   {
     "question": "A 70-year-old woman comes to the physician because of a 3-month history of foul-smelling breath and pain before and after she swallows.Physical examination shows halitosis.Two views from a barium swallow are shown;the arrow indicates a diverticulum.This abnormality is most likely located between which of the following muscles?",
     "options": ["Cricopharyngeus and inferior pharyngeal constrictor", "Inferior and middle pharyngeal constrictor", "Middle and superior pharyngeal constrictor", "Stylopharyngeus and middle pharyngeal constrictor", "Superior pharyngeal constrictor and stylopharyngeus"],
-    "correct": 0,
+    "correct": 5,
     "block": 4,
     "question_number": 26
   },
@@ -1271,119 +1301,122 @@
   {
     "question": "An investigator studying pulmonary lymphatic flow in ventilated animals wants to increase pulmonary lymph flow.Which intervention will most likely achieve this?",
     "options": ["Endothelin-1 into pulmonary artery", "Phenylephrine into pulmonary artery", "Decrease inspired O₂ from 21% to 10%", "Increase inspired CO₂ from 0.3% to 3%", "IV 0.9% saline for 5 min", "IV 20% albumin for 5 min"],
-    "correct": 5,
+    "correct": 0,
     "block": 4,
     "question_number": 28
   },
   {
     "question": "Thyroid hormone receptor binds chromatin in both absence and presence of T₃;in absence it represses,in presence it activates transcription.Binding of T₃ is theorized to cause allosteric change decreasing affinity for complex 1 and increasing for complex 2.Complex 1 and 2 most likely contain:",
     "options": ["Complex 1: Deiodinase; Complex 2: Thyroxine peroxidase", "Complex 1: Histone deacetylase; Complex 2: Histone acetyltransferase", "Complex 1: Restriction endonuclease; Complex 2: DNA ligase", "Complex 1: Restriction endonuclease; Complex 2: DNA ligase", "Complex 1: Tyrosine kinase; Complex 2: Protein tyrosine phosphatase", "Complex 1: Ubiquitin ligase; Complex 2: SUMO ligase"],
-    "correct": 1,
+    "correct": 4,
     "block": 4,
     "question_number": 29
   },
   {
     "question": "A 78-year-old Vietnam War veteran has 3-month low back pain radiating down left leg,night sweats,fever,weight loss 20 lb,CT shows lytic lesions.Which left hip motion is likely most painful?",
     "options": ["Abduction", "Adduction", "Extension", "External rotation", "Flexion", "Internal rotation"],
-    "correct": 4,
+    "correct": 5,
     "block": 4,
     "question_number": 30
   },
   {
     "question": "An investigator studying nerve regeneration after crush injury finds axons lost distal to the lesion.Which structure acts as path-finding guide for regenerating axons?",
     "options": ["Axon hillock", "Dendritic spine", "Myelin sheath", "Nissl substance", "Terminal bouton"],
-    "correct": 2,
+    "correct": 3,
     "block": 4,
     "question_number": 31
   },
   {
     "question": "A 48-year-old woman has had burning retrosternal pain after meals for 3 months.Endoscopy shows linear ulcerations in distal esophagus.Biopsy shows columnar epithelium with goblet cells.Which change best describes this tissue?",
     "options": ["Atrophy", "Dysplasia", "Hyperplasia", "Hypertrophy", "Metaplasia"],
-    "correct": 4,
+    "correct": 0,
     "block": 4,
     "question_number": 32
   },
   {
     "question": "A 36-year-old woman with Crohn disease has severe abdominal pain after eating popcorn.CT shows terminal ileum wall thickening and obstruction.Which type of inflammatory cell predominates in the affected bowel wall?",
     "options": ["Basophils", "Eosinophils", "Macrophages", "Neutrophils", "Plasma cells"],
-    "correct": 2,
+    "correct": 4,
     "block": 4,
-    "question_number": 33
+    "question_number": 33,
+    "image": "images/25/183.png"
   },
   {
     "question": "A newborn male has ambiguous genitalia with hypospadias and bifid scrotum.Chromosomes are 46,XX.SRY gene is absent.Which embryologic process failed?",
     "options": ["First and second branchial arches", "First and second branchial grooves", "First and second branchial pouches", "Third and fourth branchial arches", "Third and fourth branchial grooves", "Third and fourth branchial pouches"],
-    "correct": 3,
+    "correct": 4,
     "block": 4,
     "question_number": 34
   },
   {
     "question": "A 75-year-old man with pancreatic head mass has dilated superficial veins in upper abdomen with blood flow upward.Which veins are most likely affected?",
     "options": ["Celiac and paraspinal veins", "Lumbar,azygos,and hemiazygos veins", "Right and left renal and suprarenal veins", "Superior and inferior mesenteric veins", "Superior mesenteric and hepatic veins"],
-    "correct": 1,
+    "correct": 4,
     "block": 4,
-    "question_number": 35
+    "question_number": 35,
+    "image": "images/25/185.png"
   },
   {
     "question": "A 40-year-old woman has hand,wrist,and knee pain,ESR ↑,normochromic normocytic anemia,RF ↑,synovial fluid from knee shows which pattern?",
     "options": ["Complement (C3) ↑, Segmented neutrophils ↓, IL-1 ↑, TNF ↑", "Complement (C3) ↓, Segmented neutrophils ↑, IL-1 ↑, TNF ↑", "Complement (C3) ↑, Segmented neutrophils ↑, IL-1 ↓, TNF ↑", "Complement (C3) ↓, Segmented neutrophils ↑, IL-1 ↓, TNF ↓"],
-    "correct": 1,
+    "correct": 4,
     "block": 4,
     "question_number": 36
   },
   {
     "question": "A 23-year-old pregnant woman at 32 weeks has left flank pain and fever 39.1°C,CVAT tenderness,renal biopsy shows neutrophil infiltration and tubular damage.Which diagnosis is most likely?",
     "options": ["Acute pyelonephritis", "Acute renal infarction", "Acute tubulointerstitial nephritis", "Crescentic glomerulonephritis", "Hemolytic uremic syndrome"],
-    "correct": 0,
+    "correct": 3,
     "block": 4,
     "question_number": 37
   },
   {
     "question": "A 55-year-old woman post-CABG develops milky pleural effusion after left internal thoracic artery harvest.Thoracentesis yields 1200 mL chyle.Which surgical step most likely caused chylothorax?",
     "options": ["Dissection of the internal thoracic artery", "Midsternal thoracotomy", "Placement of central line via left internal jugular vein", "Placement of epicardial pacemaker lead", "Placement of pulmonary artery catheter via right subclavian vein"],
-    "correct": 0,
+    "correct": 2,
     "block": 4,
     "question_number": 38
   },
   {
     "question": "A 27-year-old woman has blurred vision in right eye,improving over 5 days,previous similar episode 1 year ago,neurologic exam shows facial weakness,dysmetria,brain MRI shows multiple periventricular lesions.Which diagnosis is most likely?",
     "options": ["Cerebral abscesses", "Cerebral lymphoma", "Coccidioidomycosis", "Multiple sclerosis", "Neurocysticercosis"],
-    "correct": 3,
+    "correct": 1,
     "block": 4,
     "question_number": 39
   },
   {
     "question": "A 2-year-old boy has high fever,erythema and edema of hands and feet,conjunctival injection,strawberry tongue.Which diagnosis is most likely?",
     "options": ["Acute rheumatic fever", "Ehrlichiosis", "Erythema multiforme", "Mucocutaneous lymph node syndrome (Kawasaki disease)", "Scarlet fever"],
-    "correct": 3,
+    "correct": 0,
     "block": 4,
     "question_number": 40
   },
   {
     "question": "A 75-year-old man with COPD,50 pack-year history,now 0.5 pack/day,has dyspnea on exertion,ankle edema,cyanosis,prolonged expiration.Arterial blood gas on room air most likely shows:",
     "options": ["pH 7.32, Pao₂ 39 mm Hg, Paco₂ 65 mm Hg, HCO₃⁻ 30 mEq/L", "pH 7.35, Pao₂ 56 mm Hg, Paco₂ 56 mm Hg, HCO₃⁻ 30 mEq/L", "pH 7.39, Pao₂ 94 mm Hg, Paco₂ 39 mm Hg, HCO₃⁻ 24 mEq/L", "pH 7.41, Pao₂ 62 mm Hg, Paco₂ 43 mm Hg, HCO₃⁻ 32 mEq/L", "pH 7.42, Pao₂ 72 mm Hg, Paco₂ 32 mm Hg, HCO₃⁻ 21 mEq/L"],
-    "correct": 0,
+    "correct": 3,
     "block": 4,
-    "question_number": 41
+    "question_number": 41,
+    "image": "images/25/191.png"
   },
   {
     "question": "A 48-year-old man has had burning retrosternal pain after meals for 3 months.Endoscopy shows linear ulcerations in the distal esophagus.Biopsy shows columnar epithelium with goblet cells.Which change best describes this tissue?",
     "options": ["Atrophy", "Dysplasia", "Hyperplasia", "Hypertrophy", "Metaplasia"],
-    "correct": 4,
+    "correct": 3,
     "block": 4,
     "question_number": 42
   },
   {
     "question": "A 36-year-old woman with Crohn disease has severe abdominal pain after eating popcorn.CT shows terminal ileum wall thickening and obstruction.Which inflammatory cell predominates in the affected bowel wall?",
     "options": ["Basophils", "Eosinophils", "Macrophages", "Neutrophils", "Plasma cells"],
-    "correct": 2,
+    "correct": 4,
     "block": 4,
     "question_number": 43
   },
   {
     "question": "A newborn male has ambiguous genitalia with hypospadias and bifid scrotum.Chromosomes are 46,XX.SRY gene is absent.Which embryologic process failed?",
     "options": ["First and second branchial arches", "First and second branchial grooves", "First and second branchial pouches", "Third and fourth branchial arches", "Third and fourth branchial grooves", "Third and fourth branchial pouches"],
-    "correct": 3,
+    "correct": 4,
     "block": 4,
     "question_number": 44
   },
@@ -1397,30 +1430,32 @@
   {
     "question": "A 40-year-old woman has hand,wrist,and knee pain,ESR ↑,normochromic normocytic anemia,RF ↑.Synovial fluid from knee is most likely to show which pattern?",
     "options": ["Complement (C3) ↑, segmented neutrophils ↓, IL-1 ↑, TNF ↑", "Complement (C3) ↓, segmented neutrophils ↑, IL-1 ↑, TNF ↑", "Complement (C3) ↑, segmented neutrophils ↑, IL-1 ↓, TNF ↑", "Complement (C3) ↓, segmented neutrophils ↑, IL-1 ↓, TNF ↓"],
-    "correct": 1,
+    "correct": 4,
     "block": 4,
     "question_number": 46
   },
   {
     "question": "A 23-year-old pregnant woman at 32 weeks has left flank pain and fever 39.1°C,CVAT tenderness,renal biopsy shows neutrophil infiltration and tubular damage.Which diagnosis is most likely?",
     "options": ["Acute pyelonephritis", "Acute renal infarction", "Acute tubulointerstitial nephritis", "Crescentic glomerulonephritis", "Hemolytic uremic syndrome"],
-    "correct": 0,
+    "correct": 1,
     "block": 4,
     "question_number": 47
   },
   {
     "question": "A 55-year-old woman post-CABG develops milky pleural effusion after left internal thoracic artery harvest.Thoracentesis yields 1200 mL chyle.Which surgical step most likely caused chylothorax?",
     "options": ["Dissection of the internal thoracic artery", "Midsternal thoracotomy", "Placement of central line via left internal jugular vein", "Placement of epicardial pacemaker lead", "Placement of pulmonary artery catheter via right subclavian vein"],
-    "correct": 0,
+    "correct": 1,
     "block": 4,
-    "question_number": 48
+    "question_number": 48,
+    "image": "images/25/198.png"
   },
   {
     "question": "A 27-year-old woman has blurred vision in right eye,improving over 5 days,previous similar episode 1 year ago,neurologic exam shows facial weakness,dysmetria,brain MRI shows multiple periventricular lesions.Which diagnosis is most likely?",
     "options": ["Cerebral abscesses", "Cerebral lymphoma", "Coccidioidomycosis", "Multiple sclerosis", "Neurocysticercosis"],
-    "correct": 3,
+    "correct": 4,
     "block": 4,
-    "question_number": 49
+    "question_number": 49,
+    "image": "images/25/199.png"
   },
   {
     "question": "An investigator studying nerve regeneration after crush injury finds axons lost distal to the lesion.Which structure acts as path-finding guide for regenerating axons?",
