@@ -1,143 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
   <title>NBME Exam Simulator</title>
-  <link rel="stylesheet" href="style.css"/>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script>
-  <style>
-    /* --- Question Layout --- */
-    .question-wrapper {
-      display: flex;
-      flex-direction: column;
-      margin-top: 12px;
-      width: 100%;
-    }
-    .question-top {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 16px;
-    }
-    .question-stem { flex: 4; }
-    .question-image-wrapper {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-    }
-    .question-image {
-      max-width: 100%;
-      max-height: 250px;
-      object-fit: contain;
-      border: 1px solid #ccc;
-      background: #fafafa;
-      padding: 4px;
-      border-radius: 4px;
-      cursor: zoom-in;
-    }
-    .question-bottom { display: flex; justify-content: center; }
-    .answers { max-width: 700px; width: 100%; }
-
-    /* --- Pills / Flags / Modals --- */
-    .pill { display:inline-block; padding:4px 8px; border-radius:999px; font-size:12px; margin-left:8px; background:#eee; }
-    .flag { background:#fdd; }
-    .review-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 1000; }
-    .review-card { background: #fff; max-width: 900px; width: 95%; max-height: 85vh; overflow: auto; border-radius: 8px; padding: 16px 16px 8px; }
-    .review-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; margin-top: 10px; }
-    .review-chip { border: 1px solid #D1D8E3; padding: 10px; border-radius: 6px; cursor: pointer; text-align: center; background: #F9FAFB; }
-    .review-chip.unanswered { background: #FFF3CD; }
-    .review-chip.flagged { background: #FDE2E1; }
-    .review-actions { display:flex; justify-content: space-between; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
-    .muted { color: #666; font-size: 12px; }
-    .header .timer { text-align:right; }
-    .toolbar { display:flex; gap:8px; align-items:center; }
-    .toolbar .pill { background:#e8edf6; }
-    .hidden { display:none; }
-    .footer { display:flex; justify-content: space-between; margin-top: 12px; }
-    .left-buttons, .right-buttons { display:flex; gap:8px; }
-
-    /* --- Legend --- */
-    .legend-item {
-      display: inline-flex;
-      align-items: center;
-      margin-right: 12px;
-      font-size: 12px;
-      color: #555;
-    }
-    .legend-color {
-      width: 14px;
-      height: 14px;
-      border: 1px solid #ccc;
-      margin-right: 4px;
-      display: inline-block;
-    }
-
-    /* --- Image Zoom Modal --- */
-    .image-modal {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.7);
-      z-index: 2000;
-    }
-    .image-modal.hidden { display: none; }
-    .image-modal-content {
-      max-width: 90%;
-      max-height: 90%;
-      object-fit: contain;
-      border: 3px solid white;
-      border-radius: 6px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.6);
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="header">
-    <div class="exam-info">
-      <div id="exam-section">Exam Section 1: Item 1 of 50</div>
-      <div class="muted" id="total-remaining">Total Exam Time Remaining: 5 hr 15 min 00 sec</div>
-    </div>
-    <div class="timer">
-      <div>Block Time Remaining:</div>
-      <div id="time-remaining">1 hr 15 min 00 sec</div>
-    </div>
-  </div>
-
   <div class="container">
-    <div class="toolbar">
-      <button id="flag-button" title="Mark for review">Flag</button>
-      <button id="end-block-button">End Section</button>
-      <span class="pill" id="status-pill">Unanswered</span>
-      <span class="pill flag hidden" id="flag-pill">Flagged</span>
+    <!-- Header -->
+    <div class="header">
+      <div class="exam-info">
+        <div id="exam-section">Exam Section 1: Item 1 of 50</div>
+        <!-- Mark 按钮和状态提示在同一行 -->
+        <div class="status-row">
+          <button id="flag-button">Mark</button>
+          <span id="status-pill" class="pill">Unanswered</span>
+          <span id="flag-pill" class="pill flag hidden">Flagged</span>
+        </div>
+      </div>
+      <div class="timer">
+        <div id="time-remaining">1 hr 15 min 00 sec</div>
+        <div id="total-remaining">Total Exam Time Remaining: 5 hr 15 min 00 sec</div>
+      </div>
     </div>
 
-    <!-- Question Area -->
+    <!-- Question -->
     <div class="question-wrapper">
       <div class="question-top">
-        <div class="question-stem" id="question-text">Loading question...</div>
-        <div class="question-image-wrapper" id="question-image-wrapper">
-          <img id="question-image" class="question-image hidden" alt="" />
+        <div class="question-stem">
+          <p id="question-text">Loading...</p>
+        </div>
+        <div class="question-image-wrapper">
+          <img id="question-image" class="question-image hidden" />
         </div>
       </div>
       <div class="question-bottom">
-        <ul class="answers" id="answer-options"></ul>
+        <ul id="answer-options" class="answers"></ul>
       </div>
     </div>
 
     <!-- Footer -->
     <div class="footer">
       <div class="left-buttons">
-        <button id="prev-button" disabled>Previous</button>
+        <button id="prev-button">Previous</button>
         <button id="next-button">Next</button>
+        <button id="end-block-button">End Block</button>
       </div>
       <div class="right-buttons">
         <button id="review-button">Review</button>
-        <button id="pause-button">Pause (Break)</button>
-        <button id="resume-button" class="hidden">Resume</button>
-        <button id="finish-exam-button" class="hidden">Finish Exam</button>
+        <button id="pause-button">Pause</button>
       </div>
     </div>
   </div>
@@ -145,21 +56,15 @@
   <!-- Review Modal -->
   <div class="review-modal" id="review-modal">
     <div class="review-card">
-      <h3 id="review-title">Review Section 1</h3>
-      <div class="muted">
-        <span class="legend-item"><span class="legend-color" style="background:#FFF3CD;"></span>Unanswered</span>
-        <span class="legend-item"><span class="legend-color" style="background:#FDE2E1;"></span>Flagged</span>
-        <span class="legend-item"><span class="legend-color" style="background:#F9FAFB;"></span>Answered</span>
+      <h3>Review Questions</h3>
+      <div class="legend">
+        <span class="legend-item"><span class="legend-color" style="background:#FFF3CD"></span> Unanswered</span>
+        <span class="legend-item"><span class="legend-color" style="background:#FDE2E1"></span> Flagged</span>
+        <span class="legend-item"><span class="legend-color" style="background:#F9FAFB"></span> Answered</span>
       </div>
-      <div class="review-grid" id="review-grid"></div>
+      <div id="review-grid" class="review-grid"></div>
       <div class="review-actions">
-        <div>
-          <button id="clear-flags">Clear All Flags (section)</button>
-          <button id="toggle-flagged">Show Flagged Only</button>
-        </div>
-        <div>
-          <button id="close-review">Close</button>
-        </div>
+        <button id="close-review">Close</button>
       </div>
     </div>
   </div>
@@ -167,20 +72,16 @@
   <!-- Section Review Modal -->
   <div class="review-modal" id="section-review-modal">
     <div class="review-card">
-      <h3 id="section-review-title">Section Review</h3>
-      <div class="muted">
-        <span class="legend-item"><span class="legend-color" style="background:#FFF3CD;"></span>Unanswered</span>
-        <span class="legend-item"><span class="legend-color" style="background:#FDE2E1;"></span>Flagged</span>
-        <span class="legend-item"><span class="legend-color" style="background:#F9FAFB;"></span>Answered</span>
+      <h3>Section Review</h3>
+      <div class="legend">
+        <span class="legend-item"><span class="legend-color" style="background:#FFF3CD"></span> Unanswered</span>
+        <span class="legend-item"><span class="legend-color" style="background:#FDE2E1"></span> Flagged</span>
+        <span class="legend-item"><span class="legend-color" style="background:#F9FAFB"></span> Answered</span>
       </div>
-      <div class="review-grid" id="section-review-grid"></div>
+      <div id="section-review-grid" class="review-grid"></div>
       <div class="review-actions">
-        <div>
-          <button id="section-review-back">Return to Questions</button>
-        </div>
-        <div>
-          <button id="section-review-end">End Section</button>
-        </div>
+        <button id="section-review-back">Return</button>
+        <button id="section-review-end">End Section</button>
       </div>
     </div>
   </div>
@@ -189,26 +90,46 @@
   <div class="review-modal" id="exam-review-modal">
     <div class="review-card">
       <h3>Exam Review</h3>
-      <div class="muted">
-        <span class="legend-item"><span class="legend-color" style="background:#FFF3CD;"></span>Unanswered</span>
-        <span class="legend-item"><span class="legend-color" style="background:#FDE2E1;"></span>Flagged</span>
-        <span class="legend-item"><span class="legend-color" style="background:#F9FAFB;"></span>Answered</span>
+      <div class="legend">
+        <span class="legend-item"><span class="legend-color" style="background:#FFF3CD"></span> Unanswered</span>
+        <span class="legend-item"><span class="legend-color" style="background:#FDE2E1"></span> Flagged</span>
+        <span class="legend-item"><span class="legend-color" style="background:#F9FAFB"></span> Answered</span>
       </div>
       <div id="exam-review-content"></div>
       <div class="review-actions">
-        <div>
-          <button id="exam-review-close">Close</button>
-        </div>
-        <div>
-          <button id="exam-review-finish">Finish & Export Results</button>
-        </div>
+        <button id="exam-review-close">Close</button>
+        <button id="exam-review-finish">Finish & Export Results</button>
       </div>
     </div>
   </div>
 
-  <!-- Image Zoom Modal -->
-  <div id="image-modal" class="image-modal hidden">
-    <img id="image-modal-content" class="image-modal-content" alt="Zoomed question image"/>
+  <!-- Final Submit Confirmation Modal -->
+  <div class="review-modal" id="submit-confirm-modal">
+    <div class="review-card">
+      <h3>Confirm Exam Submission</h3>
+      <p>Are you sure you want to submit your exam? Once submitted, you cannot return to review or change your answers.</p>
+      <div class="review-actions">
+        <button id="cancel-submit">Cancel</button>
+        <button id="confirm-submit">Submit & End Exam</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section End Confirmation Modal -->
+  <div class="review-modal" id="section-end-confirm-modal">
+    <div class="review-card">
+      <h3>Confirm End Section</h3>
+      <p>Are you sure you want to end this section and move to the next one? Once you proceed, you cannot return to review or change your answers in this section.</p>
+      <div class="review-actions">
+        <button id="cancel-section-end">Cancel</button>
+        <button id="confirm-section-end">End Section</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Image Modal -->
+  <div class="image-modal hidden" id="image-modal">
+    <img id="image-modal-content" class="image-modal-content" />
   </div>
 
   <script src="script.js"></script>
