@@ -8,6 +8,10 @@ let timerInterval = null;
 let sectionTime = 75 * 60;
 let totalTime = 315 * 60;
 
+// 暂停相关变量
+let isPaused = false;
+let pauseStartTime = 0;
+
 // 自动保存相关变量
 let autoSaveInterval = null;
 let examAutoSave = null;
@@ -35,6 +39,7 @@ const reviewCloseBtn = document.getElementById("close-review");
 const endBlockBtn = document.getElementById("end-block-button");
 const sectionReviewBackBtn = document.getElementById("section-review-back");
 const examReviewCloseBtn = document.getElementById("exam-review-close");
+const pauseBtn = document.getElementById("pause-button");
 
 // ========== 移动端检测和初始化 ==========
 function isMobileDevice() {
@@ -64,6 +69,9 @@ function initMobileOptimizations() {
     if (questionWrapper) {
       questionWrapper.style.webkitOverflowScrolling = 'touch';
     }
+    
+    // 添加移动端专用的CSS类
+    document.body.classList.add('mobile-device');
   }
 }
 
@@ -113,9 +121,103 @@ function hideModal(modal) {
   }
 }
 
+// ========== 暂停功能 ==========
+function pauseExam() {
+  if (isPaused) {
+    // 恢复考试
+    resumeExam();
+  } else {
+    // 暂停考试
+    if (timerInterval) {
+      clearInterval(timerInterval);
+      timerInterval = null;
+    }
+    
+    isPaused = true;
+    pauseStartTime = Date.now();
+    pauseBtn.textContent = 'Resume';
+    pauseBtn.classList.add('paused');
+    
+    // 显示暂停覆盖层
+    showPauseOverlay();
+    
+    // Pause exam automatically save
+    autoSave();
+    
+    console.log('Exam paused');
+  }
+}
+
+function resumeExam() {
+  isPaused = false;
+  pauseBtn.textContent = 'Pause';
+  pauseBtn.classList.remove('paused');
+  
+  // Hide pause overlay
+  hidePauseOverlay();
+  
+  // Restart timer
+  startTimer();
+  
+  console.log('Exam resumed');
+}
+
+function showPauseOverlay() {
+  // Create pause overlay
+  const overlay = document.createElement('div');
+  overlay.id = 'pause-overlay';
+  overlay.className = 'pause-overlay';
+  overlay.innerHTML = `
+    <div class="pause-content">
+      <div class="pause-icon">⏸️</div>
+      <h3>Exam Paused</h3>
+      <p>Click "Resume" button to continue the exam</p>
+      <p class="pause-time">Pause duration: <span id="pause-timer">00:00</span></p>
+      <button onclick="resumeExam()" class="resume-button">Resume</button>
+    </div>
+  `;
+  
+  document.body.appendChild(overlay);
+  
+  // Start pause timer
+  startPauseTimer();
+}
+
+function hidePauseOverlay() {
+  const overlay = document.getElementById('pause-overlay');
+  if (overlay) {
+    overlay.remove();
+  }
+  
+  // 停止暂停计时器
+  stopPauseTimer();
+}
+
+let pauseTimerInterval = null;
+
+function startPauseTimer() {
+  pauseTimerInterval = setInterval(() => {
+    const elapsed = Math.floor((Date.now() - pauseStartTime) / 1000);
+    const minutes = Math.floor(elapsed / 60);
+    const seconds = elapsed % 60;
+    
+    const timerElement = document.getElementById('pause-timer');
+    if (timerElement) {
+      timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+  }, 1000);
+}
+
+function stopPauseTimer() {
+  if (pauseTimerInterval) {
+    clearInterval(pauseTimerInterval);
+    pauseTimerInterval = null;
+  }
+}
+
 // ========== 自动保存功能 ==========
 function showAutoSaveIndicator(success = true) {
-  // 创建或获取自动保存指示器
+  // Create or get auto-save indicator
   let indicator = document.getElementById('auto-save-indicator');
   if (!indicator) {
     indicator = document.createElement('div');
@@ -124,17 +226,17 @@ function showAutoSaveIndicator(success = true) {
     document.body.appendChild(indicator);
   }
   
-  // 更新状态和文本
+  // Update status and text
   indicator.className = 'auto-save-indicator show';
   if (success) {
-    indicator.textContent = '已自动保存';
+    indicator.textContent = 'Auto-saved';
     indicator.classList.remove('error');
   } else {
-    indicator.textContent = '保存失败';
+    indicator.textContent = 'Save failed';
     indicator.classList.add('error');
   }
   
-  // 3秒后隐藏
+  // Hide after 3 seconds
   setTimeout(() => {
     indicator.classList.remove('show');
   }, 3000);
@@ -150,18 +252,19 @@ function autoSave() {
       flags: FLAGS,
       sectionTime: sectionTime,
       totalTime: totalTime,
+      isPaused: isPaused,
       timestamp: Date.now(),
-      version: '1.0'
+      version: '1.1'
     };
     
-    // 使用内存存储
+    // Use in-memory storage
     examAutoSave = examData;
     showAutoSaveIndicator(true);
     
-    console.log('考试数据已自动保存', new Date().toLocaleTimeString());
+    console.log('Exam data auto-saved', new Date().toLocaleTimeString());
     
   } catch (error) {
-    console.error('自动保存失败:', error);
+    console.error('Auto-save failed:', error);
     showAutoSaveIndicator(false);
   }
 }
@@ -170,10 +273,10 @@ function loadAutoSave() {
   if (examAutoSave && examAutoSave.bank === BANK) {
     const timeSinceLastSave = Date.now() - examAutoSave.timestamp;
     
-    // 如果保存时间不超过2小时，则恢复数据
+    // If save time is within 2 hours, restore data
     if (timeSinceLastSave < 2 * 60 * 60 * 1000) {
       const shouldRestore = confirm(
-        `发现之前的考试记录（${Math.floor(timeSinceLastSave / 60000)}分钟前保存）\n是否恢复继续考试？`
+        `Previous exam session found (saved ${Math.floor(timeSinceLastSave / 60000)} minutes ago)\nWould you like to resume the exam?`
       );
       
       if (shouldRestore) {
@@ -184,7 +287,12 @@ function loadAutoSave() {
         sectionTime = examAutoSave.sectionTime;
         totalTime = examAutoSave.totalTime;
         
-        console.log('已恢复之前的考试进度');
+        // If previously paused, don't auto-pause on restore
+        if (examAutoSave.isPaused) {
+          console.log('Previous session was paused, now resumed');
+        }
+        
+        console.log('Previous exam progress restored');
         showAutoSaveIndicator(true);
         
         return true;
@@ -195,13 +303,13 @@ function loadAutoSave() {
 }
 
 function startAutoSave() {
-  // 每30秒自动保存一次
+  // Auto-save every 30 seconds
   if (autoSaveInterval) {
     clearInterval(autoSaveInterval);
   }
   
   autoSaveInterval = setInterval(autoSave, 30000);
-  console.log('自动保存功能已启动');
+  console.log('Auto-save feature started');
 }
 
 function stopAutoSave() {
@@ -209,7 +317,7 @@ function stopAutoSave() {
     clearInterval(autoSaveInterval);
     autoSaveInterval = null;
   }
-  console.log('自动保存功能已停止');
+  console.log('Auto-save feature stopped');
 }
 
 // ========== Load exam ==========
@@ -227,38 +335,51 @@ async function loadExam() {
     ANSWERS = QUESTIONS.map(() => ({}));
     FLAGS = QUESTIONS.map(() => ({}));
 
-    // 尝试恢复之前的进度
+    // Try to restore previous progress
     const restored = loadAutoSave();
     
     renderQuestion();
     startTimer();
-    startAutoSave(); // 启动自动保存
+    startAutoSave(); // Start auto-save
     
     if (!restored) {
-      // 首次加载时也保存一次
+      // Also save once on first load
       setTimeout(autoSave, 5000);
     }
     
   } catch (error) {
-    console.error('加载考试失败:', error);
-    alert('加载考试失败，请检查网络连接或联系管理员');
+    console.error('Failed to load exam:', error);
+    alert('Failed to load exam. Please check your network connection or contact administrator.');
   }
 }
 
 // ========== Timer ==========
 function startTimer() {
+  if (timerInterval) {
+    clearInterval(timerInterval);
+  }
+  
   timerInterval = setInterval(() => {
-    sectionTime--;
-    totalTime--;
-    updateTimerDisplay();
-    if (sectionTime <= 0) endSection();
-    if (totalTime <= 0) finishExam();
+    if (!isPaused) {
+      sectionTime--;
+      totalTime--;
+      updateTimerDisplay();
+      if (sectionTime <= 0) endSection();
+      if (totalTime <= 0) finishExam();
+    }
   }, 1000);
 }
 
 function updateTimerDisplay() {
   timeRemaining.textContent = formatTime(sectionTime);
   totalRemaining.textContent = "Total Exam Time Remaining: " + formatTime(totalTime);
+  
+  // 时间预警
+  if (sectionTime <= 300) { // 5分钟预警
+    timeRemaining.classList.add('time-warning');
+  } else {
+    timeRemaining.classList.remove('time-warning');
+  }
 }
 
 function formatTime(sec) {
@@ -276,14 +397,17 @@ function renderQuestion() {
 
   // 同步控制右侧图片容器
   const imageWrapper = document.querySelector(".question-image-wrapper");
+  const questionTop = document.querySelector(".question-top");
 
   if (q.image) {
     questionImage.src = q.image.includes("/") ? q.image : `images/${BANK}/${q.image}`;
     questionImage.classList.remove("hidden");
     if (imageWrapper) imageWrapper.classList.remove("hidden");
+    if (questionTop) questionTop.classList.remove("no-image");
   } else {
     questionImage.classList.add("hidden");
     if (imageWrapper) imageWrapper.classList.add("hidden"); // 关键：隐藏整列
+    if (questionTop) questionTop.classList.add("no-image");
   }
 
   answerOptions.innerHTML = "";
@@ -297,7 +421,7 @@ function renderQuestion() {
     input.onchange = () => {
       ANSWERS[CURRENT_SECTION][CURRENT_INDEX] = idx;
       updateStatus();
-      // 答题后立即保存一次
+      // Save immediately after answering
       setTimeout(autoSave, 1000);
     };
     li.appendChild(input);
@@ -344,9 +468,12 @@ document.getElementById("prev-button").onclick = () => {
 document.getElementById("flag-button").onclick = () => {
   FLAGS[CURRENT_SECTION][CURRENT_INDEX] = !FLAGS[CURRENT_SECTION][CURRENT_INDEX];
   updateStatus();
-  // 标记后保存
+  // Save after flagging
   setTimeout(autoSave, 1000);
 };
+
+// ========== Pause Button Event ==========
+pauseBtn.onclick = pauseExam;
 
 // ========== Review ==========
 function populateReviewGrid() {
@@ -435,7 +562,7 @@ function populateExamReview() {
 
 function finishExam() {
   clearInterval(timerInterval);
-  stopAutoSave(); // 停止自动保存
+  stopAutoSave(); // Stop auto-save
   populateExamReview();
   showModal(examReviewModal);
 }
@@ -458,9 +585,9 @@ document.getElementById("cancel-submit").onclick = () => {
 document.getElementById("confirm-submit").onclick = () => {
   hideModal(submitConfirmModal);
   clearInterval(timerInterval);
-  stopAutoSave(); // 确保停止自动保存
+  stopAutoSave(); // Ensure auto-save is stopped
   
-  // 清除自动保存数据
+  // Clear auto-save data
   examAutoSave = null;
   
   document.body.innerHTML = `
@@ -486,7 +613,7 @@ document.getElementById("confirm-section-end").onclick = () => {
 
 // ========== Section Flow ==========
 function endSection() {
-  // 结束当前section时保存一次
+  // Save when ending current section
   autoSave();
   
   CURRENT_SECTION++;
@@ -530,7 +657,7 @@ function exportResults() {
   let unansweredCount = totalQuestions - answeredCount;
   let completionRate = ((answeredCount / totalQuestions) * 100).toFixed(1);
   let correctRate = ((correctCount / totalQuestions) * 100).toFixed(1);
-  let totalScore = correctCount; // 总分就是正确答案数
+  let totalScore = correctCount; // Total score is number of correct answers
   
   // Generate current date
   let now = new Date();
@@ -783,9 +910,9 @@ function exportResults() {
       if (userAnswer == null) {
         symbol = 'U';
       } else if (userAnswer === correctAnswer) {
-        symbol = '✓'; // 打勾表示正确
+        symbol = '✓'; // Check mark for correct
       } else {
-        symbol = '✗'; // 打叉表示错误
+        symbol = '✗'; // X mark for incorrect
       }
       
       pdfContent += `<div class="${className}">${q + 1}<br/>${symbol}</div>`;
@@ -839,25 +966,70 @@ imageModal.onclick = (e) => {
   }
 };
 
-// ========== 处理屏幕方向变化 ==========
+// ========== Handle screen orientation changes ==========
 window.addEventListener('orientationchange', function() {
   setTimeout(() => {
-    // 重新计算布局
+    // Recalculate layout
     if (window.DeviceOrientationEvent) {
       window.scrollTo(0, 0);
     }
   }, 100);
 });
 
-// ========== 防止意外关闭 ==========
+// ========== Prevent accidental closure ==========
 window.addEventListener('beforeunload', function(e) {
   if (timerInterval) {
     e.preventDefault();
-    e.returnValue = '考试正在进行中，确定要离开吗？';
+    e.returnValue = 'Exam is in progress. Are you sure you want to leave?';
     return e.returnValue;
   }
 });
 
-// ========== 初始化 ==========
+// ========== Keyboard shortcuts support ==========
+document.addEventListener('keydown', function(e) {
+  // Only enable shortcuts on non-input elements
+  if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+    switch(e.key) {
+      case 'ArrowLeft':
+        if (CURRENT_INDEX > 0) {
+          e.preventDefault();
+          CURRENT_INDEX--;
+          renderQuestion();
+        }
+        break;
+      case 'ArrowRight':
+        if (CURRENT_INDEX < 49) {
+          e.preventDefault();
+          CURRENT_INDEX++;
+          renderQuestion();
+        }
+        break;
+      case 'f':
+      case 'F':
+        e.preventDefault();
+        document.getElementById("flag-button").click();
+        break;
+      case ' ':
+        e.preventDefault();
+        pauseExam();
+        break;
+      case '1':
+      case '2':
+      case '3':
+      case '4':
+      case '5':
+        const optionIndex = parseInt(e.key) - 1;
+        const options = document.querySelectorAll('input[name="answer"]');
+        if (options[optionIndex]) {
+          e.preventDefault();
+          options[optionIndex].checked = true;
+          options[optionIndex].onchange();
+        }
+        break;
+    }
+  }
+});
+
+// ========== Initialization ==========
 initMobileOptimizations();
 loadExam();
