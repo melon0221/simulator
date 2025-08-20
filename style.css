@@ -55,6 +55,19 @@ body {
   color: #222;
 }
 
+/* 时间预警样式 */
+.time-warning {
+  color: #d63384 !important;
+  font-weight: bold;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.6; }
+  100% { opacity: 1; }
+}
+
 .pill {
   display: inline-block;
   padding: 2px 8px;
@@ -132,6 +145,14 @@ body {
 
 .answers li {
   margin-bottom: 10px;
+  padding: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.answers li:hover {
+  background-color: #f8f9fa;
 }
 
 .answers input {
@@ -152,10 +173,23 @@ body {
   cursor: pointer;
   border: 1px solid #888;
   background: #eef4fc;
+  border-radius: 4px;
+  transition: background-color 0.2s;
 }
 
 .footer button:hover {
   background: #d8e6fa;
+}
+
+/* 暂停按钮特殊样式 */
+#pause-button.paused {
+  background: #d1ecf1;
+  color: #0c5460;
+  border-color: #bee5eb;
+}
+
+#pause-button.paused:hover {
+  background: #bee5eb;
 }
 
 /* Review Modal */
@@ -201,6 +235,12 @@ body {
   font-size: 13px;
   border-radius: 4px;
   background: #f9fafb;
+  transition: transform 0.1s;
+}
+
+.review-chip:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .review-chip.unanswered {
@@ -251,17 +291,109 @@ body {
   justify-content: center;
   align-items: center;
   z-index: 1100;
+  cursor: pointer;
 }
 
 .image-modal img {
   max-width: 90%;
   max-height: 90%;
+  cursor: default;
 }
 
 .image-modal.show {
   display: flex;
 }
 
+/* 暂停覆盖层样式 */
+.pause-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  backdrop-filter: blur(10px);
+}
+
+.pause-content {
+  background: white;
+  padding: 40px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  max-width: 400px;
+  width: 90%;
+}
+
+.pause-icon {
+  font-size: 48px;
+  margin-bottom: 20px;
+}
+
+.pause-content h3 {
+  margin: 0 0 15px 0;
+  color: #2a4365;
+  font-size: 24px;
+}
+
+.pause-content p {
+  margin: 10px 0;
+  color: #666;
+}
+
+.pause-time {
+  font-weight: bold;
+  color: #d63384;
+  font-size: 18px;
+}
+
+.resume-button {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: background-color 0.2s;
+}
+
+.resume-button:hover {
+  background: #218838;
+}
+
+/* 自动保存指示器 */
+.auto-save-indicator {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #d4edda;
+  color: #155724;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 13px;
+  border: 1px solid #c3e6cb;
+  opacity: 0;
+  transform: translateX(100%);
+  transition: all 0.3s ease;
+  z-index: 1500;
+}
+
+.auto-save-indicator.show {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.auto-save-indicator.error {
+  background: #f8d7da;
+  color: #721c24;
+  border-color: #f5c6cb;
+}
 
 .professional-header {
   background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
@@ -289,4 +421,283 @@ body {
   background: #3b82f6;
   border-radius: 2px;
   transition: width 0.3s ease;
+}
+
+/* ==================== 移动端适配 ==================== */
+@media (max-width: 768px) {
+  body.mobile-device .container {
+    height: 100vh;
+    overflow: hidden;
+  }
+  
+  /* 移动端头部优化 */
+  body.mobile-device .header {
+    flex-direction: column;
+    padding: 8px 15px;
+    gap: 8px;
+  }
+  
+  body.mobile-device .exam-info {
+    width: 100%;
+  }
+  
+  body.mobile-device .timer {
+    text-align: left;
+    font-size: 13px;
+  }
+  
+  body.mobile-device .status-row {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  
+  body.mobile-device #flag-button {
+    font-size: 12px;
+    padding: 3px 8px;
+  }
+  
+  /* 移动端问题区域 - 上中下三部分布局 */
+  body.mobile-device .question-wrapper {
+    padding: 15px;
+    gap: 15px;
+  }
+  
+  body.mobile-device .question-top {
+    flex-direction: column;
+    margin-bottom: 15px;
+    gap: 15px;
+  }
+  
+  body.mobile-device .question-stem {
+    flex: none;
+    padding-right: 0;
+    order: 1; /* 题干在上 */
+  }
+  
+  body.mobile-device .question-image-wrapper {
+    flex: none;
+    order: 2; /* 图片在中 */
+    justify-content: center;
+    align-items: center;
+  }
+  
+  body.mobile-device .question-image {
+    max-height: 250px;
+    width: auto;
+    height: auto;
+  }
+  
+  body.mobile-device .question-bottom {
+    order: 3; /* 选项在下 */
+    margin-top: 0;
+  }
+  
+  /* 移动端选项优化 */
+  body.mobile-device .answers li {
+    padding: 12px 8px;
+    margin-bottom: 8px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    background: #fafafa;
+    font-size: 14px;
+    line-height: 1.4;
+    touch-action: manipulation;
+  }
+  
+  body.mobile-device .answers li:active {
+    background: #e3f2fd;
+    transform: scale(0.98);
+  }
+  
+  body.mobile-device .answers input {
+    margin-right: 10px;
+    transform: scale(1.2);
+  }
+  
+  /* 移动端底部按钮优化 */
+  body.mobile-device .footer {
+    padding: 8px 15px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  
+  body.mobile-device .left-buttons,
+  body.mobile-device .right-buttons {
+    display: flex;
+    gap: 6px;
+  }
+  
+  body.mobile-device .footer button {
+    font-size: 13px;
+    padding: 8px 12px;
+    min-width: 70px;
+    touch-action: manipulation;
+  }
+  
+  /* 移动端模态框优化 */
+  body.mobile-device .review-card {
+    width: 95%;
+    max-height: 90%;
+    padding: 15px;
+    margin: 10px;
+  }
+  
+  body.mobile-device .review-grid {
+    grid-template-columns: repeat(auto-fill, minmax(45px, 1fr));
+    gap: 8px;
+  }
+  
+  body.mobile-device .review-chip {
+    padding: 10px 4px;
+    font-size: 11px;
+    min-height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  body.mobile-device .legend {
+    flex-wrap: wrap;
+    gap: 10px;
+    font-size: 12px;
+  }
+  
+  body.mobile-device .review-actions {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+  
+  body.mobile-device .review-actions button {
+    padding: 10px 16px;
+    font-size: 14px;
+    min-width: 80px;
+  }
+  
+  /* 移动端暂停覆盖层 */
+  body.mobile-device .pause-content {
+    padding: 30px 20px;
+    max-width: 90%;
+  }
+  
+  body.mobile-device .pause-icon {
+    font-size: 36px;
+    margin-bottom: 15px;
+  }
+  
+  body.mobile-device .pause-content h3 {
+    font-size: 20px;
+    margin-bottom: 12px;
+  }
+  
+  body.mobile-device .pause-time {
+    font-size: 16px;
+  }
+  
+  body.mobile-device .resume-button {
+    padding: 12px 20px;
+    font-size: 16px;
+    width: 100%;
+  }
+  
+  /* 移动端自动保存指示器 */
+  body.mobile-device .auto-save-indicator {
+    top: 10px;
+    right: 10px;
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+  
+  /* 移动端图片模态框 */
+  body.mobile-device .image-modal img {
+    max-width: 95%;
+    max-height: 85%;
+  }
+  
+  /* 防止移动端缩放 */
+  body.mobile-device {
+    -webkit-text-size-adjust: 100%;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  
+  /* 允许文本选择 */
+  body.mobile-device .question-stem,
+  body.mobile-device .answers li {
+    -webkit-user-select: text;
+    -khtml-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+  }
+}
+
+/* 横屏手机适配 */
+@media (max-width: 768px) and (orientation: landscape) {
+  body.mobile-device .question-wrapper {
+    padding: 10px 15px;
+  }
+  
+  body.mobile-device .question-image {
+    max-height: 180px;
+  }
+  
+  body.mobile-device .answers li {
+    padding: 8px;
+    margin-bottom: 6px;
+    font-size: 13px;
+  }
+  
+  body.mobile-device .header {
+    padding: 6px 15px;
+  }
+  
+  body.mobile-device .footer {
+    padding: 6px 15px;
+  }
+}
+
+/* 平板适配 */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .container {
+    max-width: 100%;
+  }
+  
+  .question-wrapper {
+    padding: 18px;
+  }
+  
+  .question-image {
+    max-height: 280px;
+  }
+  
+  .review-card {
+    width: 85%;
+    max-width: 700px;
+  }
+  
+  .review-grid {
+    grid-template-columns: repeat(auto-fill, minmax(48px, 1fr));
+  }
+}
+
+/* 大屏幕优化 */
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+  }
+  
+  .question-wrapper {
+    padding: 25px;
+  }
+  
+  .question-image {
+    max-height: 350px;
+  }
 }
