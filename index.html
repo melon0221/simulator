@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>NBME Exam Simulator</title>
   <link rel="stylesheet" href="style.css">
   <style>
@@ -12,72 +13,307 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      min-height: 100vh;
+      padding: 20px;
+      box-sizing: border-box;
+      -webkit-text-size-adjust: 100%;
+      -webkit-tap-highlight-color: transparent;
     }
+    
     .welcome-container {
       background: white;
       padding: 40px;
-      border-radius: 10px;
+      border-radius: 12px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.1);
       max-width: 500px;
-      width: 90%;
+      width: 100%;
       text-align: center;
+      position: relative;
     }
+    
     h1 {
-      margin-bottom: 10px;
+      margin-bottom: 15px;
+      color: #2a4365;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    
+    p {
+      margin: 12px 0;
+      color: #444;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+    
+    .exam-details {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+      border-left: 4px solid #2a4365;
+    }
+    
+    .exam-details strong {
       color: #2a4365;
     }
-    p {
-      margin: 8px 0;
-      color: #444;
-      font-size: 14px;
-    }
-    select {
-      margin: 16px 0;
-      padding: 8px;
-      font-size: 14px;
-      width: 100%;
-    }
-    button {
+    
+    label {
+      display: block;
       margin-top: 20px;
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: #2a4365;
+      text-align: left;
+    }
+    
+    select {
+      margin: 0 0 16px 0;
+      padding: 12px;
+      font-size: 16px;
+      width: 100%;
+      border: 2px solid #e0e0e0;
+      border-radius: 6px;
+      background: white;
+      color: #333;
+      box-sizing: border-box;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=US-ASCII,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'><path fill='%23666' d='M2 0L0 2h4zm0 5L0 3h4z'/></svg>");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      background-size: 12px;
+    }
+    
+    select:focus {
+      outline: none;
+      border-color: #2b6cb0;
+      box-shadow: 0 0 0 3px rgba(43, 108, 176, 0.1);
+    }
+    
+    button {
+      margin-top: 25px;
       background: #2b6cb0;
       color: white;
       border: none;
-      padding: 12px 24px;
-      font-size: 16px;
-      border-radius: 6px;
+      padding: 16px 24px;
+      font-size: 18px;
+      font-weight: bold;
+      border-radius: 8px;
       cursor: pointer;
       width: 100%;
+      transition: all 0.2s ease;
+      touch-action: manipulation;
     }
-    button:hover {
+    
+    button:hover,
+    button:active {
       background: #2c5282;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(43, 108, 176, 0.3);
+    }
+    
+    button:active {
+      transform: translateY(0);
+    }
+    
+    .app-info {
+      margin-top: 25px;
+      padding: 15px;
+      background: #e3f2fd;
+      border-radius: 6px;
+      font-size: 14px;
+      color: #1565c0;
+    }
+    
+    /* Mobile optimizations */
+    @media (max-width: 767px) {
+      body {
+        padding: 15px;
+        min-height: 100vh;
+        align-items: flex-start;
+        padding-top: 30px;
+      }
+      
+      .welcome-container {
+        padding: 25px 20px;
+        border-radius: 10px;
+        max-width: none;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      
+      h1 {
+        font-size: 24px;
+        margin-bottom: 12px;
+      }
+      
+      p {
+        font-size: 15px;
+        margin: 10px 0;
+      }
+      
+      .exam-details {
+        padding: 16px;
+        margin: 16px 0;
+      }
+      
+      select {
+        padding: 14px 12px;
+        font-size: 16px;
+        border-radius: 8px;
+      }
+      
+      button {
+        padding: 18px 24px;
+        font-size: 18px;
+        border-radius: 8px;
+        margin-top: 20px;
+      }
+      
+      .app-info {
+        margin-top: 20px;
+        padding: 12px;
+        font-size: 13px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .welcome-container {
+        padding: 20px 16px;
+      }
+      
+      h1 {
+        font-size: 22px;
+      }
+      
+      p {
+        font-size: 14px;
+      }
+      
+      .exam-details {
+        padding: 14px;
+      }
+      
+      select {
+        padding: 12px;
+        font-size: 15px;
+      }
+      
+      button {
+        padding: 16px 20px;
+        font-size: 17px;
+      }
+    }
+    
+    /* Loading state */
+    .loading {
+      pointer-events: none;
+      opacity: 0.7;
+    }
+    
+    .loading button {
+      position: relative;
+    }
+    
+    .loading button:after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      margin: auto;
+      border: 2px solid transparent;
+      border-top-color: #ffffff;
+      border-radius: 50%;
+      animation: spin 1s ease infinite;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
   </style>
 </head>
 <body>
   <div class="welcome-container">
     <h1>NBME Exam Simulator</h1>
-    <p>Welcome! This simulator replicates the NBME Comprehensive Basic Science exam.</p>
-    <p>The exam consists of <b>4 sections</b>, each with <b>50 questions</b>, timed at <b>75 minutes</b> per section.</p>
+    <p>Welcome! This simulator replicates the NBME Comprehensive Basic Science exam experience.</p>
+    
+    <div class="exam-details">
+      <p>The exam consists of <strong>4 sections</strong>, each with <strong>50 questions</strong>, timed at <strong>75 minutes</strong> per section.</p>
+      <p>Total exam time: <strong>5 hours</strong> (300 minutes)</p>
+    </div>
     
     <label for="bank">Select Question Bank:</label>
-    <select id="bank">
+    <select id="bank" aria-label="Select Question Bank">
       <option value="25">Form 25</option>
-   <!--   <option value="26">Form 26</option>
+      <option value="26">Form 26</option>
       <option value="27">Form 27</option>
-      <option value="28">Form 28</option>  -->
-      <!-- 可以继续加 -->
+      <option value="28">Form 28</option>
     </select>
     
-    <button onclick="startExam()">Start Exam</button>
+    <button onclick="startExam()" id="start-button" aria-label="Start Examination">
+      Start Exam
+    </button>
+    
+    <div class="app-info">
+      <p><strong>💡 Mobile Tip:</strong> For the best experience, use landscape mode and ensure you have a stable internet connection.</p>
+    </div>
   </div>
 
   <script>
     function startExam() {
       const bank = document.getElementById('bank').value;
-      window.location.href = `exam.html?bank=${bank}`;
+      const startButton = document.getElementById('start-button');
+      const container = document.querySelector('.welcome-container');
+      
+      // Add loading state
+      startButton.textContent = 'Loading...';
+      container.classList.add('loading');
+      
+      // Prevent double-clicks
+      startButton.disabled = true;
+      
+      // Add small delay to show loading state
+      setTimeout(() => {
+        window.location.href = `exam.html?bank=${bank}`;
+      }, 500);
     }
+    
+    // Prevent form submission on Enter key
+    document.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        startExam();
+      }
+    });
+    
+    // Add touch feedback for mobile
+    document.addEventListener('DOMContentLoaded', function() {
+      const isMobile = window.innerWidth <= 767 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      
+      if (isMobile) {
+        console.log('Mobile device detected - optimizations active');
+        
+        // Add mobile class to body
+        document.body.classList.add('mobile-device');
+        
+        // Optimize select dropdown for mobile
+        const select = document.getElementById('bank');
+        select.addEventListener('touchstart', function() {
+          this.style.transform = 'scale(0.98)';
+        });
+        
+        select.addEventListener('touchend', function() {
+          this.style.transform = '';
+        });
+      }
+    });
   </script>
+
 </body>
 </html>
-
