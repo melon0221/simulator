@@ -40,20 +40,17 @@
     </div>
 
     <!-- Question Content -->
-    <div class="question-wrapper" role="main" tabindex="0">
+    <div class="question-wrapper">
       <div class="question-top">
-        <div class="question-stem" role="region" aria-labelledby="exam-section">
+        <div class="question-stem">
           <p id="question-text">Loading...</p>
         </div>
         <div class="question-image-wrapper">
-          <img id="question-image" class="question-image hidden" alt="Question diagram or image" onclick="openImageModal(this)" />
+          <img id="question-image" class="question-image hidden" />
         </div>
       </div>
       <div class="question-bottom">
-        <fieldset>
-          <legend class="sr-only">Answer options</legend>
-          <ul id="answer-options" class="answers" role="radiogroup" aria-labelledby="exam-section"></ul>
-        </fieldset>
+        <ul id="answer-options" class="answers"></ul>
       </div>
     </div>
 
@@ -185,102 +182,139 @@
 
   <script src="script.js"></script>
   
-  <!-- Mobile-specific enhancements -->
+  <!-- 确保script.js加载完成后再执行初始化 -->
   <script>
-    // Enhanced mobile initialization
+    // 等待DOM和script.js都加载完成
     document.addEventListener('DOMContentLoaded', function() {
-      // Initialize mobile optimizations immediately
+      console.log('DOM loaded, initializing exam...');
+      
+      // 确保loadExam函数存在后再调用
+      if (typeof loadExam === 'function') {
+        loadExam();
+      } else {
+        console.error('loadExam function not found');
+        // 尝试延迟加载
+        setTimeout(function() {
+          if (typeof loadExam === 'function') {
+            loadExam();
+          } else {
+            alert('Failed to load exam. Please refresh the page.');
+          }
+        }, 1000);
+      }
+      
+      // 初始化移动端优化
       if (typeof initMobileOptimizations === 'function') {
         initMobileOptimizations();
       }
       
-      // Add keyboard navigation support
+      // 图片点击事件处理
+      document.addEventListener('click', function(e) {
+        if (e.target && e.target.id === 'question-image' && !e.target.classList.contains('hidden')) {
+          openImageModal(e.target);
+        }
+      });
+      
+      // 键盘导航支持（仅桌面端）
       document.addEventListener('keydown', function(e) {
-        // Only handle keyboard navigation on non-mobile devices
-        if (!window.isMobile) {
+        // 检查是否为移动设备
+        const isMobile = window.innerWidth <= 767 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        
+        if (!isMobile) {
           switch(e.key) {
             case 'ArrowLeft':
               if (e.ctrlKey) {
                 e.preventDefault();
-                document.getElementById('prev-button').click();
+                const prevBtn = document.getElementById('prev-button');
+                if (prevBtn) prevBtn.click();
               }
               break;
             case 'ArrowRight':
               if (e.ctrlKey) {
                 e.preventDefault();
-                document.getElementById('next-button').click();
+                const nextBtn = document.getElementById('next-button');
+                if (nextBtn) nextBtn.click();
               }
               break;
             case 'f':
             case 'F':
               if (e.ctrlKey) {
                 e.preventDefault();
-                document.getElementById('flag-button').click();
+                const flagBtn = document.getElementById('flag-button');
+                if (flagBtn) flagBtn.click();
               }
               break;
             case 'r':
             case 'R':
               if (e.ctrlKey) {
                 e.preventDefault();
-                document.getElementById('review-button').click();
+                const reviewBtn = document.getElementById('review-button');
+                if (reviewBtn) reviewBtn.click();
+              }
+              break;
+            case 'Escape':
+              // 关闭打开的模态框
+              const openModal = document.querySelector('.review-modal.show');
+              if (openModal) {
+                const closeBtn = openModal.querySelector('.review-actions button:first-child');
+                if (closeBtn) closeBtn.click();
+              }
+              
+              // 关闭图片模态框
+              const imageModal = document.getElementById('image-modal');
+              if (imageModal && !imageModal.classList.contains('hidden')) {
+                closeImageModal();
               }
               break;
           }
         }
       });
       
-      // Enhanced error handling for mobile
+      // 错误处理
       window.addEventListener('error', function(e) {
         console.error('Application error:', e.error);
-        // Show user-friendly error message on mobile
-        if (window.isMobile) {
-          showMobileError('An error occurred. Please refresh the page if problems persist.');
-        }
+        showMobileError('发生错误，如果问题持续存在，请刷新页面。');
       });
       
-      // Handle visibility change (app backgrounding/foregrounding)
+      // 处理页面可见性变化（应用程序后台/前台切换）
       document.addEventListener('visibilitychange', function() {
-        if (document.hidden) {
-          // App went to background - auto-save
-          if (typeof autoSave === 'function') {
-            autoSave();
-          }
+        if (document.hidden && typeof autoSave === 'function') {
+          autoSave();
         }
       });
     });
     
-    // Image modal functions
+    // 图片模态框功能
     function openImageModal(img) {
       const modal = document.getElementById('image-modal');
       const modalImg = document.getElementById('image-modal-content');
       
-      modalImg.src = img.src;
-      modalImg.alt = img.alt || 'Question image';
-      modal.classList.remove('hidden');
-      modal.classList.add('show');
-      modal.setAttribute('aria-hidden', 'false');
-      
-      // Focus trap for accessibility
-      modalImg.focus();
-      
-      // Screen reader notification
-      announceToScreenReader('Image opened in full screen view. Click or press Escape to close.');
+      if (modal && modalImg && img) {
+        modalImg.src = img.src;
+        modalImg.alt = img.alt || '题目图片';
+        modal.classList.remove('hidden');
+        modal.classList.add('show');
+        
+        // 聚焦到图片以便键盘导航
+        modalImg.focus();
+      }
     }
     
     function closeImageModal() {
       const modal = document.getElementById('image-modal');
-      modal.classList.add('hidden');
-      modal.classList.remove('show');
-      modal.setAttribute('aria-hidden', 'true');
-      
-      // Return focus to original image
-      const originalImage = document.getElementById('question-image');
-      if (originalImage) {
-        originalImage.focus();
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('show');
+        
+        // 将焦点返回到原始图片
+        const originalImage = document.getElementById('question-image');
+        if (originalImage) {
+          originalImage.focus();
+        }
       }
     }
     
-    // Mobile error handling
+    // 移动端错误提示
     function showMobileError(message) {
       const errorDiv = document.createElement('div');
       errorDiv.className = 'mobile-error-toast';
@@ -298,6 +332,7 @@
         font-size: 14px;
         max-width: 90%;
         text-align: center;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
       `;
       
       document.body.appendChild(errorDiv);
@@ -308,37 +343,6 @@
         }
       }, 5000);
     }
-    
-    // Screen reader announcements
-    function announceToScreenReader(message) {
-      const srElement = document.getElementById('sr-notifications');
-      if (srElement) {
-        srElement.textContent = message;
-        setTimeout(() => {
-          srElement.textContent = '';
-        }, 1000);
-      }
-    }
-    
-    // Handle keyboard modal closing
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-        // Close any open modals
-        const openModal = document.querySelector('.review-modal.show');
-        if (openModal) {
-          const closeButton = openModal.querySelector('.review-actions button:first-child');
-          if (closeButton) {
-            closeButton.click();
-          }
-        }
-        
-        // Close image modal
-        const imageModal = document.getElementById('image-modal');
-        if (imageModal && !imageModal.classList.contains('hidden')) {
-          closeImageModal();
-        }
-      }
-    });
   </script>
 </body>
 </html>
