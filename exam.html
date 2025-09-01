@@ -2,136 +2,343 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="NBME Exam">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#2a4365">
   <title>NBME Exam Simulator</title>
   <link rel="stylesheet" href="style.css">
+  
+  <!-- Prevent zoom on input focus for iOS -->
+  <style>
+    @media screen and (-webkit-min-device-pixel-ratio: 0) {
+      select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"] {
+        font-size: 16px;
+      }
+    }
+  </style>
 </head>
 <body>
   <div class="container">
     <!-- Header -->
     <div class="header">
       <div class="exam-info">
-        <div id="exam-section">Exam Section 1: Item 1 of 50</div>
-        <!-- Mark 按钮和状态提示在同一行 -->
+        <div id="exam-section" aria-live="polite">Exam Section 1: Item 1 of 50</div>
+        <!-- Mark button and status indicators on same row -->
         <div class="status-row">
-          <button id="flag-button">Mark</button>
-          <span id="status-pill" class="pill">Unanswered</span>
-          <span id="flag-pill" class="pill flag hidden">Flagged</span>
+          <button id="flag-button" aria-label="Mark question for review" type="button">Mark</button>
+          <span id="status-pill" class="pill" aria-live="polite">Unanswered</span>
+          <span id="flag-pill" class="pill flag hidden" aria-live="polite">Flagged</span>
         </div>
       </div>
       <div class="timer">
-        <div id="time-remaining">1 hr 15 min 00 sec</div>
-        <div id="total-remaining">Total Exam Time Remaining: 5 hr 15 min 00 sec</div>
+        <div id="time-remaining" aria-live="polite">1 hr 15 min 00 sec</div>
+        <div id="total-remaining" aria-live="polite">Total Exam Time Remaining: 5 hr 15 min 00 sec</div>
       </div>
     </div>
 
-    <!-- Question -->
-    <div class="question-wrapper">
+    <!-- Question Content -->
+    <div class="question-wrapper" role="main" tabindex="0">
       <div class="question-top">
-        <div class="question-stem">
+        <div class="question-stem" role="region" aria-labelledby="exam-section">
           <p id="question-text">Loading...</p>
         </div>
         <div class="question-image-wrapper">
-          <img id="question-image" class="question-image hidden" />
+          <img id="question-image" class="question-image hidden" alt="Question diagram or image" onclick="openImageModal(this)" />
         </div>
       </div>
       <div class="question-bottom">
-        <ul id="answer-options" class="answers"></ul>
+        <fieldset>
+          <legend class="sr-only">Answer options</legend>
+          <ul id="answer-options" class="answers" role="radiogroup" aria-labelledby="exam-section"></ul>
+        </fieldset>
       </div>
     </div>
 
     <!-- Footer -->
     <div class="footer">
       <div class="left-buttons">
-        <button id="prev-button">Previous</button>
-        <button id="next-button">Next</button>
-        <button id="end-block-button">End Block</button>
+        <button id="prev-button" type="button" aria-label="Go to previous question">Previous</button>
+        <button id="next-button" type="button" aria-label="Go to next question">Next</button>
+        <button id="end-block-button" type="button" aria-label="End current section">End Block</button>
       </div>
       <div class="right-buttons">
-        <button id="review-button">Review</button>
-        <button id="pause-button">Pause</button>
+        <button id="review-button" type="button" aria-label="Review all questions in section">Review</button>
+        <button id="pause-button" type="button" aria-label="Pause examination">Pause</button>
       </div>
     </div>
   </div>
 
   <!-- Review Modal -->
-  <div class="review-modal" id="review-modal">
+  <div class="review-modal" id="review-modal" role="dialog" aria-labelledby="review-title" aria-hidden="true">
     <div class="review-card">
-      <h3>Review Questions</h3>
-      <div class="legend">
-        <span class="legend-item"><span class="legend-color" style="background:#FFF3CD"></span> Unanswered</span>
-        <span class="legend-item"><span class="legend-color" style="background:#FDE2E1"></span> Flagged</span>
-        <span class="legend-item"><span class="legend-color" style="background:#F9FAFB"></span> Answered</span>
+      <h3 id="review-title">Review Questions</h3>
+      <div class="legend" role="img" aria-label="Question status legend">
+        <span class="legend-item">
+          <span class="legend-color" style="background:#FFF3CD" aria-hidden="true"></span> 
+          Unanswered
+        </span>
+        <span class="legend-item">
+          <span class="legend-color" style="background:#FDE2E1" aria-hidden="true"></span> 
+          Flagged
+        </span>
+        <span class="legend-item">
+          <span class="legend-color" style="background:#F9FAFB" aria-hidden="true"></span> 
+          Answered
+        </span>
       </div>
-      <div id="review-grid" class="review-grid"></div>
+      <div id="review-grid" class="review-grid" role="grid" aria-label="Question review grid"></div>
       <div class="review-actions">
-        <button id="close-review">Close</button>
+        <button id="close-review" type="button" aria-label="Close review modal">Close</button>
       </div>
     </div>
   </div>
 
   <!-- Section Review Modal -->
-  <div class="review-modal" id="section-review-modal">
+  <div class="review-modal" id="section-review-modal" role="dialog" aria-labelledby="section-review-title" aria-hidden="true">
     <div class="review-card">
-      <h3>Section Review</h3>
-      <div class="legend">
-        <span class="legend-item"><span class="legend-color" style="background:#FFF3CD"></span> Unanswered</span>
-        <span class="legend-item"><span class="legend-color" style="background:#FDE2E1"></span> Flagged</span>
-        <span class="legend-item"><span class="legend-color" style="background:#F9FAFB"></span> Answered</span>
+      <h3 id="section-review-title">Section Review</h3>
+      <div class="legend" role="img" aria-label="Question status legend">
+        <span class="legend-item">
+          <span class="legend-color" style="background:#FFF3CD" aria-hidden="true"></span> 
+          Unanswered
+        </span>
+        <span class="legend-item">
+          <span class="legend-color" style="background:#FDE2E1" aria-hidden="true"></span> 
+          Flagged
+        </span>
+        <span class="legend-item">
+          <span class="legend-color" style="background:#F9FAFB" aria-hidden="true"></span> 
+          Answered
+        </span>
       </div>
-      <div id="section-review-grid" class="review-grid"></div>
+      <div id="section-review-grid" class="review-grid" role="grid" aria-label="Section question review grid"></div>
       <div class="review-actions">
-        <button id="section-review-back">Return</button>
-        <button id="section-review-end">End Section</button>
+        <button id="section-review-back" type="button" aria-label="Return to exam">Return</button>
+        <button id="section-review-end" type="button" aria-label="End section and continue">End Section</button>
       </div>
     </div>
   </div>
 
   <!-- Exam Review Modal -->
-  <div class="review-modal" id="exam-review-modal">
+  <div class="review-modal" id="exam-review-modal" role="dialog" aria-labelledby="exam-review-title" aria-hidden="true">
     <div class="review-card">
-      <h3>Exam Review</h3>
-      <div class="legend">
-        <span class="legend-item"><span class="legend-color" style="background:#FFF3CD"></span> Unanswered</span>
-        <span class="legend-item"><span class="legend-color" style="background:#FDE2E1"></span> Flagged</span>
-        <span class="legend-item"><span class="legend-color" style="background:#F9FAFB"></span> Answered</span>
+      <h3 id="exam-review-title">Exam Review</h3>
+      <div class="legend" role="img" aria-label="Question status legend">
+        <span class="legend-item">
+          <span class="legend-color" style="background:#FFF3CD" aria-hidden="true"></span> 
+          Unanswered
+        </span>
+        <span class="legend-item">
+          <span class="legend-color" style="background:#FDE2E1" aria-hidden="true"></span> 
+          Flagged
+        </span>
+        <span class="legend-item">
+          <span class="legend-color" style="background:#F9FAFB" aria-hidden="true"></span> 
+          Answered
+        </span>
       </div>
-      <div id="exam-review-content"></div>
+      <div id="exam-review-content" role="region" aria-label="Complete exam review"></div>
       <div class="review-actions">
-        <button id="exam-review-close">Close</button>
-        <button id="exam-review-finish">Finish & Export Results</button>
+        <button id="exam-review-close" type="button" aria-label="Close exam review">Close</button>
+        <button id="exam-review-finish" type="button" aria-label="Finish and export results">Finish & Export Results</button>
       </div>
     </div>
   </div>
 
   <!-- Final Submit Confirmation Modal -->
-  <div class="review-modal" id="submit-confirm-modal">
+  <div class="review-modal" id="submit-confirm-modal" role="dialog" aria-labelledby="submit-confirm-title" aria-describedby="submit-confirm-desc" aria-hidden="true">
     <div class="review-card">
-      <h3>Confirm Exam Submission</h3>
-      <p>Are you sure you want to submit your exam? Once submitted, you cannot return to review or change your answers.</p>
+      <h3 id="submit-confirm-title">Confirm Exam Submission</h3>
+      <p id="submit-confirm-desc">Are you sure you want to submit your exam? Once submitted, you cannot return to review or change your answers.</p>
       <div class="review-actions">
-        <button id="cancel-submit">Cancel</button>
-        <button id="confirm-submit">Submit & End Exam</button>
+        <button id="cancel-submit" type="button" aria-label="Cancel submission">Cancel</button>
+        <button id="confirm-submit" type="button" aria-label="Confirm exam submission">Submit & End Exam</button>
       </div>
     </div>
   </div>
 
   <!-- Section End Confirmation Modal -->
-  <div class="review-modal" id="section-end-confirm-modal">
+  <div class="review-modal" id="section-end-confirm-modal" role="dialog" aria-labelledby="section-end-title" aria-describedby="section-end-desc" aria-hidden="true">
     <div class="review-card">
-      <h3>Confirm End Section</h3>
-      <p>Are you sure you want to end this section and move to the next one? Once you proceed, you cannot return to review or change your answers in this section.</p>
+      <h3 id="section-end-title">Confirm End Section</h3>
+      <p id="section-end-desc">Are you sure you want to end this section and move to the next one? Once you proceed, you cannot return to review or change your answers in this section.</p>
       <div class="review-actions">
-        <button id="cancel-section-end">Cancel</button>
-        <button id="confirm-section-end">End Section</button>
+        <button id="cancel-section-end" type="button" aria-label="Cancel section end">Cancel</button>
+        <button id="confirm-section-end" type="button" aria-label="Confirm end section">End Section</button>
       </div>
     </div>
   </div>
 
   <!-- Image Modal -->
-  <div class="image-modal hidden" id="image-modal">
-    <img id="image-modal-content" class="image-modal-content" />
+  <div class="image-modal hidden" id="image-modal" role="dialog" aria-labelledby="image-modal-title" aria-hidden="true" onclick="closeImageModal()">
+    <h3 id="image-modal-title" class="sr-only">Question Image - Full Size</h3>
+    <img id="image-modal-content" class="image-modal-content" alt="Full size question image" />
+  </div>
+
+  <!-- Screen reader only content -->
+  <div class="sr-only">
+    <div id="sr-notifications" aria-live="assertive" aria-atomic="true"></div>
   </div>
 
   <script src="script.js"></script>
+  
+  <!-- Mobile-specific enhancements -->
+  <script>
+    // Enhanced mobile initialization
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize mobile optimizations immediately
+      if (typeof initMobileOptimizations === 'function') {
+        initMobileOptimizations();
+      }
+      
+      // Add keyboard navigation support
+      document.addEventListener('keydown', function(e) {
+        // Only handle keyboard navigation on non-mobile devices
+        if (!window.isMobile) {
+          switch(e.key) {
+            case 'ArrowLeft':
+              if (e.ctrlKey) {
+                e.preventDefault();
+                document.getElementById('prev-button').click();
+              }
+              break;
+            case 'ArrowRight':
+              if (e.ctrlKey) {
+                e.preventDefault();
+                document.getElementById('next-button').click();
+              }
+              break;
+            case 'f':
+            case 'F':
+              if (e.ctrlKey) {
+                e.preventDefault();
+                document.getElementById('flag-button').click();
+              }
+              break;
+            case 'r':
+            case 'R':
+              if (e.ctrlKey) {
+                e.preventDefault();
+                document.getElementById('review-button').click();
+              }
+              break;
+          }
+        }
+      });
+      
+      // Enhanced error handling for mobile
+      window.addEventListener('error', function(e) {
+        console.error('Application error:', e.error);
+        // Show user-friendly error message on mobile
+        if (window.isMobile) {
+          showMobileError('An error occurred. Please refresh the page if problems persist.');
+        }
+      });
+      
+      // Handle visibility change (app backgrounding/foregrounding)
+      document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+          // App went to background - auto-save
+          if (typeof autoSave === 'function') {
+            autoSave();
+          }
+        }
+      });
+    });
+    
+    // Image modal functions
+    function openImageModal(img) {
+      const modal = document.getElementById('image-modal');
+      const modalImg = document.getElementById('image-modal-content');
+      
+      modalImg.src = img.src;
+      modalImg.alt = img.alt || 'Question image';
+      modal.classList.remove('hidden');
+      modal.classList.add('show');
+      modal.setAttribute('aria-hidden', 'false');
+      
+      // Focus trap for accessibility
+      modalImg.focus();
+      
+      // Screen reader notification
+      announceToScreenReader('Image opened in full screen view. Click or press Escape to close.');
+    }
+    
+    function closeImageModal() {
+      const modal = document.getElementById('image-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('show');
+      modal.setAttribute('aria-hidden', 'true');
+      
+      // Return focus to original image
+      const originalImage = document.getElementById('question-image');
+      if (originalImage) {
+        originalImage.focus();
+      }
+    }
+    
+    // Mobile error handling
+    function showMobileError(message) {
+      const errorDiv = document.createElement('div');
+      errorDiv.className = 'mobile-error-toast';
+      errorDiv.textContent = message;
+      errorDiv.style.cssText = `
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #dc3545;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 6px;
+        z-index: 10000;
+        font-size: 14px;
+        max-width: 90%;
+        text-align: center;
+      `;
+      
+      document.body.appendChild(errorDiv);
+      
+      setTimeout(() => {
+        if (errorDiv.parentNode) {
+          errorDiv.parentNode.removeChild(errorDiv);
+        }
+      }, 5000);
+    }
+    
+    // Screen reader announcements
+    function announceToScreenReader(message) {
+      const srElement = document.getElementById('sr-notifications');
+      if (srElement) {
+        srElement.textContent = message;
+        setTimeout(() => {
+          srElement.textContent = '';
+        }, 1000);
+      }
+    }
+    
+    // Handle keyboard modal closing
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        // Close any open modals
+        const openModal = document.querySelector('.review-modal.show');
+        if (openModal) {
+          const closeButton = openModal.querySelector('.review-actions button:first-child');
+          if (closeButton) {
+            closeButton.click();
+          }
+        }
+        
+        // Close image modal
+        const imageModal = document.getElementById('image-modal');
+        if (imageModal && !imageModal.classList.contains('hidden')) {
+          closeImageModal();
+        }
+      }
+    });
+  </script>
 </body>
 </html>
