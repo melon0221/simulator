@@ -341,7 +341,14 @@
         
         // 手动执行resume逻辑
         try {
-          // 重置暂停状态 - 访问script.js中的全局变量
+          // 首先检查并记录当前状态
+          console.log('Current state before resume:');
+          console.log('isPaused:', window.isPaused);
+          console.log('sectionTime:', window.sectionTime);
+          console.log('totalTime:', window.totalTime);
+          console.log('timerInterval:', window.timerInterval);
+          
+          // 重置暂停状态
           window.isPaused = false;
           console.log('isPaused set to false');
           
@@ -367,8 +374,34 @@
             console.log('Pause timer cleared');
           }
           
-          // 重启主计时器 - 直接重新实现startTimer逻辑
-          console.log('Restarting main timer...');
+          // 检查时间变量是否有效，如果无效则不启动计时器
+          if (typeof window.sectionTime === 'undefined' || window.sectionTime === null || isNaN(window.sectionTime)) {
+            console.error('sectionTime is invalid:', window.sectionTime);
+            console.log('Attempting to call original resumeExam function instead');
+            
+            // 尝试调用原始的resumeExam函数
+            if (typeof window.resumeExam === 'function') {
+              window.resumeExam();
+              return;
+            }
+            
+            // 如果还是不行，就不启动计时器，只是返回界面
+            console.log('Cannot restart timer - time variables are invalid');
+            return;
+          }
+          
+          if (typeof window.totalTime === 'undefined' || window.totalTime === null || isNaN(window.totalTime)) {
+            console.error('totalTime is invalid:', window.totalTime);
+            console.log('Attempting to call original resumeExam function instead');
+            
+            if (typeof window.resumeExam === 'function') {
+              window.resumeExam();
+              return;
+            }
+            
+            console.log('Cannot restart timer - time variables are invalid');
+            return;
+          }
           
           // 清除现有计时器
           if (window.timerInterval) {
@@ -376,56 +409,59 @@
             window.timerInterval = null;
           }
           
-          // 创建新的计时器 - 复制script.js中的startTimer逻辑
+          console.log('Starting timer with sectionTime:', window.sectionTime, 'totalTime:', window.totalTime);
+          
+          // 创建新的计时器
           window.timerInterval = setInterval(() => {
             if (!window.isPaused) {
-              window.sectionTime--;
-              window.totalTime--;
-              
-              // 更新计时器显示 - 复制script.js中的updateTimerDisplay逻辑
-              const timeRemaining = document.getElementById('time-remaining');
-              const totalRemaining = document.getElementById('total-remaining');
-              
-              if (timeRemaining) {
-                // 复制formatTime函数逻辑
-                let sec = window.sectionTime;
-                let h = Math.floor(sec / 3600);
-                let m = Math.floor((sec % 3600) / 60);
-                let s = sec % 60;
-                timeRemaining.textContent = `${h} hr ${m} min ${s.toString().padStart(2, "0")} sec`;
+              // 再次检查变量有效性
+              if (typeof window.sectionTime === 'number' && typeof window.totalTime === 'number') {
+                window.sectionTime--;
+                window.totalTime--;
                 
-                // 5分钟警告
-                if (window.sectionTime <= 300) {
-                  timeRemaining.classList.add('time-warning');
-                } else {
-                  timeRemaining.classList.remove('time-warning');
+                // 更新计时器显示
+                const timeRemaining = document.getElementById('time-remaining');
+                const totalRemaining = document.getElementById('total-remaining');
+                
+                if (timeRemaining && window.sectionTime >= 0) {
+                  let sec = window.sectionTime;
+                  let h = Math.floor(sec / 3600);
+                  let m = Math.floor((sec % 3600) / 60);
+                  let s = sec % 60;
+                  timeRemaining.textContent = `${h} hr ${m} min ${s.toString().padStart(2, "0")} sec`;
+                  
+                  // 5分钟警告
+                  if (window.sectionTime <= 300) {
+                    timeRemaining.classList.add('time-warning');
+                  } else {
+                    timeRemaining.classList.remove('time-warning');
+                  }
                 }
-              }
-              
-              if (totalRemaining) {
-                let sec = window.totalTime;
-                let h = Math.floor(sec / 3600);
-                let m = Math.floor((sec % 3600) / 60);
-                let s = sec % 60;
-                totalRemaining.textContent = `Total Exam Time Remaining: ${h} hr ${m} min ${s.toString().padStart(2, "0")} sec`;
-              }
-              
-              // 检查时间结束
-              if (window.sectionTime <= 0 && typeof window.endSection === 'function') {
-                window.endSection();
-              }
-              if (window.totalTime <= 0 && typeof window.finishExam === 'function') {
-                window.finishExam();
+                
+                if (totalRemaining && window.totalTime >= 0) {
+                  let sec = window.totalTime;
+                  let h = Math.floor(sec / 3600);
+                  let m = Math.floor((sec % 3600) / 60);
+                  let s = sec % 60;
+                  totalRemaining.textContent = `Total Exam Time Remaining: ${h} hr ${m} min ${s.toString().padStart(2, "0")} sec`;
+                }
+                
+                // 检查时间结束
+                if (window.sectionTime <= 0 && typeof window.endSection === 'function') {
+                  window.endSection();
+                }
+                if (window.totalTime <= 0 && typeof window.finishExam === 'function') {
+                  window.finishExam();
+                }
+              } else {
+                console.error('Time variables became invalid during timer execution');
+                clearInterval(window.timerInterval);
+                window.timerInterval = null;
               }
             }
           }, 1000);
           
           console.log('Timer restarted successfully');
-          
-          // 验证计时器是否正在运行
-          setTimeout(() => {
-            console.log('Timer verification - isPaused:', window.isPaused, 'timerInterval exists:', !!window.timerInterval);
-          }, 2000);
           
         } catch (error) {
           console.error('Error during resume:', error);
