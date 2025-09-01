@@ -293,64 +293,89 @@
         }
       }
       
-      // 修复Resume按钮功能
-      // 重写pauseExam函数以确保Resume按钮正确工作
-      const originalPauseExam = window.pauseExam;
-      if (originalPauseExam) {
-        window.pauseExam = function() {
-          if (typeof isPaused !== 'undefined' && isPaused) {
-            // 调用resume功能
-            if (typeof resumeExam === 'function') {
-              resumeExam();
-            }
-          } else {
-            // 调用原始pause功能
-            originalPauseExam.call(this);
-            
-            // 确保Resume按钮事件正确绑定
-            setTimeout(function() {
-              const resumeButton = document.querySelector('.resume-button');
-              if (resumeButton) {
-                // 清除现有事件并重新绑定
-                const newButton = resumeButton.cloneNode(true);
-                resumeButton.parentNode.replaceChild(newButton, resumeButton);
-                
-                newButton.addEventListener('click', function(e) {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  console.log('Resume button clicked - calling resumeExam');
+      // 修复Resume按钮功能 - 使用MutationObserver监控DOM变化
+      const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+          if (mutation.type === 'childList') {
+            // 检查是否有暂停覆盖层被添加
+            const pauseOverlay = document.getElementById('pause-overlay');
+            if (pauseOverlay) {
+              console.log('Pause overlay detected, binding resume button');
+              
+              setTimeout(function() {
+                const resumeButton = pauseOverlay.querySelector('.resume-button');
+                if (resumeButton) {
+                  console.log('Found resume button, adding event listeners');
                   
-                  if (typeof resumeExam === 'function') {
-                    resumeExam();
-                  } else {
-                    // 手动resume逻辑
-                    window.isPaused = false;
-                    const pauseBtn = document.getElementById('pause-button');
-                    if (pauseBtn) {
-                      pauseBtn.textContent = 'Pause';
-                      pauseBtn.classList.remove('paused');
-                    }
-                    
-                    const overlay = document.getElementById('pause-overlay');
-                    if (overlay) {
-                      overlay.remove();
-                    }
-                    
-                    if (typeof startTimer === 'function') {
-                      startTimer();
-                    }
-                  }
-                });
-                
-                // 移动端触摸事件
-                newButton.addEventListener('touchend', function(e) {
-                  e.preventDefault();
-                  this.click();
-                }, { passive: false });
-              }
-            }, 200);
+                  // 移除现有的onclick属性
+                  resumeButton.removeAttribute('onclick');
+                  
+                  // 为Resume按钮添加多种事件监听器
+                  resumeButton.addEventListener('click', handleResumeClick, { capture: true });
+                  resumeButton.addEventListener('touchstart', handleResumeClick, { capture: true });
+                  resumeButton.addEventListener('touchend', handleResumeClick, { capture: true });
+                  
+                  // 为整个按钮区域添加点击区域
+                  resumeButton.style.cursor = 'pointer';
+                  resumeButton.style.userSelect = 'none';
+                  
+                  console.log('Resume button events bound successfully');
+                }
+              }, 100);
+            }
           }
-        };
+        });
+      });
+      
+      // 开始观察document.body的变化
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true
+      });
+      
+      // Resume按钮点击处理函数
+      function handleResumeClick(e) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        console.log('Resume button clicked via:', e.type);
+        
+        // 手动执行resume逻辑
+        try {
+          // 重置暂停状态
+          if (typeof window.isPaused !== 'undefined') {
+            window.isPaused = false;
+          }
+          
+          // 更新pause按钮状态
+          const pauseBtn = document.getElementById('pause-button');
+          if (pauseBtn) {
+            pauseBtn.textContent = 'Pause';
+            pauseBtn.classList.remove('paused');
+          }
+          
+          // 移除暂停覆盖层
+          const overlay = document.getElementById('pause-overlay');
+          if (overlay) {
+            overlay.remove();
+            console.log('Pause overlay removed');
+          }
+          
+          // 重启计时器
+          if (typeof window.startTimer === 'function') {
+            window.startTimer();
+            console.log('Timer restarted');
+          }
+          
+          // 停止pause计时器
+          if (typeof window.stopPauseTimer === 'function') {
+            window.stopPauseTimer();
+          }
+          
+          console.log('Resume completed successfully');
+          
+        } catch (error) {
+          console.error('Error during resume:', error);
+        }
       }
       
       // 基本键盘支持（仅桌面端）
