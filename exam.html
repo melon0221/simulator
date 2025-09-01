@@ -341,11 +341,9 @@
         
         // 手动执行resume逻辑
         try {
-          // 重置暂停状态
-          if (typeof window.isPaused !== 'undefined') {
-            window.isPaused = false;
-            console.log('isPaused set to false');
-          }
+          // 重置暂停状态 - 访问script.js中的全局变量
+          window.isPaused = false;
+          console.log('isPaused set to false');
           
           // 更新pause按钮状态
           const pauseBtn = document.getElementById('pause-button');
@@ -363,73 +361,71 @@
           }
           
           // 停止pause计时器
-          if (typeof window.stopPauseTimer === 'function') {
-            window.stopPauseTimer();
-            console.log('Pause timer stopped');
-          } else if (typeof window.pauseTimerInterval !== 'undefined' && window.pauseTimerInterval) {
+          if (window.pauseTimerInterval) {
             clearInterval(window.pauseTimerInterval);
             window.pauseTimerInterval = null;
-            console.log('Pause timer cleared manually');
+            console.log('Pause timer cleared');
           }
           
-          // 重启主计时器 - 尝试多种方法
-          console.log('Attempting to restart timer...');
+          // 重启主计时器 - 直接重新实现startTimer逻辑
+          console.log('Restarting main timer...');
           
-          // 方法1: 调用startTimer函数
-          if (typeof window.startTimer === 'function') {
-            window.startTimer();
-            console.log('Timer restarted via startTimer()');
-          } 
-          // 方法2: 直接重新创建计时器
-          else {
-            console.log('startTimer not found, creating timer manually');
-            
-            // 清除现有计时器
-            if (typeof window.timerInterval !== 'undefined' && window.timerInterval) {
-              clearInterval(window.timerInterval);
-            }
-            
-            // 创建新的计时器
-            window.timerInterval = setInterval(() => {
-              if (!window.isPaused) {
-                if (typeof window.sectionTime !== 'undefined') {
-                  window.sectionTime--;
-                }
-                if (typeof window.totalTime !== 'undefined') {
-                  window.totalTime--;
-                }
+          // 清除现有计时器
+          if (window.timerInterval) {
+            clearInterval(window.timerInterval);
+            window.timerInterval = null;
+          }
+          
+          // 创建新的计时器 - 复制script.js中的startTimer逻辑
+          window.timerInterval = setInterval(() => {
+            if (!window.isPaused) {
+              window.sectionTime--;
+              window.totalTime--;
+              
+              // 更新计时器显示 - 复制script.js中的updateTimerDisplay逻辑
+              const timeRemaining = document.getElementById('time-remaining');
+              const totalRemaining = document.getElementById('total-remaining');
+              
+              if (timeRemaining) {
+                // 复制formatTime函数逻辑
+                let sec = window.sectionTime;
+                let h = Math.floor(sec / 3600);
+                let m = Math.floor((sec % 3600) / 60);
+                let s = sec % 60;
+                timeRemaining.textContent = `${h} hr ${m} min ${s.toString().padStart(2, "0")} sec`;
                 
-                // 更新显示
-                if (typeof window.updateTimerDisplay === 'function') {
-                  window.updateTimerDisplay();
+                // 5分钟警告
+                if (window.sectionTime <= 300) {
+                  timeRemaining.classList.add('time-warning');
                 } else {
-                  // 手动更新显示
-                  const timeElement = document.getElementById('time-remaining');
-                  const totalElement = document.getElementById('total-remaining');
-                  
-                  if (timeElement && typeof window.formatTime === 'function' && typeof window.sectionTime !== 'undefined') {
-                    timeElement.textContent = window.formatTime(window.sectionTime);
-                  }
-                  
-                  if (totalElement && typeof window.formatTime === 'function' && typeof window.totalTime !== 'undefined') {
-                    totalElement.textContent = "Total Exam Time Remaining: " + window.formatTime(window.totalTime);
-                  }
-                }
-                
-                // 检查时间结束
-                if (typeof window.sectionTime !== 'undefined' && window.sectionTime <= 0 && typeof window.endSection === 'function') {
-                  window.endSection();
-                }
-                if (typeof window.totalTime !== 'undefined' && window.totalTime <= 0 && typeof window.finishExam === 'function') {
-                  window.finishExam();
+                  timeRemaining.classList.remove('time-warning');
                 }
               }
-            }, 1000);
-            
-            console.log('Manual timer created successfully');
-          }
+              
+              if (totalRemaining) {
+                let sec = window.totalTime;
+                let h = Math.floor(sec / 3600);
+                let m = Math.floor((sec % 3600) / 60);
+                let s = sec % 60;
+                totalRemaining.textContent = `Total Exam Time Remaining: ${h} hr ${m} min ${s.toString().padStart(2, "0")} sec`;
+              }
+              
+              // 检查时间结束
+              if (window.sectionTime <= 0 && typeof window.endSection === 'function') {
+                window.endSection();
+              }
+              if (window.totalTime <= 0 && typeof window.finishExam === 'function') {
+                window.finishExam();
+              }
+            }
+          }, 1000);
           
-          console.log('Resume completed successfully');
+          console.log('Timer restarted successfully');
+          
+          // 验证计时器是否正在运行
+          setTimeout(() => {
+            console.log('Timer verification - isPaused:', window.isPaused, 'timerInterval exists:', !!window.timerInterval);
+          }, 2000);
           
         } catch (error) {
           console.error('Error during resume:', error);
