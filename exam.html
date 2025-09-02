@@ -183,11 +183,16 @@
   <script src="script.js"></script>
   
   <script>
-    // 等待所有资源加载完成
+    // Initialize when page is fully loaded
     window.addEventListener('load', function() {
       console.log('Page fully loaded, starting initialization...');
       
-      // 确保loadExam函数存在后再调用
+      // Initialize mobile optimizations first
+      if (typeof initMobileOptimizations === 'function') {
+        initMobileOptimizations();
+      }
+      
+      // Load the exam
       if (typeof loadExam === 'function') {
         loadExam();
       } else {
@@ -201,317 +206,184 @@
         }, 1000);
       }
       
-      // 初始化移动端优化
-      if (typeof initMobileOptimizations === 'function') {
-        initMobileOptimizations();
-      }
-      
-      // 检测移动设备
+      // Mobile device detection and optimizations
       const isMobile = window.innerWidth <= 767 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
       console.log('Mobile device detected:', isMobile);
       
-      // 移动端答案选择修复
       if (isMobile) {
-        // 重写renderQuestion函数来确保移动端事件正确绑定
+        document.body.classList.add('mobile-device');
+        
+        // Enhanced mobile answer option handling
+        function enhanceMobileAnswerOptions() {
+          const answerOptions = document.querySelectorAll('.answers li');
+          
+          answerOptions.forEach(function(li, index) {
+            // Remove existing listeners to avoid duplicates
+            const newLi = li.cloneNode(true);
+            li.parentNode.replaceChild(newLi, li);
+            
+            // Add optimized touch events
+            newLi.addEventListener('touchend', function(e) {
+              e.preventDefault();
+              e.stopPropagation();
+              
+              const radio = this.querySelector('input[type="radio"]');
+              if (radio && !radio.checked) {
+                // Clear other selections
+                const allRadios = document.querySelectorAll('.answers input[type="radio"]');
+                allRadios.forEach(r => r.checked = false);
+                
+                // Set current selection
+                radio.checked = true;
+                
+                // Update answer data
+                if (typeof window.ANSWERS !== 'undefined' && 
+                    typeof window.CURRENT_SECTION !== 'undefined' && 
+                    typeof window.CURRENT_INDEX !== 'undefined') {
+                  window.ANSWERS[window.CURRENT_SECTION][window.CURRENT_INDEX] = index;
+                  
+                  // Update status display
+                  if (typeof window.updateStatus === 'function') {
+                    window.updateStatus();
+                  }
+                  
+                  // Trigger auto-save
+                  if (typeof window.autoSave === 'function') {
+                    setTimeout(window.autoSave, 1000);
+                  }
+                  
+                  console.log('Mobile answer selected:', index);
+                }
+                
+                // Visual feedback
+                this.style.backgroundColor = '#e3f2fd';
+                setTimeout(() => {
+                  this.style.backgroundColor = '';
+                }, 300);
+              }
+            }, { passive: false });
+            
+            // Fallback click event
+            newLi.addEventListener('click', function(e) {
+              if (e.target.tagName !== 'INPUT') {
+                e.preventDefault();
+                const radio = this.querySelector('input[type="radio"]');
+                if (radio && !radio.checked) {
+                  const allRadios = document.querySelectorAll('.answers input[type="radio"]');
+                  allRadios.forEach(r => r.checked = false);
+                  radio.checked = true;
+                  
+                  if (typeof window.ANSWERS !== 'undefined' && 
+                      typeof window.CURRENT_SECTION !== 'undefined' && 
+                      typeof window.CURRENT_INDEX !== 'undefined') {
+                    window.ANSWERS[window.CURRENT_SECTION][window.CURRENT_INDEX] = index;
+                    
+                    if (typeof window.updateStatus === 'function') {
+                      window.updateStatus();
+                    }
+                    
+                    if (typeof window.autoSave === 'function') {
+                      setTimeout(window.autoSave, 1000);
+                    }
+                  }
+                }
+              }
+            });
+          });
+        }
+        
+        // Override renderQuestion to include mobile enhancements
         const originalRenderQuestion = window.renderQuestion;
         if (originalRenderQuestion) {
           window.renderQuestion = function() {
-            // 调用原始函数
             originalRenderQuestion.call(this);
-            
-            // 为移动端重新绑定事件
-            setTimeout(function() {
-              const answerOptions = document.querySelectorAll('.answers li');
-              answerOptions.forEach(function(li, index) {
-                // 移除所有现有事件监听器
-                const newLi = li.cloneNode(true);
-                li.parentNode.replaceChild(newLi, li);
-                
-                // 添加移动端优化的事件
-                newLi.addEventListener('touchend', function(e) {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  
-                  const radio = this.querySelector('input[type="radio"]');
-                  if (radio && !radio.checked) {
-                    // 清除其他选项的选中状态
-                    const allRadios = document.querySelectorAll('.answers input[type="radio"]');
-                    allRadios.forEach(r => r.checked = false);
-                    
-                    // 设置当前选项为选中
-                    radio.checked = true;
-                    
-                    // 直接调用script.js中的答案保存逻辑
-                    if (typeof ANSWERS !== 'undefined' && typeof CURRENT_SECTION !== 'undefined' && typeof CURRENT_INDEX !== 'undefined') {
-                      ANSWERS[CURRENT_SECTION][CURRENT_INDEX] = index;
-                      console.log('Answer saved:', index, 'for question', CURRENT_INDEX);
-                      
-                      // 直接更新状态
-                      if (typeof updateStatus === 'function') {
-                        updateStatus();
-                      }
-                      
-                      // 触发自动保存
-                      if (typeof autoSave === 'function') {
-                        setTimeout(autoSave, 1000);
-                      }
-                    }
-                    
-                    // 视觉反馈
-                    this.style.backgroundColor = '#e3f2fd';
-                    setTimeout(() => {
-                      this.style.backgroundColor = '';
-                    }, 300);
-                  }
-                }, { passive: false });
-                
-                // 备用click事件
-                newLi.addEventListener('click', function(e) {
-                  if (e.target.tagName !== 'INPUT') {
-                    e.preventDefault();
-                    const radio = this.querySelector('input[type="radio"]');
-                    if (radio) {
-                      const allRadios = document.querySelectorAll('.answers input[type="radio"]');
-                      allRadios.forEach(r => r.checked = false);
-                      radio.checked = true;
-                      
-                      if (typeof ANSWERS !== 'undefined' && typeof CURRENT_SECTION !== 'undefined' && typeof CURRENT_INDEX !== 'undefined') {
-                        ANSWERS[CURRENT_SECTION][CURRENT_INDEX] = index;
-                        if (typeof updateStatus === 'function') {
-                          updateStatus();
-                        }
-                        if (typeof autoSave === 'function') {
-                          setTimeout(autoSave, 1000);
-                        }
-                      }
-                    }
-                  }
-                });
-              });
-            }, 100);
+            setTimeout(enhanceMobileAnswerOptions, 100);
           };
         }
       }
       
-      // 修复Resume按钮功能 - 使用MutationObserver监控DOM变化
-      const observer = new MutationObserver(function(mutations) {
-        mutations.forEach(function(mutation) {
-          if (mutation.type === 'childList') {
-            // 检查是否有暂停覆盖层被添加
-            const pauseOverlay = document.getElementById('pause-overlay');
-            if (pauseOverlay) {
-              console.log('Pause overlay detected, binding resume button');
-              
-              setTimeout(function() {
-                const resumeButton = pauseOverlay.querySelector('.resume-button');
-                if (resumeButton) {
-                  console.log('Found resume button, adding event listeners');
-                  
-                  // 移除现有的onclick属性
-                  resumeButton.removeAttribute('onclick');
-                  
-                  // 为Resume按钮添加多种事件监听器
-                  resumeButton.addEventListener('click', handleResumeClick, { capture: true });
-                  resumeButton.addEventListener('touchstart', handleResumeClick, { capture: true });
-                  resumeButton.addEventListener('touchend', handleResumeClick, { capture: true });
-                  
-                  // 为整个按钮区域添加点击区域
-                  resumeButton.style.cursor = 'pointer';
-                  resumeButton.style.userSelect = 'none';
-                  
-                  console.log('Resume button events bound successfully');
-                }
-              }, 100);
-            }
-          }
-        });
-      });
-      
-      // 开始观察document.body的变化
-      observer.observe(document.body, {
-        childList: true,
-        subtree: true
-      });
-      
-      // Resume按钮点击处理函数
-      function handleResumeClick(e) {
-        e.preventDefault();
-        e.stopImmediatePropagation();
-        console.log('Resume button clicked via:', e.type);
+      // Image modal functionality
+      window.openImageModal = function(img) {
+        const modal = document.getElementById('image-modal');
+        const modalImg = document.getElementById('image-modal-content');
         
-        // 手动执行resume逻辑
-        try {
-          // 首先检查并记录当前状态
-          console.log('Current state before resume:');
-          console.log('isPaused:', window.isPaused);
-          console.log('sectionTime:', window.sectionTime);
-          console.log('totalTime:', window.totalTime);
-          console.log('timerInterval:', window.timerInterval);
-          
-          // 重置暂停状态
-          window.isPaused = false;
-          console.log('isPaused set to false');
-          
-          // 更新pause按钮状态
-          const pauseBtn = document.getElementById('pause-button');
-          if (pauseBtn) {
-            pauseBtn.textContent = 'Pause';
-            pauseBtn.classList.remove('paused');
-            console.log('Pause button updated');
-          }
-          
-          // 移除暂停覆盖层
-          const overlay = document.getElementById('pause-overlay');
-          if (overlay) {
-            overlay.remove();
-            console.log('Pause overlay removed');
-          }
-          
-          // 停止pause计时器
-          if (window.pauseTimerInterval) {
-            clearInterval(window.pauseTimerInterval);
-            window.pauseTimerInterval = null;
-            console.log('Pause timer cleared');
-          }
-          
-          // 检查时间变量是否有效，如果无效则不启动计时器
-          if (typeof window.sectionTime === 'undefined' || window.sectionTime === null || isNaN(window.sectionTime)) {
-            console.error('sectionTime is invalid:', window.sectionTime);
-            console.log('Attempting to call original resumeExam function instead');
-            
-            // 尝试调用原始的resumeExam函数
-            if (typeof window.resumeExam === 'function') {
-              window.resumeExam();
-              return;
-            }
-            
-            // 如果还是不行，就不启动计时器，只是返回界面
-            console.log('Cannot restart timer - time variables are invalid');
-            return;
-          }
-          
-          if (typeof window.totalTime === 'undefined' || window.totalTime === null || isNaN(window.totalTime)) {
-            console.error('totalTime is invalid:', window.totalTime);
-            console.log('Attempting to call original resumeExam function instead');
-            
-            if (typeof window.resumeExam === 'function') {
-              window.resumeExam();
-              return;
-            }
-            
-            console.log('Cannot restart timer - time variables are invalid');
-            return;
-          }
-          
-          // 清除现有计时器
-          if (window.timerInterval) {
-            clearInterval(window.timerInterval);
-            window.timerInterval = null;
-          }
-          
-          console.log('Starting timer with sectionTime:', window.sectionTime, 'totalTime:', window.totalTime);
-          
-          // 创建新的计时器
-          window.timerInterval = setInterval(() => {
-            if (!window.isPaused) {
-              // 再次检查变量有效性
-              if (typeof window.sectionTime === 'number' && typeof window.totalTime === 'number') {
-                window.sectionTime--;
-                window.totalTime--;
-                
-                // 更新计时器显示
-                const timeRemaining = document.getElementById('time-remaining');
-                const totalRemaining = document.getElementById('total-remaining');
-                
-                if (timeRemaining && window.sectionTime >= 0) {
-                  let sec = window.sectionTime;
-                  let h = Math.floor(sec / 3600);
-                  let m = Math.floor((sec % 3600) / 60);
-                  let s = sec % 60;
-                  timeRemaining.textContent = `${h} hr ${m} min ${s.toString().padStart(2, "0")} sec`;
-                  
-                  // 5分钟警告
-                  if (window.sectionTime <= 300) {
-                    timeRemaining.classList.add('time-warning');
-                  } else {
-                    timeRemaining.classList.remove('time-warning');
-                  }
-                }
-                
-                if (totalRemaining && window.totalTime >= 0) {
-                  let sec = window.totalTime;
-                  let h = Math.floor(sec / 3600);
-                  let m = Math.floor((sec % 3600) / 60);
-                  let s = sec % 60;
-                  totalRemaining.textContent = `Total Exam Time Remaining: ${h} hr ${m} min ${s.toString().padStart(2, "0")} sec`;
-                }
-                
-                // 检查时间结束
-                if (window.sectionTime <= 0 && typeof window.endSection === 'function') {
-                  window.endSection();
-                }
-                if (window.totalTime <= 0 && typeof window.finishExam === 'function') {
-                  window.finishExam();
-                }
-              } else {
-                console.error('Time variables became invalid during timer execution');
-                clearInterval(window.timerInterval);
-                window.timerInterval = null;
-              }
-            }
-          }, 1000);
-          
-          console.log('Timer restarted successfully');
-          
-        } catch (error) {
-          console.error('Error during resume:', error);
+        if (modal && modalImg && img) {
+          modalImg.src = img.src;
+          modalImg.alt = img.alt || 'Question image';
+          modal.classList.remove('hidden');
+          modal.classList.add('show');
         }
-      }
+      };
       
-      // 基本键盘支持（仅桌面端）
+      window.closeImageModal = function() {
+        const modal = document.getElementById('image-modal');
+        if (modal) {
+          modal.classList.add('hidden');
+          modal.classList.remove('show');
+        }
+      };
+      
+      // Close image modal when clicking background
+      document.addEventListener('click', function(e) {
+        if (e.target && e.target.id === 'image-modal') {
+          window.closeImageModal();
+        }
+      });
+      
+      // Keyboard support for desktop
       if (!isMobile) {
         document.addEventListener('keydown', function(e) {
           if (e.key === 'Escape') {
+            // Close any open modal
             const openModal = document.querySelector('.review-modal.show');
             if (openModal) {
               const closeBtn = openModal.querySelector('.review-actions button:first-child');
               if (closeBtn) closeBtn.click();
             }
             
+            // Close image modal
             const imageModal = document.getElementById('image-modal');
             if (imageModal && !imageModal.classList.contains('hidden')) {
-              closeImageModal();
+              window.closeImageModal();
             }
           }
         });
       }
+      
+      console.log('Initialization complete');
     });
     
-    // 图片模态框功能
-    function openImageModal(img) {
-      const modal = document.getElementById('image-modal');
-      const modalImg = document.getElementById('image-modal-content');
-      
-      if (modal && modalImg && img) {
-        modalImg.src = img.src;
-        modalImg.alt = img.alt || '题目图片';
-        modal.classList.remove('hidden');
-        modal.classList.add('show');
-      }
-    }
-    
-    function closeImageModal() {
-      const modal = document.getElementById('image-modal');
-      if (modal) {
-        modal.classList.add('hidden');
-        modal.classList.remove('show');
-      }
-    }
-    
-    // 点击模态框背景关闭
-    document.addEventListener('click', function(e) {
-      if (e.target && e.target.id === 'image-modal') {
-        closeImageModal();
+    // Error handling for script loading
+    window.addEventListener('error', function(e) {
+      console.error('Script error:', e.error);
+      if (e.error && e.error.message && e.error.message.includes('resumeExam')) {
+        console.warn('Resume function error - attempting manual fix');
+        
+        // Manual resume fallback
+        window.resumeExam = function() {
+          console.log('Manual resume fallback called');
+          
+          // Basic resume logic
+          if (typeof window.isPaused !== 'undefined') {
+            window.isPaused = false;
+          }
+          
+          const pauseBtn = document.getElementById('pause-button');
+          if (pauseBtn) {
+            pauseBtn.textContent = 'Pause';
+            pauseBtn.classList.remove('paused');
+          }
+          
+          const overlay = document.getElementById('pause-overlay');
+          if (overlay) {
+            overlay.remove();
+          }
+          
+          // Try to restart timer if possible
+          if (typeof window.startTimer === 'function') {
+            window.startTimer();
+          }
+        };
       }
     });
   </script>
