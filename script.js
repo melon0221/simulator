@@ -128,7 +128,7 @@ function handleTouchMove(e) {
   }
 }
 
-// Enhanced answer option optimization for mobile
+// Fixed answer option optimization for mobile
 function optimizeAnswerOptions() {
   const answerItems = document.querySelectorAll('.answers li');
   
@@ -137,47 +137,75 @@ function optimizeAnswerOptions() {
     const newLi = li.cloneNode(true);
     li.parentNode.replaceChild(newLi, li);
     
-    // Add enhanced touch events
-    newLi.addEventListener('touchstart', function(e) {
-      if (!isScrolling) {
-        this.style.transform = 'scale(0.98)';
-        this.style.transition = 'transform 0.1s ease';
-      }
-    }, { passive: true });
+    // Get the input element
+    const input = newLi.querySelector('input[type="radio"]');
     
-    newLi.addEventListener('touchend', function(e) {
-      this.style.transform = '';
+    if (input) {
+      // Re-attach the original onchange handler with proper variable access
+      input.onchange = () => {
+        ANSWERS[CURRENT_SECTION][CURRENT_INDEX] = parseInt(input.value);
+        updateStatus();
+        setTimeout(autoSave, 1000);
+      };
       
-      if (!isScrolling && e.target.tagName !== 'INPUT') {
-        e.preventDefault();
-        const input = this.querySelector('input[type="radio"]');
-        if (input && !input.checked) {
-          input.checked = true;
-          if (input.onchange) {
-            input.onchange();
+      // Add enhanced touch events for mobile
+      if (isMobile) {
+        newLi.addEventListener('touchstart', function(e) {
+          if (!isScrolling) {
+            this.style.transform = 'scale(0.98)';
+            this.style.transition = 'transform 0.1s ease';
           }
+        }, { passive: true });
+        
+        newLi.addEventListener('touchend', function(e) {
+          this.style.transform = '';
           
-          // Add visual feedback
-          this.style.backgroundColor = '#e3f2fd';
-          setTimeout(() => {
-            this.style.backgroundColor = '';
-          }, 200);
-        }
+          if (!isScrolling && e.target.tagName !== 'INPUT') {
+            e.preventDefault();
+            const radioInput = this.querySelector('input[type="radio"]');
+            if (radioInput && !radioInput.checked) {
+              // Clear all radio buttons in this group
+              const allInputs = document.querySelectorAll('.answers input[type="radio"]');
+              allInputs.forEach(inp => inp.checked = false);
+              
+              // Select this radio button
+              radioInput.checked = true;
+              
+              // Trigger the onchange event manually
+              if (radioInput.onchange) {
+                radioInput.onchange();
+              }
+              
+              // Add visual feedback
+              this.style.backgroundColor = '#e3f2fd';
+              setTimeout(() => {
+                this.style.backgroundColor = '';
+              }, 200);
+            }
+          }
+        }, { passive: false });
+        
+        newLi.addEventListener('touchcancel', function(e) {
+          this.style.transform = '';
+        });
       }
-    }, { passive: false });
+    }
     
-    newLi.addEventListener('touchcancel', function(e) {
-      this.style.transform = '';
-    });
-    
-    // Also handle click events for desktop compatibility
+    // Desktop click handler (non-mobile or fallback)
     newLi.addEventListener('click', function(e) {
       if (!isMobile && e.target.tagName !== 'INPUT') {
-        const input = this.querySelector('input[type="radio"]');
-        if (input) {
-          input.checked = true;
-          if (input.onchange) {
-            input.onchange();
+        const radioInput = this.querySelector('input[type="radio"]');
+        if (radioInput && !radioInput.checked) {
+          // Clear all radio buttons
+          const allInputs = document.querySelectorAll('.answers input[type="radio"]');
+          allInputs.forEach(inp => inp.checked = false);
+          
+          // Select this radio button
+          radioInput.checked = true;
+          
+          // Trigger the onchange event
+          if (radioInput.onchange) {
+            radioInput.onchange();
           }
         }
       }
@@ -576,21 +604,28 @@ function renderQuestion() {
     input.type = "radio";
     input.name = "answer";
     input.value = idx;
-    if (ANSWERS[CURRENT_SECTION][CURRENT_INDEX] == idx) input.checked = true;
+    
+    // Check if this answer was previously selected
+    if (ANSWERS[CURRENT_SECTION][CURRENT_INDEX] == idx) {
+      input.checked = true;
+    }
+    
+    // Set up the onchange handler
     input.onchange = () => {
       ANSWERS[CURRENT_SECTION][CURRENT_INDEX] = idx;
       updateStatus();
       setTimeout(autoSave, 1000);
     };
+    
     li.appendChild(input);
     li.append(" " + opt);
     answerOptions.appendChild(li);
   });
 
   // Apply mobile optimizations to new answer options
-  if (isMobile) {
-    setTimeout(optimizeAnswerOptions, 100);
-  }
+  setTimeout(() => {
+    optimizeAnswerOptions();
+  }, 50);
 
   updateStatus();
 }
