@@ -245,11 +245,29 @@ function pauseExam() {
     showPauseOverlay();
     autoSave();
     
-    console.log('Exam paused');
+    console.log('Exam paused at:', new Date().toLocaleTimeString());
+    console.log('Current times - Section:', sectionTime, 'Total:', totalTime);
   }
 }
 
-function resumeExam() {
+// Fixed resumeExam function - make it global and handle timer properly
+window.resumeExam = function() {
+  console.log('Resume function called');
+  console.log('Current state - isPaused:', isPaused, 'sectionTime:', sectionTime, 'totalTime:', totalTime);
+  
+  // Validate timer variables before proceeding
+  if (typeof sectionTime === 'undefined' || sectionTime === null || isNaN(sectionTime)) {
+    console.error('sectionTime is invalid:', sectionTime);
+    alert('Timer error - please refresh the page');
+    return;
+  }
+  
+  if (typeof totalTime === 'undefined' || totalTime === null || isNaN(totalTime)) {
+    console.error('totalTime is invalid:', totalTime);
+    alert('Timer error - please refresh the page');
+    return;
+  }
+  
   isPaused = false;
   pauseBtn.textContent = 'Pause';
   pauseBtn.classList.remove('paused');
@@ -257,7 +275,7 @@ function resumeExam() {
   hidePauseOverlay();
   startTimer();
   
-  console.log('Exam resumed');
+  console.log('Exam resumed at:', new Date().toLocaleTimeString());
 }
 
 function showPauseOverlay() {
@@ -270,17 +288,41 @@ function showPauseOverlay() {
       <h3>Exam Paused</h3>
       <p>Click "Resume" button to continue the exam</p>
       <p class="pause-time">Pause duration: <span id="pause-timer">00:00</span></p>
-      <button onclick="resumeExam()" class="resume-button">Resume</button>
+      <button class="resume-button" type="button">Resume</button>
     </div>
   `;
   
   document.body.appendChild(overlay);
+  
+  // Add event listener to the resume button
+  const resumeButton = overlay.querySelector('.resume-button');
+  if (resumeButton) {
+    resumeButton.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      console.log('Resume button clicked');
+      window.resumeExam();
+    });
+    
+    // Add mobile touch support
+    if (isMobile) {
+      resumeButton.addEventListener('touchend', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('Resume button touched');
+        window.resumeExam();
+      });
+    }
+  }
+  
   startPauseTimer();
   
-  // Add mobile touch support
+  // Add mobile touch support for overlay
   if (isMobile) {
     overlay.addEventListener('touchstart', function(e) {
-      e.preventDefault();
+      if (e.target === e.currentTarget || e.target.classList.contains('pause-content')) {
+        e.preventDefault();
+      }
     });
   }
 }
@@ -440,26 +482,43 @@ async function loadExam() {
   }
 }
 
+// Make loadExam globally accessible
+window.loadExam = loadExam;
+
 // ========== TIMER ==========
 function startTimer() {
   if (timerInterval) {
     clearInterval(timerInterval);
   }
   
+  console.log('Starting timer with sectionTime:', sectionTime, 'totalTime:', totalTime);
+  
   timerInterval = setInterval(() => {
-    if (!isPaused) {
+    if (!isPaused && sectionTime > 0 && totalTime > 0) {
       sectionTime--;
       totalTime--;
       updateTimerDisplay();
-      if (sectionTime <= 0) endSection();
-      if (totalTime <= 0) finishExam();
+      
+      if (sectionTime <= 0) {
+        console.log('Section time ended');
+        endSection();
+      }
+      if (totalTime <= 0) {
+        console.log('Total time ended');
+        finishExam();
+      }
     }
   }, 1000);
 }
 
 function updateTimerDisplay() {
-  timeRemaining.textContent = formatTime(sectionTime);
-  totalRemaining.textContent = "Total Exam Time Remaining: " + formatTime(totalTime);
+  if (timeRemaining && sectionTime >= 0) {
+    timeRemaining.textContent = formatTime(sectionTime);
+  }
+  
+  if (totalRemaining && totalTime >= 0) {
+    totalRemaining.textContent = "Total Exam Time Remaining: " + formatTime(totalTime);
+  }
   
   if (sectionTime <= 300) { // 5 minute warning
     timeRemaining.classList.add('time-warning');
@@ -469,6 +528,8 @@ function updateTimerDisplay() {
 }
 
 function formatTime(sec) {
+  if (isNaN(sec) || sec < 0) return "0 hr 0 min 00 sec";
+  
   let h = Math.floor(sec / 3600);
   let m = Math.floor((sec % 3600) / 60);
   let s = sec % 60;
@@ -490,6 +551,17 @@ function renderQuestion() {
     questionImage.classList.remove("hidden");
     if (imageWrapper) imageWrapper.classList.remove("hidden");
     if (questionTop) questionTop.classList.remove("no-image");
+    
+    // Add click event for image modal
+    questionImage.onclick = () => {
+      const modal = document.getElementById("image-modal");
+      const modalImg = document.getElementById("image-modal-content");
+      if (modal && modalImg) {
+        modalImg.src = questionImage.src;
+        modal.classList.remove("hidden");
+        modal.classList.add("show");
+      }
+    };
   } else {
     questionImage.classList.add("hidden");
     if (imageWrapper) imageWrapper.classList.add("hidden");
@@ -1067,3 +1139,22 @@ function exportResults() {
     printWindow.print();
   }, 500);
 }
+
+// Make key functions globally accessible
+window.resumeExam = window.resumeExam || function() {
+  console.log('Global resumeExam called');
+  isPaused = false;
+  pauseBtn.textContent = 'Pause';
+  pauseBtn.classList.remove('paused');
+  hidePauseOverlay();
+  startTimer();
+};
+
+// Expose necessary variables and functions to window object for debugging
+window.examState = {
+  get sectionTime() { return sectionTime; },
+  get totalTime() { return totalTime; },
+  get isPaused() { return isPaused; },
+  get CURRENT_SECTION() { return CURRENT_SECTION; },
+  get CURRENT_INDEX() { return CURRENT_INDEX; }
+};
