@@ -126,6 +126,46 @@
       color: #1565c0;
     }
     
+    /* 新增：移动端检测和优化提示 */
+    .mobile-optimization-notice {
+      background: #fff3cd;
+      color: #856404;
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      margin-top: 15px;
+      border: 1px solid #ffeaa7;
+      display: none;
+    }
+    
+    .mobile-optimization-notice.show {
+      display: block;
+    }
+    
+    /* 连接状态指示器 */
+    .connection-status {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      display: none;
+      z-index: 1000;
+    }
+    
+    .connection-status.online {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    
+    .connection-status.offline {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+    
     /* Mobile optimizations */
     @media (max-width: 767px) {
       body {
@@ -175,6 +215,12 @@
         margin-top: 20px;
         padding: 12px;
         font-size: 13px;
+      }
+      
+      .mobile-optimization-notice {
+        margin-top: 12px;
+        padding: 10px;
+        font-size: 12px;
       }
     }
     
@@ -239,6 +285,11 @@
   </style>
 </head>
 <body>
+  <!-- 连接状态指示器 -->
+  <div class="connection-status" id="connection-status">
+    <span id="connection-text">Online</span>
+  </div>
+
   <div class="welcome-container">
     <h1>NBME Exam Simulator</h1>
     <p>Welcome! This simulator replicates the NBME Comprehensive Basic Science exam experience.</p>
@@ -263,28 +314,145 @@
     <div class="app-info">
       <p><strong>💡 Mobile Tip:</strong> For the best experience, use landscape mode and ensure you have a stable internet connection.</p>
     </div>
+    
+    <!-- 移动端优化提示 -->
+    <div class="mobile-optimization-notice" id="mobile-notice">
+      <p><strong>📱 Mobile Device Detected:</strong> Touch optimizations are active. Tap answer options to select them. Your progress will be automatically saved.</p>
+    </div>
   </div>
 
   <script>
+    // 移动端检测和初始化
+    function detectMobileDevice() {
+      const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+      const screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+      
+      return (
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent) ||
+        screenWidth <= 767
+      );
+    }
+    
+    // 连接状态监控
+    function updateConnectionStatus() {
+      const status = document.getElementById('connection-status');
+      const text = document.getElementById('connection-text');
+      
+      if (navigator.onLine) {
+        status.className = 'connection-status online';
+        text.textContent = 'Online';
+      } else {
+        status.className = 'connection-status offline';
+        text.textContent = 'Offline';
+      }
+      
+      status.style.display = 'block';
+      
+      // 3秒后隐藏状态指示器（如果在线）
+      if (navigator.onLine) {
+        setTimeout(() => {
+          status.style.display = 'none';
+        }, 3000);
+      }
+    }
+    
+    // 开始考试函数 - 增强版
     function startExam() {
       const bank = document.getElementById('bank').value;
       const startButton = document.getElementById('start-button');
       const container = document.querySelector('.welcome-container');
       
-      // Add loading state
-      startButton.textContent = 'Loading...';
+      // 检查网络连接
+      if (!navigator.onLine) {
+        alert('Please check your internet connection and try again.');
+        return;
+      }
+      
+      // 添加加载状态
+      startButton.textContent = 'Loading Exam...';
       container.classList.add('loading');
       
-      // Prevent double-clicks
+      // 防止重复点击
       startButton.disabled = true;
       
-      // Add small delay to show loading state
-      setTimeout(() => {
-        window.location.href = `exam.html?bank=${bank}`;
-      }, 500);
+      // 移动端额外提示
+      if (detectMobileDevice()) {
+        startButton.textContent = 'Initializing Mobile Mode...';
+      }
+      
+      // 预加载检查
+      const testUrl = `questionBanks/${bank}.json`;
+      fetch(testUrl, { method: 'HEAD' })
+        .then(response => {
+          if (response.ok) {
+            // 添加小延迟以显示加载状态
+            setTimeout(() => {
+              window.location.href = `exam.html?bank=${bank}`;
+            }, 800);
+          } else {
+            throw new Error('Question bank not found');
+          }
+        })
+        .catch(error => {
+          console.error('Failed to load question bank:', error);
+          alert('Failed to load question bank. Please try again or select a different form.');
+          
+          // 重置按钮状态
+          startButton.textContent = 'Start Exam';
+          startButton.disabled = false;
+          container.classList.remove('loading');
+        });
     }
     
-    // Prevent form submission on Enter key
+    // 页面加载完成后初始化
+    document.addEventListener('DOMContentLoaded', function() {
+      const isMobile = detectMobileDevice();
+      console.log('Device type detected:', isMobile ? 'Mobile' : 'Desktop');
+      
+      if (isMobile) {
+        // 显示移动端优化提示
+        const mobileNotice = document.getElementById('mobile-notice');
+        mobileNotice.classList.add('show');
+        
+        // 添加移动端样式类
+        document.body.classList.add('mobile-device');
+        
+        // 移动端选择框触摸优化
+        const select = document.getElementById('bank');
+        select.addEventListener('touchstart', function() {
+          this.style.transform = 'scale(0.98)';
+          this.style.transition = 'transform 0.1s ease';
+        });
+        
+        select.addEventListener('touchend', function() {
+          this.style.transform = '';
+        });
+        
+        // 移动端按钮触摸优化
+        const startButton = document.getElementById('start-button');
+        startButton.addEventListener('touchstart', function() {
+          if (!this.disabled) {
+            this.style.transform = 'scale(0.98)';
+            this.style.transition = 'transform 0.1s ease';
+          }
+        });
+        
+        startButton.addEventListener('touchend', function() {
+          this.style.transform = '';
+        });
+        
+        console.log('Mobile optimizations applied to welcome page');
+      }
+      
+      // 监听网络状态变化
+      window.addEventListener('online', updateConnectionStatus);
+      window.addEventListener('offline', updateConnectionStatus);
+      
+      // 初始连接状态检查
+      setTimeout(updateConnectionStatus, 1000);
+    });
+    
+    // 防止表单在Enter键上提交
     document.addEventListener('keypress', function(e) {
       if (e.key === 'Enter') {
         e.preventDefault();
@@ -292,25 +460,36 @@
       }
     });
     
-    // Add touch feedback for mobile
-    document.addEventListener('DOMContentLoaded', function() {
-      const isMobile = window.innerWidth <= 767 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    // 页面可见性变化检测（用于暂停/恢复优化）
+    document.addEventListener('visibilitychange', function() {
+      if (document.hidden) {
+        console.log('Page hidden - user may have switched tabs');
+      } else {
+        console.log('Page visible - user returned to tab');
+        // 重新检查连接状态
+        updateConnectionStatus();
+      }
+    });
+    
+    // 页面卸载前的清理
+    window.addEventListener('beforeunload', function() {
+      console.log('Leaving welcome page');
+    });
+    
+    // 错误处理
+    window.addEventListener('error', function(e) {
+      console.error('Page error:', e.error);
       
-      if (isMobile) {
-        console.log('Mobile device detected - optimizations active');
+      // 如果是加载状态中出现错误，重置界面
+      const container = document.querySelector('.welcome-container');
+      const startButton = document.getElementById('start-button');
+      
+      if (container.classList.contains('loading')) {
+        container.classList.remove('loading');
+        startButton.textContent = 'Start Exam';
+        startButton.disabled = false;
         
-        // Add mobile class to body
-        document.body.classList.add('mobile-device');
-        
-        // Optimize select dropdown for mobile
-        const select = document.getElementById('bank');
-        select.addEventListener('touchstart', function() {
-          this.style.transform = 'scale(0.98)';
-        });
-        
-        select.addEventListener('touchend', function() {
-          this.style.transform = '';
-        });
+        alert('An error occurred. Please try again.');
       }
     });
   </script>
