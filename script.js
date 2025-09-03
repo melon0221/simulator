@@ -8,15 +8,20 @@ let timerInterval = null;
 let sectionTime = 75 * 60;
 let totalTime = 315 * 60;
 
-// 暂停相关变量
+// Pause related variables
 let isPaused = false;
 let pauseStartTime = 0;
 
-// 自动保存相关变量
+// Auto-save related variables
 let autoSaveInterval = null;
 let examAutoSave = null;
 
-// DOM
+// Mobile optimization variables
+let isMobile = false;
+let touchStartY = 0;
+let isScrolling = false;
+
+// DOM elements
 const questionText = document.getElementById("question-text");
 const questionImage = document.getElementById("question-image");
 const answerOptions = document.getElementById("answer-options");
@@ -41,56 +46,166 @@ const sectionReviewBackBtn = document.getElementById("section-review-back");
 const examReviewCloseBtn = document.getElementById("exam-review-close");
 const pauseBtn = document.getElementById("pause-button");
 
-// ========== 移动端检测和初始化 ==========
-function isMobileDevice() {
-  return window.innerWidth <= 768 || /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+// ========== MOBILE DETECTION AND INITIALIZATION ==========
+function detectMobile() {
+  const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+  const screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+  
+  isMobile = (
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent) ||
+    screenWidth <= 767
+  );
+  
+  return isMobile;
 }
 
 function initMobileOptimizations() {
-  if (isMobileDevice()) {
-    // 禁用双击缩放
-    document.addEventListener('touchstart', function(e) {
-      if (e.touches.length > 1) {
-        e.preventDefault();
-      }
-    });
+  detectMobile();
+  
+  if (isMobile) {
+    // Add mobile class to body
+    document.body.classList.add('mobile-device');
     
+    // Prevent double-tap zoom
     let lastTouchEnd = 0;
-    document.addEventListener('touchend', function(e) {
-      let now = (new Date()).getTime();
+    document.addEventListener('touchend', function(event) {
+      const now = (new Date()).getTime();
       if (now - lastTouchEnd <= 300) {
-        e.preventDefault();
+        event.preventDefault();
       }
       lastTouchEnd = now;
     }, false);
     
-    // 优化触摸滚动
+    // Prevent pinch zoom
+    document.addEventListener('gesturestart', function(e) {
+      e.preventDefault();
+    });
+    
+    document.addEventListener('gesturechange', function(e) {
+      e.preventDefault();
+    });
+    
+    document.addEventListener('gestureend', function(e) {
+      e.preventDefault();
+    });
+    
+    // Optimize touch scrolling
     const questionWrapper = document.querySelector('.question-wrapper');
     if (questionWrapper) {
       questionWrapper.style.webkitOverflowScrolling = 'touch';
+      
+      // Add touch scroll optimization
+      questionWrapper.addEventListener('touchstart', handleTouchStart, { passive: true });
+      questionWrapper.addEventListener('touchmove', handleTouchMove, { passive: true });
     }
     
-    // 添加移动端专用的CSS类
-    document.body.classList.add('mobile-device');
+    // Optimize viewport for mobile
+    let viewport = document.querySelector('meta[name="viewport"]');
+    if (!viewport) {
+      viewport = document.createElement('meta');
+      viewport.name = 'viewport';
+      document.head.appendChild(viewport);
+    }
+    viewport.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover';
+    
+    console.log('Mobile optimizations initialized');
   }
 }
 
-// 优化选项点击体验
+function handleTouchStart(e) {
+  touchStartY = e.touches[0].clientY;
+  isScrolling = false;
+}
+
+function handleTouchMove(e) {
+  if (!touchStartY) return;
+  
+  const touchY = e.touches[0].clientY;
+  const diffY = touchStartY - touchY;
+  
+  if (Math.abs(diffY) > 5) {
+    isScrolling = true;
+  }
+}
+
+// Fixed answer option optimization for mobile
 function optimizeAnswerOptions() {
-  document.querySelectorAll('.answers li').forEach(li => {
-    li.addEventListener('click', function(e) {
-      if (e.target.tagName !== 'INPUT') {
-        let input = this.querySelector('input[type="radio"]');
-        if (input) {
-          input.checked = true;
-          input.onchange();
-          
-          // 添加视觉反馈
-          if (isMobileDevice()) {
+  const answerItems = document.querySelectorAll('.answers li');
+  
+  answerItems.forEach((li, index) => {
+    // Remove any existing event listeners to avoid duplicates
+    const newLi = li.cloneNode(true);
+    li.parentNode.replaceChild(newLi, li);
+    
+    // Get the input element
+    const input = newLi.querySelector('input[type="radio"]');
+    
+    if (input) {
+      // Re-attach the original onchange handler with proper variable access
+      input.onchange = () => {
+        ANSWERS[CURRENT_SECTION][CURRENT_INDEX] = parseInt(input.value);
+        updateStatus();
+        setTimeout(autoSave, 1000);
+      };
+      
+      // Add enhanced touch events for mobile
+      if (isMobile) {
+        newLi.addEventListener('touchstart', function(e) {
+          if (!isScrolling) {
             this.style.transform = 'scale(0.98)';
-            setTimeout(() => {
-              this.style.transform = '';
-            }, 150);
+            this.style.transition = 'transform 0.1s ease';
+          }
+        }, { passive: true });
+        
+        newLi.addEventListener('touchend', function(e) {
+          this.style.transform = '';
+          
+          if (!isScrolling && e.target.tagName !== 'INPUT') {
+            e.preventDefault();
+            const radioInput = this.querySelector('input[type="radio"]');
+            if (radioInput && !radioInput.checked) {
+              // Clear all radio buttons in this group
+              const allInputs = document.querySelectorAll('.answers input[type="radio"]');
+              allInputs.forEach(inp => inp.checked = false);
+              
+              // Select this radio button
+              radioInput.checked = true;
+              
+              // Trigger the onchange event manually
+              if (radioInput.onchange) {
+                radioInput.onchange();
+              }
+              
+              // Add visual feedback
+              this.style.backgroundColor = '#e3f2fd';
+              setTimeout(() => {
+                this.style.backgroundColor = '';
+              }, 200);
+            }
+          }
+        }, { passive: false });
+        
+        newLi.addEventListener('touchcancel', function(e) {
+          this.style.transform = '';
+        });
+      }
+    }
+    
+    // Desktop click handler (non-mobile or fallback)
+    newLi.addEventListener('click', function(e) {
+      if (!isMobile && e.target.tagName !== 'INPUT') {
+        const radioInput = this.querySelector('input[type="radio"]');
+        if (radioInput && !radioInput.checked) {
+          // Clear all radio buttons
+          const allInputs = document.querySelectorAll('.answers input[type="radio"]');
+          allInputs.forEach(inp => inp.checked = false);
+          
+          // Select this radio button
+          radioInput.checked = true;
+          
+          // Trigger the onchange event
+          if (radioInput.onchange) {
+            radioInput.onchange();
           }
         }
       }
@@ -98,36 +213,53 @@ function optimizeAnswerOptions() {
   });
 }
 
-// 优化模态框在移动端的显示
+// Enhanced modal handling for mobile
 function showModal(modal) {
   modal.classList.add('show');
   
-  if (isMobileDevice()) {
-    // 防止背景滚动
+  if (isMobile) {
+    // Prevent background scrolling
     document.body.style.overflow = 'hidden';
     document.body.style.position = 'fixed';
     document.body.style.width = '100%';
+    document.body.style.top = `-${window.scrollY}px`;
+    
+    // Add touch event to close modal when tapping outside
+    modal.addEventListener('touchstart', handleModalTouch);
   }
 }
 
 function hideModal(modal) {
   modal.classList.remove('show');
   
-  if (isMobileDevice()) {
-    // 恢复背景滚动
+  if (isMobile) {
+    // Restore background scrolling
+    const scrollY = document.body.style.top;
     document.body.style.overflow = '';
     document.body.style.position = '';
     document.body.style.width = '';
+    document.body.style.top = '';
+    
+    if (scrollY) {
+      window.scrollTo(0, parseInt(scrollY || '0') * -1);
+    }
+    
+    // Remove touch event listener
+    modal.removeEventListener('touchstart', handleModalTouch);
   }
 }
 
-// ========== 暂停功能 ==========
+function handleModalTouch(e) {
+  if (e.target === e.currentTarget) {
+    hideModal(e.currentTarget);
+  }
+}
+
+// ========== PAUSE FUNCTIONALITY ==========
 function pauseExam() {
   if (isPaused) {
-    // 恢复考试
     resumeExam();
   } else {
-    // 暂停考试
     if (timerInterval) {
       clearInterval(timerInterval);
       timerInterval = null;
@@ -138,32 +270,43 @@ function pauseExam() {
     pauseBtn.textContent = 'Resume';
     pauseBtn.classList.add('paused');
     
-    // 显示暂停覆盖层
     showPauseOverlay();
-    
-    // Pause exam automatically save
     autoSave();
     
-    console.log('Exam paused');
+    console.log('Exam paused at:', new Date().toLocaleTimeString());
+    console.log('Current times - Section:', sectionTime, 'Total:', totalTime);
   }
 }
 
-function resumeExam() {
+// Fixed resumeExam function - make it global and handle timer properly
+window.resumeExam = function() {
+  console.log('Resume function called');
+  console.log('Current state - isPaused:', isPaused, 'sectionTime:', sectionTime, 'totalTime:', totalTime);
+  
+  // Validate timer variables before proceeding
+  if (typeof sectionTime === 'undefined' || sectionTime === null || isNaN(sectionTime)) {
+    console.error('sectionTime is invalid:', sectionTime);
+    alert('Timer error - please refresh the page');
+    return;
+  }
+  
+  if (typeof totalTime === 'undefined' || totalTime === null || isNaN(totalTime)) {
+    console.error('totalTime is invalid:', totalTime);
+    alert('Timer error - please refresh the page');
+    return;
+  }
+  
   isPaused = false;
   pauseBtn.textContent = 'Pause';
   pauseBtn.classList.remove('paused');
   
-  // Hide pause overlay
   hidePauseOverlay();
-  
-  // Restart timer
   startTimer();
   
-  console.log('Exam resumed');
+  console.log('Exam resumed at:', new Date().toLocaleTimeString());
 }
 
 function showPauseOverlay() {
-  // Create pause overlay
   const overlay = document.createElement('div');
   overlay.id = 'pause-overlay';
   overlay.className = 'pause-overlay';
@@ -173,14 +316,43 @@ function showPauseOverlay() {
       <h3>Exam Paused</h3>
       <p>Click "Resume" button to continue the exam</p>
       <p class="pause-time">Pause duration: <span id="pause-timer">00:00</span></p>
-      <button onclick="resumeExam()" class="resume-button">Resume</button>
+      <button class="resume-button" type="button">Resume</button>
     </div>
   `;
   
   document.body.appendChild(overlay);
   
-  // Start pause timer
+  // Add event listener to the resume button
+  const resumeButton = overlay.querySelector('.resume-button');
+  if (resumeButton) {
+    resumeButton.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      console.log('Resume button clicked');
+      window.resumeExam();
+    });
+    
+    // Add mobile touch support
+    if (isMobile) {
+      resumeButton.addEventListener('touchend', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('Resume button touched');
+        window.resumeExam();
+      });
+    }
+  }
+  
   startPauseTimer();
+  
+  // Add mobile touch support for overlay
+  if (isMobile) {
+    overlay.addEventListener('touchstart', function(e) {
+      if (e.target === e.currentTarget || e.target.classList.contains('pause-content')) {
+        e.preventDefault();
+      }
+    });
+  }
 }
 
 function hidePauseOverlay() {
@@ -188,8 +360,6 @@ function hidePauseOverlay() {
   if (overlay) {
     overlay.remove();
   }
-  
-  // 停止暂停计时器
   stopPauseTimer();
 }
 
@@ -215,9 +385,8 @@ function stopPauseTimer() {
   }
 }
 
-// ========== 自动保存功能 ==========
+// ========== AUTO-SAVE FUNCTIONALITY ==========
 function showAutoSaveIndicator(success = true) {
-  // Create or get auto-save indicator
   let indicator = document.getElementById('auto-save-indicator');
   if (!indicator) {
     indicator = document.createElement('div');
@@ -226,7 +395,6 @@ function showAutoSaveIndicator(success = true) {
     document.body.appendChild(indicator);
   }
   
-  // Update status and text
   indicator.className = 'auto-save-indicator show';
   if (success) {
     indicator.textContent = 'Auto-saved';
@@ -236,7 +404,6 @@ function showAutoSaveIndicator(success = true) {
     indicator.classList.add('error');
   }
   
-  // Hide after 3 seconds
   setTimeout(() => {
     indicator.classList.remove('show');
   }, 3000);
@@ -254,10 +421,9 @@ function autoSave() {
       totalTime: totalTime,
       isPaused: isPaused,
       timestamp: Date.now(),
-      version: '1.1'
+      version: '1.2'
     };
     
-    // Use in-memory storage
     examAutoSave = examData;
     showAutoSaveIndicator(true);
     
@@ -273,7 +439,6 @@ function loadAutoSave() {
   if (examAutoSave && examAutoSave.bank === BANK) {
     const timeSinceLastSave = Date.now() - examAutoSave.timestamp;
     
-    // If save time is within 2 hours, restore data
     if (timeSinceLastSave < 2 * 60 * 60 * 1000) {
       const shouldRestore = confirm(
         `Previous exam session found (saved ${Math.floor(timeSinceLastSave / 60000)} minutes ago)\nWould you like to resume the exam?`
@@ -287,11 +452,6 @@ function loadAutoSave() {
         sectionTime = examAutoSave.sectionTime;
         totalTime = examAutoSave.totalTime;
         
-        // If previously paused, don't auto-pause on restore
-        if (examAutoSave.isPaused) {
-          console.log('Previous session was paused, now resumed');
-        }
-        
         console.log('Previous exam progress restored');
         showAutoSaveIndicator(true);
         
@@ -303,7 +463,6 @@ function loadAutoSave() {
 }
 
 function startAutoSave() {
-  // Auto-save every 30 seconds
   if (autoSaveInterval) {
     clearInterval(autoSaveInterval);
   }
@@ -320,7 +479,7 @@ function stopAutoSave() {
   console.log('Auto-save feature stopped');
 }
 
-// ========== Load exam ==========
+// ========== LOAD EXAM ==========
 async function loadExam() {
   const urlParams = new URLSearchParams(window.location.search);
   BANK = urlParams.get("bank") || "25";
@@ -335,15 +494,13 @@ async function loadExam() {
     ANSWERS = QUESTIONS.map(() => ({}));
     FLAGS = QUESTIONS.map(() => ({}));
 
-    // Try to restore previous progress
     const restored = loadAutoSave();
     
     renderQuestion();
     startTimer();
-    startAutoSave(); // Start auto-save
+    startAutoSave();
     
     if (!restored) {
-      // Also save once on first load
       setTimeout(autoSave, 5000);
     }
     
@@ -353,29 +510,45 @@ async function loadExam() {
   }
 }
 
-// ========== Timer ==========
+// Make loadExam globally accessible
+window.loadExam = loadExam;
+
+// ========== TIMER ==========
 function startTimer() {
   if (timerInterval) {
     clearInterval(timerInterval);
   }
   
+  console.log('Starting timer with sectionTime:', sectionTime, 'totalTime:', totalTime);
+  
   timerInterval = setInterval(() => {
-    if (!isPaused) {
+    if (!isPaused && sectionTime > 0 && totalTime > 0) {
       sectionTime--;
       totalTime--;
       updateTimerDisplay();
-      if (sectionTime <= 0) endSection();
-      if (totalTime <= 0) finishExam();
+      
+      if (sectionTime <= 0) {
+        console.log('Section time ended');
+        endSection();
+      }
+      if (totalTime <= 0) {
+        console.log('Total time ended');
+        finishExam();
+      }
     }
   }, 1000);
 }
 
 function updateTimerDisplay() {
-  timeRemaining.textContent = formatTime(sectionTime);
-  totalRemaining.textContent = "Total Exam Time Remaining: " + formatTime(totalTime);
+  if (timeRemaining && sectionTime >= 0) {
+    timeRemaining.textContent = formatTime(sectionTime);
+  }
   
-  // 时间预警
-  if (sectionTime <= 300) { // 5分钟预警
+  if (totalRemaining && totalTime >= 0) {
+    totalRemaining.textContent = "Total Exam Time Remaining: " + formatTime(totalTime);
+  }
+  
+  if (sectionTime <= 300) { // 5 minute warning
     timeRemaining.classList.add('time-warning');
   } else {
     timeRemaining.classList.remove('time-warning');
@@ -383,19 +556,21 @@ function updateTimerDisplay() {
 }
 
 function formatTime(sec) {
+  if (isNaN(sec) || sec < 0) return "0 hr 0 min 00 sec";
+  
   let h = Math.floor(sec / 3600);
   let m = Math.floor((sec % 3600) / 60);
   let s = sec % 60;
   return `${h} hr ${m} min ${s.toString().padStart(2, "0")} sec`;
 }
 
-// ========== Render Question ==========
+// ========== RENDER QUESTION ==========
 function renderQuestion() {
   let q = QUESTIONS[CURRENT_SECTION][CURRENT_INDEX];
   examSection.textContent = `Exam Section ${CURRENT_SECTION+1}: Item ${CURRENT_INDEX+1} of 50`;
   questionText.textContent = q.question;
 
-  // 同步控制右侧图片容器
+  // Handle image display
   const imageWrapper = document.querySelector(".question-image-wrapper");
   const questionTop = document.querySelector(".question-top");
 
@@ -404,12 +579,24 @@ function renderQuestion() {
     questionImage.classList.remove("hidden");
     if (imageWrapper) imageWrapper.classList.remove("hidden");
     if (questionTop) questionTop.classList.remove("no-image");
+    
+    // Add click event for image modal
+    questionImage.onclick = () => {
+      const modal = document.getElementById("image-modal");
+      const modalImg = document.getElementById("image-modal-content");
+      if (modal && modalImg) {
+        modalImg.src = questionImage.src;
+        modal.classList.remove("hidden");
+        modal.classList.add("show");
+      }
+    };
   } else {
     questionImage.classList.add("hidden");
-    if (imageWrapper) imageWrapper.classList.add("hidden"); // 关键：隐藏整列
+    if (imageWrapper) imageWrapper.classList.add("hidden");
     if (questionTop) questionTop.classList.add("no-image");
   }
 
+  // Render answer options
   answerOptions.innerHTML = "";
   q.options.forEach((opt, idx) => {
     let li = document.createElement("li");
@@ -417,22 +604,28 @@ function renderQuestion() {
     input.type = "radio";
     input.name = "answer";
     input.value = idx;
-    if (ANSWERS[CURRENT_SECTION][CURRENT_INDEX] == idx) input.checked = true;
+    
+    // Check if this answer was previously selected
+    if (ANSWERS[CURRENT_SECTION][CURRENT_INDEX] == idx) {
+      input.checked = true;
+    }
+    
+    // Set up the onchange handler
     input.onchange = () => {
       ANSWERS[CURRENT_SECTION][CURRENT_INDEX] = idx;
       updateStatus();
-      // Save immediately after answering
       setTimeout(autoSave, 1000);
     };
+    
     li.appendChild(input);
     li.append(" " + opt);
     answerOptions.appendChild(li);
   });
 
-  // 移动端优化
-  if (isMobileDevice()) {
+  // Apply mobile optimizations to new answer options
+  setTimeout(() => {
     optimizeAnswerOptions();
-  }
+  }, 50);
 
   updateStatus();
 }
@@ -450,13 +643,14 @@ function updateStatus() {
   flag ? flagPill.classList.remove("hidden") : flagPill.classList.add("hidden");
 }
 
-// ========== Navigation ==========
+// ========== NAVIGATION ==========
 document.getElementById("next-button").onclick = () => {
   if (CURRENT_INDEX < 49) {
     CURRENT_INDEX++;
     renderQuestion();
   }
 };
+
 document.getElementById("prev-button").onclick = () => {
   if (CURRENT_INDEX > 0) {
     CURRENT_INDEX--;
@@ -464,18 +658,17 @@ document.getElementById("prev-button").onclick = () => {
   }
 };
 
-// ========== Flag ==========
+// ========== FLAG ==========
 document.getElementById("flag-button").onclick = () => {
   FLAGS[CURRENT_SECTION][CURRENT_INDEX] = !FLAGS[CURRENT_SECTION][CURRENT_INDEX];
   updateStatus();
-  // Save after flagging
   setTimeout(autoSave, 1000);
 };
 
-// ========== Pause Button Event ==========
+// ========== PAUSE BUTTON EVENT ==========
 pauseBtn.onclick = pauseExam;
 
-// ========== Review ==========
+// ========== REVIEW ==========
 function populateReviewGrid() {
   let grid = document.getElementById("review-grid");
   grid.innerHTML = "";
@@ -492,6 +685,17 @@ function populateReviewGrid() {
       renderQuestion();
       hideModal(reviewModal);
     };
+    
+    // Add touch support for mobile
+    if (isMobile) {
+      chip.addEventListener('touchstart', function() {
+        this.style.transform = 'scale(0.95)';
+      });
+      chip.addEventListener('touchend', function() {
+        this.style.transform = '';
+      });
+    }
+    
     grid.appendChild(chip);
   });
 }
@@ -504,7 +708,7 @@ reviewCloseBtn.onclick = () => {
   hideModal(reviewModal); 
 };
 
-// ========== Section Review ==========
+// ========== SECTION REVIEW ==========
 function populateSectionReview() {
   let grid = document.getElementById("section-review-grid");
   grid.innerHTML = "";
@@ -516,6 +720,17 @@ function populateSectionReview() {
     if (ans == null) chip.classList.add("unanswered");
     if (flag) chip.classList.add("flagged");
     chip.textContent = `Q${idx+1}`;
+    
+    // Add mobile touch feedback
+    if (isMobile) {
+      chip.addEventListener('touchstart', function() {
+        this.style.transform = 'scale(0.95)';
+      });
+      chip.addEventListener('touchend', function() {
+        this.style.transform = '';
+      });
+    }
+    
     grid.appendChild(chip);
   });
 }
@@ -528,15 +743,13 @@ sectionReviewBackBtn.onclick = () => {
   hideModal(sectionReviewModal); 
 };
 
-// FIXED: Show confirmation before ending section
 document.getElementById("section-review-end").onclick = () => { 
-  hideModal(sectionReviewModal); // Close review modal first
-  // Show confirmation modal
+  hideModal(sectionReviewModal);
   const confirmModal = document.getElementById("section-end-confirm-modal");
   showModal(confirmModal);
 };
 
-// ========== Exam Review ==========
+// ========== EXAM REVIEW ==========
 function populateExamReview() {
   let content = document.getElementById("exam-review-content");
   content.innerHTML = "";
@@ -562,7 +775,7 @@ function populateExamReview() {
 
 function finishExam() {
   clearInterval(timerInterval);
-  stopAutoSave(); // Stop auto-save
+  stopAutoSave();
   populateExamReview();
   showModal(examReviewModal);
 }
@@ -571,7 +784,7 @@ examReviewCloseBtn.onclick = () => {
   hideModal(examReviewModal); 
 };
 
-// 提交确认逻辑
+// Submit confirmation logic
 document.getElementById("exam-review-finish").onclick = () => {
   hideModal(examReviewModal);
   showModal(submitConfirmModal);
@@ -585,16 +798,15 @@ document.getElementById("cancel-submit").onclick = () => {
 document.getElementById("confirm-submit").onclick = () => {
   hideModal(submitConfirmModal);
   clearInterval(timerInterval);
-  stopAutoSave(); // Ensure auto-save is stopped
+  stopAutoSave();
   
-  // Clear auto-save data
   examAutoSave = null;
   
   document.body.innerHTML = `
-    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;text-align:center;">
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;text-align:center;padding:20px;">
       <h2>Exam Ended</h2>
       <p>Your responses have been submitted successfully.</p>
-      <button id="export-results">Download Results</button>
+      <button id="export-results" style="padding:12px 24px;font-size:16px;background:#2b6cb0;color:white;border:none;border-radius:6px;cursor:pointer;margin-top:20px;">Download Results</button>
     </div>
   `;
   document.getElementById("export-results").onclick = () => { exportResults(); };
@@ -603,17 +815,16 @@ document.getElementById("confirm-submit").onclick = () => {
 // Section end confirmation logic
 document.getElementById("cancel-section-end").onclick = () => {
   hideModal(sectionEndConfirmModal);
-  showModal(sectionReviewModal); // Return to section review
+  showModal(sectionReviewModal);
 };
 
 document.getElementById("confirm-section-end").onclick = () => {
   hideModal(sectionEndConfirmModal);
-  endSection(); // Proceed to next section
+  endSection();
 };
 
-// ========== Section Flow ==========
+// ========== SECTION FLOW ==========
 function endSection() {
-  // Save when ending current section
   autoSave();
   
   CURRENT_SECTION++;
@@ -626,7 +837,7 @@ function endSection() {
   }
 }
 
-// ========== Export PDF Results ==========
+// ========== EXPORT PDF RESULTS ==========
 function exportResults() {
   // Calculate statistics
   let totalQuestions = 200;
@@ -657,9 +868,8 @@ function exportResults() {
   let unansweredCount = totalQuestions - answeredCount;
   let completionRate = ((answeredCount / totalQuestions) * 100).toFixed(1);
   let correctRate = ((correctCount / totalQuestions) * 100).toFixed(1);
-  let totalScore = correctCount; // Total score is number of correct answers
+  let totalScore = correctCount;
   
-  // Generate current date
   let now = new Date();
   let examDate = now.toLocaleDateString('en-US', { 
     year: 'numeric', 
@@ -673,6 +883,7 @@ function exportResults() {
     <html>
     <head>
       <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <style>
         @page { margin: 1in; }
         body { 
@@ -794,6 +1005,21 @@ function exportResults() {
           font-size: 9pt;
           color: #666;
           font-style: italic;
+        }
+        
+        @media (max-width: 768px) {
+          .exam-info {
+            grid-template-columns: 1fr;
+            gap: 15px;
+          }
+          .question-grid {
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+          }
+          .question-cell {
+            min-height: 30px;
+            font-size: 9pt;
+          }
         }
       </style>
     </head>
@@ -949,87 +1175,21 @@ function exportResults() {
   }, 500);
 }
 
-// ========== Image Zoom ==========
-const imageModal = document.getElementById("image-modal");
-const imageModalContent = document.getElementById("image-modal-content");
-
-questionImage.onclick = () => {
-  if (!questionImage.classList.contains("hidden")) {
-    imageModalContent.src = questionImage.src;
-    showModal(imageModal);
-  }
+// Make key functions globally accessible
+window.resumeExam = window.resumeExam || function() {
+  console.log('Global resumeExam called');
+  isPaused = false;
+  pauseBtn.textContent = 'Pause';
+  pauseBtn.classList.remove('paused');
+  hidePauseOverlay();
+  startTimer();
 };
 
-imageModal.onclick = (e) => {
-  if (e.target === imageModal) {
-    hideModal(imageModal);
-  }
+// Expose necessary variables and functions to window object for debugging
+window.examState = {
+  get sectionTime() { return sectionTime; },
+  get totalTime() { return totalTime; },
+  get isPaused() { return isPaused; },
+  get CURRENT_SECTION() { return CURRENT_SECTION; },
+  get CURRENT_INDEX() { return CURRENT_INDEX; }
 };
-
-// ========== Handle screen orientation changes ==========
-window.addEventListener('orientationchange', function() {
-  setTimeout(() => {
-    // Recalculate layout
-    if (window.DeviceOrientationEvent) {
-      window.scrollTo(0, 0);
-    }
-  }, 100);
-});
-
-// ========== Prevent accidental closure ==========
-window.addEventListener('beforeunload', function(e) {
-  if (timerInterval) {
-    e.preventDefault();
-    e.returnValue = 'Exam is in progress. Are you sure you want to leave?';
-    return e.returnValue;
-  }
-});
-
-// ========== Keyboard shortcuts support ==========
-document.addEventListener('keydown', function(e) {
-  // Only enable shortcuts on non-input elements
-  if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
-    switch(e.key) {
-      case 'ArrowLeft':
-        if (CURRENT_INDEX > 0) {
-          e.preventDefault();
-          CURRENT_INDEX--;
-          renderQuestion();
-        }
-        break;
-      case 'ArrowRight':
-        if (CURRENT_INDEX < 49) {
-          e.preventDefault();
-          CURRENT_INDEX++;
-          renderQuestion();
-        }
-        break;
-      case 'f':
-      case 'F':
-        e.preventDefault();
-        document.getElementById("flag-button").click();
-        break;
-      case ' ':
-        e.preventDefault();
-        pauseExam();
-        break;
-      case '1':
-      case '2':
-      case '3':
-      case '4':
-      case '5':
-        const optionIndex = parseInt(e.key) - 1;
-        const options = document.querySelectorAll('input[name="answer"]');
-        if (options[optionIndex]) {
-          e.preventDefault();
-          options[optionIndex].checked = true;
-          options[optionIndex].onchange();
-        }
-        break;
-    }
-  }
-});
-
-// ========== Initialization ==========
-initMobileOptimizations();
-loadExam();
