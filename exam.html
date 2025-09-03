@@ -18,140 +18,6 @@
         font-size: 16px;
       }
     }
-    
-    /* Mobile answer selection styles */
-    .mobile-device .answers li {
-      padding: 16px;
-      border: 2px solid #e0e0e0;
-      border-radius: 8px;
-      margin-bottom: 12px;
-      background: white;
-      transition: all 0.2s ease;
-    }
-    
-    .mobile-device .answers li.selected {
-      background: #e3f2fd !important;
-      border-color: #2196f3;
-      transform: scale(0.98);
-    }
-    
-    .mobile-device .answers li input[type="radio"] {
-      transform: scale(1.3);
-      margin-right: 12px;
-    }
-    
-    .mobile-device .answers label {
-      display: block;
-      padding: 8px;
-      margin: -8px;
-      cursor: pointer;
-    }
-
-    /* Auto-save indicator */
-    .auto-save-indicator {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background: #d4edda;
-      color: #155724;
-      padding: 8px 16px;
-      border-radius: 4px;
-      font-size: 13px;
-      border: 1px solid #c3e6cb;
-      opacity: 0;
-      transform: translateX(100%);
-      transition: all 0.3s ease;
-      z-index: 1500;
-      pointer-events: none;
-    }
-
-    .auto-save-indicator.show {
-      opacity: 1;
-      transform: translateX(0);
-    }
-
-    .auto-save-indicator.error {
-      background: #f8d7da;
-      color: #721c24;
-      border-color: #f5c6cb;
-    }
-
-    /* Pause overlay styles */
-    .pause-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0,0,0,0.9);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 2000;
-      backdrop-filter: blur(10px);
-    }
-
-    .pause-content {
-      background: white;
-      padding: 40px;
-      border-radius: 12px;
-      text-align: center;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-      max-width: 400px;
-      width: 90%;
-    }
-
-    .pause-icon {
-      font-size: 48px;
-      margin-bottom: 20px;
-    }
-
-    .pause-content h3 {
-      margin: 0 0 15px 0;
-      color: #2a4365;
-      font-size: 24px;
-    }
-
-    .pause-content p {
-      margin: 10px 0;
-      color: #666;
-    }
-
-    .pause-time {
-      font-weight: bold;
-      color: #d63384;
-      font-size: 18px;
-    }
-
-    .resume-button {
-      background: #28a745;
-      color: white;
-      border: none;
-      padding: 12px 24px;
-      font-size: 16px;
-      border-radius: 6px;
-      cursor: pointer;
-      margin-top: 20px;
-      transition: background-color 0.2s;
-      width: 100%;
-    }
-
-    .resume-button:hover {
-      background: #218838;
-    }
-
-    /* Screen reader only */
-    .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap;
-      border: 0;
-    }
   </style>
 </head>
 <body>
@@ -304,7 +170,7 @@
   </div>
 
   <!-- Image Modal -->
-  <div class="image-modal hidden" id="image-modal" role="dialog" aria-labelledby="image-modal-title" aria-hidden="true">
+  <div class="image-modal hidden" id="image-modal" role="dialog" aria-labelledby="image-modal-title" aria-hidden="true" onclick="closeImageModal()">
     <h3 id="image-modal-title" class="sr-only">Question Image - Full Size</h3>
     <img id="image-modal-content" class="image-modal-content" alt="Full size question image" />
   </div>
@@ -340,7 +206,158 @@
         }, 1000);
       }
       
-      // Image modal functionality
+      // Mobile device detection and optimizations
+      const isMobile = window.innerWidth <= 767 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      console.log('Mobile device detected:', isMobile);
+      
+      if (isMobile) {
+        document.body.classList.add('mobile-device');
+        console.log('Mobile optimizations applied');
+        
+        // 移动端答案选择增强函数 - 修正版本
+        function enhanceMobileAnswerOptions() {
+          const answerOptions = document.querySelectorAll('.answers li');
+          console.log('Enhancing mobile answer options, found:', answerOptions.length, 'items');
+          
+          answerOptions.forEach(function(li, index) {
+            // 移除现有监听器以避免重复
+            const newLi = li.cloneNode(true);
+            li.parentNode.replaceChild(newLi, li);
+            
+            const radio = newLi.querySelector('input[type="radio"]');
+            if (radio) {
+              // 确保radio input有正确的值
+              radio.value = index;
+              console.log('Set radio value for index:', index);
+              
+              // 重新绑定onchange事件处理程序
+              radio.onchange = function() {
+                console.log('Radio onchange fired for index:', index);
+                if (window.ANSWERS && window.CURRENT_SECTION !== undefined && window.CURRENT_INDEX !== undefined) {
+                  window.ANSWERS[window.CURRENT_SECTION][window.CURRENT_INDEX] = index;
+                  console.log('Answer saved:', index, 'for section:', window.CURRENT_SECTION, 'question:', window.CURRENT_INDEX);
+                  
+                  if (window.updateStatus) {
+                    window.updateStatus();
+                  }
+                  
+                  if (window.autoSave) {
+                    setTimeout(window.autoSave, 1000);
+                  }
+                } else {
+                  console.error('Global variables not accessible:', {
+                    ANSWERS: !!window.ANSWERS,
+                    CURRENT_SECTION: window.CURRENT_SECTION,
+                    CURRENT_INDEX: window.CURRENT_INDEX
+                  });
+                }
+              };
+            }
+            
+            // 移动端触摸事件处理 - 改进版本
+            newLi.addEventListener('touchend', function(e) {
+              e.preventDefault();
+              e.stopPropagation();
+              
+              const radioInput = this.querySelector('input[type="radio"]');
+              if (radioInput && !radioInput.checked) {
+                console.log('Mobile touch selection for index:', index);
+                
+                // 清除其他选择
+                const allRadios = document.querySelectorAll('.answers input[type="radio"]');
+                allRadios.forEach(r => r.checked = false);
+                
+                // 设置当前选择
+                radioInput.checked = true;
+                
+                // 手动触发保存逻辑
+                if (window.ANSWERS && window.CURRENT_SECTION !== undefined && window.CURRENT_INDEX !== undefined) {
+                  window.ANSWERS[window.CURRENT_SECTION][window.CURRENT_INDEX] = index;
+                  console.log('Mobile answer manually saved:', index);
+                  
+                  // 触发状态更新
+                  if (window.updateStatus) {
+                    window.updateStatus();
+                    console.log('Status updated after mobile selection');
+                  }
+                  
+                  // 触发自动保存
+                  if (window.autoSave) {
+                    setTimeout(window.autoSave, 1000);
+                    console.log('Auto-save triggered after mobile selection');
+                  }
+                } else {
+                  console.error('Failed to save mobile answer - global variables not accessible');
+                }
+                
+                // 触发onchange事件作为备用
+                if (radioInput.onchange) {
+                  radioInput.onchange();
+                }
+                
+                // 视觉反馈
+                this.style.backgroundColor = '#e3f2fd';
+                this.style.transition = 'background-color 0.3s ease';
+                setTimeout(() => {
+                  this.style.backgroundColor = '';
+                }, 300);
+              }
+            }, { passive: false });
+            
+            // 桌面端备用点击事件
+            newLi.addEventListener('click', function(e) {
+              if (!isMobile && e.target.tagName !== 'INPUT') {
+                e.preventDefault();
+                const radioInput = this.querySelector('input[type="radio"]');
+                if (radioInput && !radioInput.checked) {
+                  console.log('Desktop click selection for index:', index);
+                  
+                  const allRadios = document.querySelectorAll('.answers input[type="radio"]');
+                  allRadios.forEach(r => r.checked = false);
+                  radioInput.checked = true;
+                  
+                  if (radioInput.onchange) {
+                    radioInput.onchange();
+                  }
+                }
+              }
+            });
+          });
+        }
+        
+        // 重写renderQuestion函数以包含移动端增强
+        const originalRenderQuestion = window.renderQuestion;
+        if (originalRenderQuestion) {
+          window.renderQuestion = function() {
+            console.log('Enhanced renderQuestion called');
+            originalRenderQuestion.call(this);
+            
+            // 延迟执行移动端优化以确保DOM已更新
+            setTimeout(function() {
+              console.log('Applying mobile enhancements...');
+              enhanceMobileAnswerOptions();
+            }, 100);
+          };
+          console.log('renderQuestion function enhanced for mobile');
+        } else {
+          console.warn('Original renderQuestion function not found');
+        }
+        
+        // 确保全局变量可访问性
+        setTimeout(function() {
+          if (typeof ANSWERS !== 'undefined') {
+            window.ANSWERS = ANSWERS;
+            window.FLAGS = FLAGS;
+            window.CURRENT_SECTION = CURRENT_SECTION;
+            window.CURRENT_INDEX = CURRENT_INDEX;
+            window.updateStatus = updateStatus;
+            window.autoSave = autoSave;
+            console.log('Global variables exported for mobile compatibility');
+          }
+        }, 2000);
+      }
+      
+      // 图片模态框功能
       window.openImageModal = function(img) {
         const modal = document.getElementById('image-modal');
         const modalImg = document.getElementById('image-modal-content');
@@ -361,19 +378,98 @@
         }
       };
       
-      // Close image modal when clicking background
+      // 点击背景关闭图片模态框
       document.addEventListener('click', function(e) {
         if (e.target && e.target.id === 'image-modal') {
           window.closeImageModal();
         }
       });
       
+      // 桌面端键盘支持
+      if (!isMobile) {
+        document.addEventListener('keydown', function(e) {
+          if (e.key === 'Escape') {
+            // 关闭任何打开的模态框
+            const openModal = document.querySelector('.review-modal.show');
+            if (openModal) {
+              const closeBtn = openModal.querySelector('.review-actions button:first-child');
+              if (closeBtn) closeBtn.click();
+            }
+            
+            // 关闭图片模态框
+            const imageModal = document.getElementById('image-modal');
+            if (imageModal && !imageModal.classList.contains('hidden')) {
+              window.closeImageModal();
+            }
+          }
+        });
+      }
+      
       console.log('Initialization complete');
     });
-
-    // Error handling for script loading
+    
+    // 脚本加载错误处理
     window.addEventListener('error', function(e) {
       console.error('Script error:', e.error);
+      if (e.error && e.error.message && e.error.message.includes('resumeExam')) {
+        console.warn('Resume function error - attempting manual fix');
+        
+        // 手动恢复备用方案
+        window.resumeExam = function() {
+          console.log('Manual resume fallback called');
+          
+          // 基本恢复逻辑
+          if (typeof window.isPaused !== 'undefined') {
+            window.isPaused = false;
+          }
+          
+          const pauseBtn = document.getElementById('pause-button');
+          if (pauseBtn) {
+            pauseBtn.textContent = 'Pause';
+            pauseBtn.classList.remove('paused');
+          }
+          
+          const overlay = document.getElementById('pause-overlay');
+          if (overlay) {
+            overlay.remove();
+          }
+          
+          // 尝试重新启动计时器
+          if (typeof window.startTimer === 'function') {
+            window.startTimer();
+          }
+        };
+      }
+    });
+    
+    // 额外的移动端支持函数 - 确保答案保存
+    window.addEventListener('DOMContentLoaded', function() {
+      // 监听全局变量变化，确保移动端能访问
+      let checkGlobalVars = setInterval(function() {
+        if (typeof ANSWERS !== 'undefined' && typeof CURRENT_SECTION !== 'undefined') {
+          window.ANSWERS = ANSWERS;
+          window.FLAGS = FLAGS;
+          window.CURRENT_SECTION = CURRENT_SECTION;
+          window.CURRENT_INDEX = CURRENT_INDEX;
+          window.updateStatus = updateStatus;
+          window.autoSave = autoSave;
+          
+          console.log('Global variables successfully exported:', {
+            ANSWERS: !!window.ANSWERS,
+            CURRENT_SECTION: window.CURRENT_SECTION,
+            CURRENT_INDEX: window.CURRENT_INDEX,
+            updateStatus: !!window.updateStatus,
+            autoSave: !!window.autoSave
+          });
+          
+          clearInterval(checkGlobalVars);
+        }
+      }, 500);
+      
+      // 10秒后停止检查
+      setTimeout(function() {
+        clearInterval(checkGlobalVars);
+      }, 10000);
     });
   </script>
 </body>
