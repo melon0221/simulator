@@ -20,7 +20,6 @@ let examAutoSave = null;
 let isMobile = false;
 let touchStartY = 0;
 let isScrolling = false;
-let lastTouchTime = 0;
 
 // DOM elements
 const questionText = document.getElementById("question-text");
@@ -98,7 +97,6 @@ function initMobileOptimizations() {
       // Add touch scroll optimization
       questionWrapper.addEventListener('touchstart', handleTouchStart, { passive: true });
       questionWrapper.addEventListener('touchmove', handleTouchMove, { passive: true });
-      questionWrapper.addEventListener('touchend', handleTouchEnd, { passive: true });
     }
     
     // Optimize viewport for mobile
@@ -130,115 +128,108 @@ function handleTouchMove(e) {
   }
 }
 
-function handleTouchEnd(e) {
-  // Reset scrolling state after a short delay
-  setTimeout(() => {
-    isScrolling = false;
-  }, 100);
-}
-
-// ========== ANSWER SELECTION HANDLING ==========
-function setupAnswerSelection() {
+// 修正后的答案选项优化函数
+function optimizeAnswerOptions() {
   const answerItems = document.querySelectorAll('.answers li');
   
   answerItems.forEach((li, index) => {
-    // Remove any existing event listeners
+    // 移除任何现有的事件监听器以避免重复
     const newLi = li.cloneNode(true);
     li.parentNode.replaceChild(newLi, li);
     
+    // 获取input元素
     const input = newLi.querySelector('input[type="radio"]');
-    const label = newLi.querySelector('label') || newLi;
     
     if (input) {
-      // Set up the onchange handler
-      input.onchange = () => {
-        ANSWERS[CURRENT_SECTION][CURRENT_INDEX] = parseInt(input.value);
+      // 重新设置正确的value值
+      input.value = index;
+      
+      // 重新添加onchange处理程序
+      input.onchange = function() {
+        console.log('Answer changed to index:', index);
+        ANSWERS[CURRENT_SECTION][CURRENT_INDEX] = index;
         updateStatus();
         setTimeout(autoSave, 1000);
       };
       
-      // Add mobile touch events
+      // 添加移动端触摸事件
       if (isMobile) {
-        // Use label for better touch area
-        label.style.cursor = 'pointer';
-        label.style.display = 'block';
-        label.style.padding = '12px';
-        label.style.margin = '-12px';
-        
-        label.addEventListener('touchstart', function(e) {
-          if (isScrolling) return;
-          
-          this.style.backgroundColor = '#e3f2fd';
-          this.style.transform = 'scale(0.98)';
-          this.style.transition = 'all 0.1s ease';
+        newLi.addEventListener('touchstart', function(e) {
+          if (!isScrolling) {
+            this.style.transform = 'scale(0.98)';
+            this.style.transition = 'transform 0.1s ease';
+          }
         }, { passive: true });
         
-        label.addEventListener('touchend', function(e) {
-          if (isScrolling) {
-            this.style.backgroundColor = '';
-            this.style.transform = '';
-            return;
+        newLi.addEventListener('touchend', function(e) {
+          this.style.transform = '';
+          
+          if (!isScrolling && e.target.tagName !== 'INPUT') {
+            e.preventDefault();
+            const radioInput = this.querySelector('input[type="radio"]');
+            if (radioInput && !radioInput.checked) {
+              console.log('Mobile touch answer selection, index:', index);
+              
+              // 清除所有单选按钮选择
+              const allInputs = document.querySelectorAll('.answers input[type="radio"]');
+              allInputs.forEach(inp => inp.checked = false);
+              
+              // 选择当前单选按钮
+              radioInput.checked = true;
+              
+              // 手动触发onchange事件
+              if (radioInput.onchange) {
+                radioInput.onchange();
+              } else {
+                // 备用触发方法
+                ANSWERS[CURRENT_SECTION][CURRENT_INDEX] = index;
+                updateStatus();
+                setTimeout(autoSave, 1000);
+                console.log('Backup answer save triggered, index:', index);
+              }
+              
+              // 添加视觉反馈
+              this.style.backgroundColor = '#e3f2fd';
+              setTimeout(() => {
+                this.style.backgroundColor = '';
+              }, 200);
+            }
           }
-          
-          e.preventDefault();
-          e.stopPropagation();
-          
-          // Prevent rapid double-taps
-          const now = Date.now();
-          if (now - lastTouchTime < 300) return;
-          lastTouchTime = now;
-          
-          // Select the answer
-          if (!input.checked) {
-            // Clear all radio buttons
-            const allInputs = document.querySelectorAll('.answers input[type="radio"]');
-            allInputs.forEach(inp => {
-              inp.checked = false;
-              if (inp.onchange) inp.onchange();
-            });
-            
-            // Select this one
-            input.checked = true;
-            if (input.onchange) input.onchange();
-          }
-          
-          // Visual feedback
-          this.style.backgroundColor = '#d4edda';
-          setTimeout(() => {
-            this.style.backgroundColor = '';
-            this.style.transform = '';
-          }, 200);
         }, { passive: false });
         
-        label.addEventListener('touchcancel', function(e) {
-          this.style.backgroundColor = '';
+        newLi.addEventListener('touchcancel', function(e) {
           this.style.transform = '';
-        }, { passive: true });
+        });
       }
-      
-      // Desktop click handler
-      label.addEventListener('click', function(e) {
-        if (!isMobile && e.target.tagName !== 'INPUT') {
-          if (!input.checked) {
-            const allInputs = document.querySelectorAll('.answers input[type="radio"]');
-            allInputs.forEach(inp => {
-              inp.checked = false;
-              if (inp.onchange) inp.onchange();
-            });
-            
-            input.checked = true;
-            if (input.onchange) input.onchange();
+    }
+    
+    // 桌面端点击处理程序（非移动端或备用）
+    newLi.addEventListener('click', function(e) {
+      if (!isMobile && e.target.tagName !== 'INPUT') {
+        const radioInput = this.querySelector('input[type="radio"]');
+        if (radioInput && !radioInput.checked) {
+          console.log('Desktop click answer selection, index:', index);
+          
+          // 清除所有单选按钮
+          const allInputs = document.querySelectorAll('.answers input[type="radio"]');
+          allInputs.forEach(inp => inp.checked = false);
+          
+          // 选择当前单选按钮
+          radioInput.checked = true;
+          
+          // 触发onchange事件
+          if (radioInput.onchange) {
+            radioInput.onchange();
           }
         }
-      });
-    }
+      }
+    });
   });
 }
 
 // Enhanced modal handling for mobile
 function showModal(modal) {
   modal.classList.add('show');
-  modal.setAttribute('aria-hidden', 'false');
   
   if (isMobile) {
     // Prevent background scrolling
@@ -254,7 +245,6 @@ function showModal(modal) {
 
 function hideModal(modal) {
   modal.classList.remove('show');
-  modal.setAttribute('aria-hidden', 'true');
   
   if (isMobile) {
     // Restore background scrolling
@@ -302,9 +292,10 @@ function pauseExam() {
   }
 }
 
-// Fixed resumeExam function
+// Fixed resumeExam function - make it global and handle timer properly
 window.resumeExam = function() {
   console.log('Resume function called');
+  console.log('Current state - isPaused:', isPaused, 'sectionTime:', sectionTime, 'totalTime:', totalTime);
   
   // Validate timer variables before proceeding
   if (typeof sectionTime === 'undefined' || sectionTime === null || isNaN(sectionTime)) {
@@ -351,6 +342,7 @@ function showPauseOverlay() {
     resumeButton.addEventListener('click', function(e) {
       e.preventDefault();
       e.stopPropagation();
+      console.log('Resume button clicked');
       window.resumeExam();
     });
     
@@ -359,12 +351,22 @@ function showPauseOverlay() {
       resumeButton.addEventListener('touchend', function(e) {
         e.preventDefault();
         e.stopPropagation();
+        console.log('Resume button touched');
         window.resumeExam();
       });
     }
   }
   
   startPauseTimer();
+  
+  // Add mobile touch support for overlay
+  if (isMobile) {
+    overlay.addEventListener('touchstart', function(e) {
+      if (e.target === e.currentTarget || e.target.classList.contains('pause-content')) {
+        e.preventDefault();
+      }
+    });
+  }
 }
 
 function hidePauseOverlay() {
@@ -440,6 +442,7 @@ function autoSave() {
     showAutoSaveIndicator(true);
     
     console.log('Exam data auto-saved', new Date().toLocaleTimeString());
+    console.log('Current answers:', ANSWERS[CURRENT_SECTION]);
     
   } catch (error) {
     console.error('Auto-save failed:', error);
@@ -608,7 +611,7 @@ function renderQuestion() {
     if (questionTop) questionTop.classList.add("no-image");
   }
 
-  // Render answer options
+  // 渲染答案选项
   answerOptions.innerHTML = "";
   q.options.forEach((opt, idx) => {
     let li = document.createElement("li");
@@ -616,34 +619,28 @@ function renderQuestion() {
     input.type = "radio";
     input.name = "answer";
     input.value = idx;
-    input.id = `answer-${CURRENT_SECTION}-${CURRENT_INDEX}-${idx}`;
     
-    // Check if this answer was previously selected
+    // 检查是否已经选择了此答案
     if (ANSWERS[CURRENT_SECTION][CURRENT_INDEX] == idx) {
       input.checked = true;
     }
     
-    // Set up the onchange handler
-    input.onchange = () => {
+    // 设置onchange处理程序
+    input.onchange = function() {
+      console.log('Input changed to index:', idx);
       ANSWERS[CURRENT_SECTION][CURRENT_INDEX] = idx;
       updateStatus();
       setTimeout(autoSave, 1000);
     };
     
     li.appendChild(input);
-    
-    // Add label for better mobile accessibility
-    let label = document.createElement("label");
-    label.htmlFor = `answer-${CURRENT_SECTION}-${CURRENT_INDEX}-${idx}`;
-    label.textContent = opt;
-    li.appendChild(label);
-    
+    li.append(" " + opt);
     answerOptions.appendChild(li);
   });
 
-  // Set up answer selection handlers
+  // 应用移动端优化到新的答案选项
   setTimeout(() => {
-    setupAnswerSelection();
+    optimizeAnswerOptions();
   }, 50);
 
   updateStatus();
@@ -652,7 +649,10 @@ function renderQuestion() {
 function updateStatus() {
   let ans = ANSWERS[CURRENT_SECTION][CURRENT_INDEX];
   let flag = FLAGS[CURRENT_SECTION][CURRENT_INDEX];
-  if (ans == null) {
+  
+  console.log('Updating status - answer:', ans, 'flag:', flag);
+  
+  if (ans == null || ans === undefined) {
     statusPill.textContent = "Unanswered";
     statusPill.style.background = "#FFF3CD";
   } else {
@@ -1194,13 +1194,33 @@ function exportResults() {
   }, 500);
 }
 
-// ========== INITIALIZATION ==========
-document.addEventListener("DOMContentLoaded", function() {
-  // Initialize mobile optimizations
-  initMobileOptimizations();
-  
-  // Start loading the exam
-  loadExam();
-  
-  console.log("Exam system initialized");
-});
+// Make key functions globally accessible
+window.resumeExam = window.resumeExam || function() {
+  console.log('Global resumeExam called');
+  isPaused = false;
+  pauseBtn.textContent = 'Pause';
+  pauseBtn.classList.remove('paused');
+  hidePauseOverlay();
+  startTimer();
+};
+
+// Expose necessary variables and functions to window object for debugging and mobile support
+window.examState = {
+  get sectionTime() { return sectionTime; },
+  get totalTime() { return totalTime; },
+  get isPaused() { return isPaused; },
+  get CURRENT_SECTION() { return CURRENT_SECTION; },
+  get CURRENT_INDEX() { return CURRENT_INDEX; },
+  get ANSWERS() { return ANSWERS; },
+  get FLAGS() { return FLAGS; },
+  updateStatus: updateStatus,
+  autoSave: autoSave
+};
+
+// Export key functions for mobile compatibility
+window.ANSWERS = ANSWERS;
+window.FLAGS = FLAGS;
+window.CURRENT_SECTION = CURRENT_SECTION;
+window.CURRENT_INDEX = CURRENT_INDEX;
+window.updateStatus = updateStatus;
+window.autoSave = autoSave;
