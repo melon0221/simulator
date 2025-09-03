@@ -18,6 +18,140 @@
         font-size: 16px;
       }
     }
+    
+    /* Mobile answer selection styles */
+    .mobile-device .answers li {
+      padding: 16px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      background: white;
+      transition: all 0.2s ease;
+    }
+    
+    .mobile-device .answers li.selected {
+      background: #e3f2fd !important;
+      border-color: #2196f3;
+      transform: scale(0.98);
+    }
+    
+    .mobile-device .answers li input[type="radio"] {
+      transform: scale(1.3);
+      margin-right: 12px;
+    }
+    
+    .mobile-device .answers label {
+      display: block;
+      padding: 8px;
+      margin: -8px;
+      cursor: pointer;
+    }
+
+    /* Auto-save indicator */
+    .auto-save-indicator {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #d4edda;
+      color: #155724;
+      padding: 8px 16px;
+      border-radius: 4px;
+      font-size: 13px;
+      border: 1px solid #c3e6cb;
+      opacity: 0;
+      transform: translateX(100%);
+      transition: all 0.3s ease;
+      z-index: 1500;
+      pointer-events: none;
+    }
+
+    .auto-save-indicator.show {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .auto-save-indicator.error {
+      background: #f8d7da;
+      color: #721c24;
+      border-color: #f5c6cb;
+    }
+
+    /* Pause overlay styles */
+    .pause-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.9);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+      backdrop-filter: blur(10px);
+    }
+
+    .pause-content {
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      max-width: 400px;
+      width: 90%;
+    }
+
+    .pause-icon {
+      font-size: 48px;
+      margin-bottom: 20px;
+    }
+
+    .pause-content h3 {
+      margin: 0 0 15px 0;
+      color: #2a4365;
+      font-size: 24px;
+    }
+
+    .pause-content p {
+      margin: 10px 0;
+      color: #666;
+    }
+
+    .pause-time {
+      font-weight: bold;
+      color: #d63384;
+      font-size: 18px;
+    }
+
+    .resume-button {
+      background: #28a745;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: background-color 0.2s;
+      width: 100%;
+    }
+
+    .resume-button:hover {
+      background: #218838;
+    }
+
+    /* Screen reader only */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
   </style>
 </head>
 <body>
@@ -170,7 +304,7 @@
   </div>
 
   <!-- Image Modal -->
-  <div class="image-modal hidden" id="image-modal" role="dialog" aria-labelledby="image-modal-title" aria-hidden="true" onclick="closeImageModal()">
+  <div class="image-modal hidden" id="image-modal" role="dialog" aria-labelledby="image-modal-title" aria-hidden="true">
     <h3 id="image-modal-title" class="sr-only">Question Image - Full Size</h3>
     <img id="image-modal-content" class="image-modal-content" alt="Full size question image" />
   </div>
@@ -206,102 +340,6 @@
         }, 1000);
       }
       
-      // Mobile device detection and optimizations
-      const isMobile = window.innerWidth <= 767 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-      console.log('Mobile device detected:', isMobile);
-      
-      if (isMobile) {
-        document.body.classList.add('mobile-device');
-        
-        // Enhanced mobile answer option handling
-        function enhanceMobileAnswerOptions() {
-          const answerOptions = document.querySelectorAll('.answers li');
-          
-          answerOptions.forEach(function(li, index) {
-            // Remove existing listeners to avoid duplicates
-            const newLi = li.cloneNode(true);
-            li.parentNode.replaceChild(newLi, li);
-            
-            // Add optimized touch events
-            newLi.addEventListener('touchend', function(e) {
-              e.preventDefault();
-              e.stopPropagation();
-              
-              const radio = this.querySelector('input[type="radio"]');
-              if (radio && !radio.checked) {
-                // Clear other selections
-                const allRadios = document.querySelectorAll('.answers input[type="radio"]');
-                allRadios.forEach(r => r.checked = false);
-                
-                // Set current selection
-                radio.checked = true;
-                
-                // Update answer data
-                if (typeof window.ANSWERS !== 'undefined' && 
-                    typeof window.CURRENT_SECTION !== 'undefined' && 
-                    typeof window.CURRENT_INDEX !== 'undefined') {
-                  window.ANSWERS[window.CURRENT_SECTION][window.CURRENT_INDEX] = index;
-                  
-                  // Update status display
-                  if (typeof window.updateStatus === 'function') {
-                    window.updateStatus();
-                  }
-                  
-                  // Trigger auto-save
-                  if (typeof window.autoSave === 'function') {
-                    setTimeout(window.autoSave, 1000);
-                  }
-                  
-                  console.log('Mobile answer selected:', index);
-                }
-                
-                // Visual feedback
-                this.style.backgroundColor = '#e3f2fd';
-                setTimeout(() => {
-                  this.style.backgroundColor = '';
-                }, 300);
-              }
-            }, { passive: false });
-            
-            // Fallback click event
-            newLi.addEventListener('click', function(e) {
-              if (e.target.tagName !== 'INPUT') {
-                e.preventDefault();
-                const radio = this.querySelector('input[type="radio"]');
-                if (radio && !radio.checked) {
-                  const allRadios = document.querySelectorAll('.answers input[type="radio"]');
-                  allRadios.forEach(r => r.checked = false);
-                  radio.checked = true;
-                  
-                  if (typeof window.ANSWERS !== 'undefined' && 
-                      typeof window.CURRENT_SECTION !== 'undefined' && 
-                      typeof window.CURRENT_INDEX !== 'undefined') {
-                    window.ANSWERS[window.CURRENT_SECTION][window.CURRENT_INDEX] = index;
-                    
-                    if (typeof window.updateStatus === 'function') {
-                      window.updateStatus();
-                    }
-                    
-                    if (typeof window.autoSave === 'function') {
-                      setTimeout(window.autoSave, 1000);
-                    }
-                  }
-                }
-              }
-            });
-          });
-        }
-        
-        // Override renderQuestion to include mobile enhancements
-        const originalRenderQuestion = window.renderQuestion;
-        if (originalRenderQuestion) {
-          window.renderQuestion = function() {
-            originalRenderQuestion.call(this);
-            setTimeout(enhanceMobileAnswerOptions, 100);
-          };
-        }
-      }
-      
       // Image modal functionality
       window.openImageModal = function(img) {
         const modal = document.getElementById('image-modal');
@@ -330,61 +368,12 @@
         }
       });
       
-      // Keyboard support for desktop
-      if (!isMobile) {
-        document.addEventListener('keydown', function(e) {
-          if (e.key === 'Escape') {
-            // Close any open modal
-            const openModal = document.querySelector('.review-modal.show');
-            if (openModal) {
-              const closeBtn = openModal.querySelector('.review-actions button:first-child');
-              if (closeBtn) closeBtn.click();
-            }
-            
-            // Close image modal
-            const imageModal = document.getElementById('image-modal');
-            if (imageModal && !imageModal.classList.contains('hidden')) {
-              window.closeImageModal();
-            }
-          }
-        });
-      }
-      
       console.log('Initialization complete');
     });
-    
+
     // Error handling for script loading
     window.addEventListener('error', function(e) {
       console.error('Script error:', e.error);
-      if (e.error && e.error.message && e.error.message.includes('resumeExam')) {
-        console.warn('Resume function error - attempting manual fix');
-        
-        // Manual resume fallback
-        window.resumeExam = function() {
-          console.log('Manual resume fallback called');
-          
-          // Basic resume logic
-          if (typeof window.isPaused !== 'undefined') {
-            window.isPaused = false;
-          }
-          
-          const pauseBtn = document.getElementById('pause-button');
-          if (pauseBtn) {
-            pauseBtn.textContent = 'Pause';
-            pauseBtn.classList.remove('paused');
-          }
-          
-          const overlay = document.getElementById('pause-overlay');
-          if (overlay) {
-            overlay.remove();
-          }
-          
-          // Try to restart timer if possible
-          if (typeof window.startTimer === 'function') {
-            window.startTimer();
-          }
-        };
-      }
     });
   </script>
 </body>
