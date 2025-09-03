@@ -20,6 +20,7 @@ let examAutoSave = null;
 let isMobile = false;
 let touchStartY = 0;
 let isScrolling = false;
+let lastTouchTime = 0;
 
 // DOM elements
 const questionText = document.getElementById("question-text");
@@ -97,6 +98,7 @@ function initMobileOptimizations() {
       // Add touch scroll optimization
       questionWrapper.addEventListener('touchstart', handleTouchStart, { passive: true });
       questionWrapper.addEventListener('touchmove', handleTouchMove, { passive: true });
+      questionWrapper.addEventListener('touchend', handleTouchEnd, { passive: true });
     }
     
     // Optimize viewport for mobile
@@ -128,94 +130,115 @@ function handleTouchMove(e) {
   }
 }
 
-// Fixed answer option optimization for mobile
-function optimizeAnswerOptions() {
+function handleTouchEnd(e) {
+  // Reset scrolling state after a short delay
+  setTimeout(() => {
+    isScrolling = false;
+  }, 100);
+}
+
+// ========== ANSWER SELECTION HANDLING ==========
+function setupAnswerSelection() {
   const answerItems = document.querySelectorAll('.answers li');
   
   answerItems.forEach((li, index) => {
-    // Remove any existing event listeners to avoid duplicates
+    // Remove any existing event listeners
     const newLi = li.cloneNode(true);
     li.parentNode.replaceChild(newLi, li);
     
-    // Get the input element
     const input = newLi.querySelector('input[type="radio"]');
+    const label = newLi.querySelector('label') || newLi;
     
     if (input) {
-      // Re-attach the original onchange handler with proper variable access
+      // Set up the onchange handler
       input.onchange = () => {
         ANSWERS[CURRENT_SECTION][CURRENT_INDEX] = parseInt(input.value);
         updateStatus();
         setTimeout(autoSave, 1000);
       };
       
-      // Add enhanced touch events for mobile
+      // Add mobile touch events
       if (isMobile) {
-        newLi.addEventListener('touchstart', function(e) {
-          if (!isScrolling) {
-            this.style.transform = 'scale(0.98)';
-            this.style.transition = 'transform 0.1s ease';
-          }
+        // Use label for better touch area
+        label.style.cursor = 'pointer';
+        label.style.display = 'block';
+        label.style.padding = '12px';
+        label.style.margin = '-12px';
+        
+        label.addEventListener('touchstart', function(e) {
+          if (isScrolling) return;
+          
+          this.style.backgroundColor = '#e3f2fd';
+          this.style.transform = 'scale(0.98)';
+          this.style.transition = 'all 0.1s ease';
         }, { passive: true });
         
-        newLi.addEventListener('touchend', function(e) {
-          this.style.transform = '';
-          
-          if (!isScrolling && e.target.tagName !== 'INPUT') {
-            e.preventDefault();
-            const radioInput = this.querySelector('input[type="radio"]');
-            if (radioInput && !radioInput.checked) {
-              // Clear all radio buttons in this group
-              const allInputs = document.querySelectorAll('.answers input[type="radio"]');
-              allInputs.forEach(inp => inp.checked = false);
-              
-              // Select this radio button
-              radioInput.checked = true;
-              
-              // Trigger the onchange event manually
-              if (radioInput.onchange) {
-                radioInput.onchange();
-              }
-              
-              // Add visual feedback
-              this.style.backgroundColor = '#e3f2fd';
-              setTimeout(() => {
-                this.style.backgroundColor = '';
-              }, 200);
-            }
+        label.addEventListener('touchend', function(e) {
+          if (isScrolling) {
+            this.style.backgroundColor = '';
+            this.style.transform = '';
+            return;
           }
+          
+          e.preventDefault();
+          e.stopPropagation();
+          
+          // Prevent rapid double-taps
+          const now = Date.now();
+          if (now - lastTouchTime < 300) return;
+          lastTouchTime = now;
+          
+          // Select the answer
+          if (!input.checked) {
+            // Clear all radio buttons
+            const allInputs = document.querySelectorAll('.answers input[type="radio"]');
+            allInputs.forEach(inp => {
+              inp.checked = false;
+              if (inp.onchange) inp.onchange();
+            });
+            
+            // Select this one
+            input.checked = true;
+            if (input.onchange) input.onchange();
+          }
+          
+          // Visual feedback
+          this.style.backgroundColor = '#d4edda';
+          setTimeout(() => {
+            this.style.backgroundColor = '';
+            this.style.transform = '';
+          }, 200);
         }, { passive: false });
         
-        newLi.addEventListener('touchcancel', function(e) {
+        label.addEventListener('touchcancel', function(e) {
+          this.style.backgroundColor = '';
           this.style.transform = '';
-        });
+        }, { passive: true });
       }
-    }
-    
-    // Desktop click handler (non-mobile or fallback)
-    newLi.addEventListener('click', function(e) {
-      if (!isMobile && e.target.tagName !== 'INPUT') {
-        const radioInput = this.querySelector('input[type="radio"]');
-        if (radioInput && !radioInput.checked) {
-          // Clear all radio buttons
-          const allInputs = document.querySelectorAll('.answers input[type="radio"]');
-          allInputs.forEach(inp => inp.checked = false);
-          
-          // Select this radio button
-          radioInput.checked = true;
-          
-          // Trigger the onchange event
-          if (radioInput.onchange) {
-            radioInput.onchange();
+      
+      // Desktop click handler
+      label.addEventListener('click', function(e) {
+        if (!isMobile && e.target.tagName !== 'INPUT') {
+          if (!input.checked) {
+            const allInputs = document.querySelectorAll('.answers input[type="radio"]');
+            allInputs.forEach(inp => {
+              inp.checked = false;
+              if (inp.onchange) inp.onchange();
+            });
+            
+            input.checked = true;
+            if (input.onchange) input.onchange();
           }
         }
-      }
-    });
+      });
+    }
   });
 }
 
 // Enhanced modal handling for mobile
 function showModal(modal) {
   modal.classList.add('show');
+  modal.setAttribute('aria-hidden', 'false');
   
   if (isMobile) {
     // Prevent background scrolling
@@ -231,6 +254,7 @@ function showModal(modal) {
 
 function hideModal(modal) {
   modal.classList.remove('show');
+  modal.setAttribute('aria-hidden', 'true');
   
   if (isMobile) {
     // Restore background scrolling
@@ -278,10 +302,9 @@ function pauseExam() {
   }
 }
 
-// Fixed resumeExam function - make it global and handle timer properly
+// Fixed resumeExam function
 window.resumeExam = function() {
   console.log('Resume function called');
-  console.log('Current state - isPaused:', isPaused, 'sectionTime:', sectionTime, 'totalTime:', totalTime);
   
   // Validate timer variables before proceeding
   if (typeof sectionTime === 'undefined' || sectionTime === null || isNaN(sectionTime)) {
@@ -328,7 +351,6 @@ function showPauseOverlay() {
     resumeButton.addEventListener('click', function(e) {
       e.preventDefault();
       e.stopPropagation();
-      console.log('Resume button clicked');
       window.resumeExam();
     });
     
@@ -337,22 +359,12 @@ function showPauseOverlay() {
       resumeButton.addEventListener('touchend', function(e) {
         e.preventDefault();
         e.stopPropagation();
-        console.log('Resume button touched');
         window.resumeExam();
       });
     }
   }
   
   startPauseTimer();
-  
-  // Add mobile touch support for overlay
-  if (isMobile) {
-    overlay.addEventListener('touchstart', function(e) {
-      if (e.target === e.currentTarget || e.target.classList.contains('pause-content')) {
-        e.preventDefault();
-      }
-    });
-  }
 }
 
 function hidePauseOverlay() {
@@ -604,7 +616,7 @@ function renderQuestion() {
     input.type = "radio";
     input.name = "answer";
     input.value = idx;
-    input.id = `answer-${idx}`;
+    input.id = `answer-${CURRENT_SECTION}-${CURRENT_INDEX}-${idx}`;
     
     // Check if this answer was previously selected
     if (ANSWERS[CURRENT_SECTION][CURRENT_INDEX] == idx) {
@@ -622,16 +634,16 @@ function renderQuestion() {
     
     // Add label for better mobile accessibility
     let label = document.createElement("label");
-    label.htmlFor = `answer-${idx}`;
+    label.htmlFor = `answer-${CURRENT_SECTION}-${CURRENT_INDEX}-${idx}`;
     label.textContent = opt;
     li.appendChild(label);
     
     answerOptions.appendChild(li);
   });
 
-  // Apply mobile optimizations to new answer options
+  // Set up answer selection handlers
   setTimeout(() => {
-    optimizeAnswerOptions();
+    setupAnswerSelection();
   }, 50);
 
   updateStatus();
@@ -1122,59 +1134,64 @@ function exportResults() {
   // Add detailed question grids for each section
   for (let s = 0; s < 4; s++) {
     pdfContent += `
-        <div class="section-header">SECTION ${s + 1}</div>
+        <div class="section-header">Section ${s + 1} Questions (1-50)</div>
         <div class="question-grid">`;
     
     for (let q = 0; q < 50; q++) {
-      let status = '';
-      let isAnswered = ANSWERS[s][q] != null;
-      let isFlagged = FLAGS[s][q];
-      let isCorrect = isAnswered && ANSWERS[s][q] === QUESTIONS[s][q].correct;
+      let userAnswer = ANSWERS[s][q];
+      let correctAnswer = QUESTIONS[s][q].correct;
+      let flagged = FLAGS[s][q];
+      let className = 'question-cell';
       
-      if (isFlagged) {
-        status = 'flagged';
-      } else if (isAnswered) {
-        status = isCorrect ? 'answered' : 'incorrect';
+      if (flagged) {
+        className += ' flagged';
+      } else if (userAnswer != null) {
+        className += ' answered';
       } else {
-        status = 'unanswered';
+        className += ' unanswered';
       }
       
-      pdfContent += `<div class="question-cell ${status}">${q + 1}</div>`;
+      let symbol = '';
+      if (userAnswer == null) {
+        symbol = 'U';
+      } else if (userAnswer === correctAnswer) {
+        symbol = '✓'; // Check mark for correct
+      } else {
+        symbol = '✗'; // X mark for incorrect
+      }
+      
+      pdfContent += `<div class="${className}">${q + 1}<br/>${symbol}</div>`;
     }
     
-    pdfContent += `
-        </div>
-        <div style="margin: 10px 0; font-size: 9pt;">
-          <span style="display: inline-block; width: 12px; height: 12px; background: #fff3cd; border: 1px solid #666; margin-right: 5px;"></span> Answered
-          <span style="display: inline-block; width: 12px; height: 12px; background: #f8d7da; border: 1px solid #666; margin: 0 5px 0 15px;"></span> Flagged
-          <span style="display: inline-block; width: 12px; height: 12px; background: #f8f9fa; border: 1px solid #666; margin: 0 5px 0 15px;"></span> Unanswered
-        </div>`;
+    pdfContent += `</div>`;
   }
   
   pdfContent += `
       </div>
       
       <div class="disclaimer">
-        This is a practice examination report generated for educational purposes only. 
-        The scores and results presented here are not official and should not be used for 
-        actual assessment or certification purposes.
+        <p><strong>Legend:</strong> ✓ = Correct Answer, ✗ = Incorrect Answer, U = Unanswered</p>
+        <p><strong>Color Code:</strong> Yellow = Answered, Gray = Unanswered, Red = Flagged</p>
+        <p><strong>Note:</strong> This is a practice examination report showing your performance and response patterns.</p>
       </div>
       
       <div class="footer">
-        Generated on ${now.toLocaleString()} | NBME Practice Exam System
+        <p>NBME Comprehensive Basic Science Examination Simulator</p>
+        <p>Generated on ${now.toLocaleString('en-US')}</p>
       </div>
     </body>
-    </html>
-  `;
+    </html>`;
   
-  // Create a blob and download the PDF
-  let blob = new Blob([pdfContent], { type: 'text/html' });
-  let a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = `NBME_Exam_${BANK}_Results_${now.getFullYear()}${(now.getMonth()+1).toString().padStart(2, '0')}${now.getDate().toString().padStart(2, '0')}.html`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
+  // Create and download PDF
+  let printWindow = window.open('', '_blank');
+  printWindow.document.write(pdfContent);
+  printWindow.document.close();
+  
+  // Wait for content to load then trigger print
+  setTimeout(() => {
+    printWindow.focus();
+    printWindow.print();
+  }, 500);
 }
 
 // ========== INITIALIZATION ==========
@@ -1182,46 +1199,8 @@ document.addEventListener("DOMContentLoaded", function() {
   // Initialize mobile optimizations
   initMobileOptimizations();
   
-  // Initialize modals
-  const modalCloseButtons = document.querySelectorAll(".modal-close");
-  modalCloseButtons.forEach(btn => {
-    btn.addEventListener("click", function() {
-      const modal = this.closest(".modal");
-      hideModal(modal);
-    });
-  });
-  
-  // Initialize image modal
-  const imageModal = document.getElementById("image-modal");
-  if (imageModal) {
-    imageModal.addEventListener("click", function(e) {
-      if (e.target === this) {
-        this.classList.add("hidden");
-        this.classList.remove("show");
-      }
-    });
-  }
-  
   // Start loading the exam
   loadExam();
-  
-  // Add keyboard shortcuts
-  document.addEventListener("keydown", function(e) {
-    if (e.key === "ArrowRight") {
-      document.getElementById("next-button").click();
-    } else if (e.key === "ArrowLeft") {
-      document.getElementById("prev-button").click();
-    } else if (e.key === "f" || e.key === "F") {
-      document.getElementById("flag-button").click();
-    } else if (e.key === "r" || e.key === "R") {
-      document.getElementById("review-button").click();
-    } else if (e.key === "Escape") {
-      const openModal = document.querySelector(".modal.show");
-      if (openModal) {
-        hideModal(openModal);
-      }
-    }
-  });
   
   console.log("Exam system initialized");
 });
