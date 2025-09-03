@@ -2,44 +2,29 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="NBME Exam">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="theme-color" content="#2a4365">
   <title>NBME Exam Simulator</title>
   <link rel="stylesheet" href="style.css">
-  
-  <!-- Prevent zoom on input focus for iOS -->
-  <style>
-    @media screen and (-webkit-min-device-pixel-ratio: 0) {
-      select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"] {
-        font-size: 16px;
-      }
-    }
-  </style>
 </head>
 <body>
   <div class="container">
     <!-- Header -->
     <div class="header">
       <div class="exam-info">
-        <div id="exam-section" aria-live="polite">Exam Section 1: Item 1 of 50</div>
-        <!-- Mark button and status indicators on same row -->
+        <div id="exam-section">Exam Section 1: Item 1 of 50</div>
+        <!-- Mark 按钮和状态提示在同一行 -->
         <div class="status-row">
-          <button id="flag-button" aria-label="Mark question for review" type="button">Mark</button>
-          <span id="status-pill" class="pill" aria-live="polite">Unanswered</span>
-          <span id="flag-pill" class="pill flag hidden" aria-live="polite">Flagged</span>
+          <button id="flag-button">Mark</button>
+          <span id="status-pill" class="pill">Unanswered</span>
+          <span id="flag-pill" class="pill flag hidden">Flagged</span>
         </div>
       </div>
       <div class="timer">
-        <div id="time-remaining" aria-live="polite">1 hr 15 min 00 sec</div>
-        <div id="total-remaining" aria-live="polite">Total Exam Time Remaining: 5 hr 15 min 00 sec</div>
+        <div id="time-remaining">1 hr 15 min 00 sec</div>
+        <div id="total-remaining">Total Exam Time Remaining: 5 hr 15 min 00 sec</div>
       </div>
     </div>
 
-    <!-- Question Content -->
+    <!-- Question -->
     <div class="question-wrapper">
       <div class="question-top">
         <div class="question-stem">
@@ -57,417 +42,96 @@
     <!-- Footer -->
     <div class="footer">
       <div class="left-buttons">
-        <button id="prev-button" type="button" aria-label="Go to previous question">Previous</button>
-        <button id="next-button" type="button" aria-label="Go to next question">Next</button>
-        <button id="end-block-button" type="button" aria-label="End current section">End Block</button>
+        <button id="prev-button">Previous</button>
+        <button id="next-button">Next</button>
+        <button id="end-block-button">End Block</button>
       </div>
       <div class="right-buttons">
-        <button id="review-button" type="button" aria-label="Review all questions in section">Review</button>
-        <button id="pause-button" type="button" aria-label="Pause examination">Pause</button>
+        <button id="review-button">Review</button>
+        <button id="pause-button">Pause</button>
       </div>
     </div>
   </div>
 
   <!-- Review Modal -->
-  <div class="review-modal" id="review-modal" role="dialog" aria-labelledby="review-title" aria-hidden="true">
+  <div class="review-modal" id="review-modal">
     <div class="review-card">
-      <h3 id="review-title">Review Questions</h3>
-      <div class="legend" role="img" aria-label="Question status legend">
-        <span class="legend-item">
-          <span class="legend-color" style="background:#FFF3CD" aria-hidden="true"></span> 
-          Unanswered
-        </span>
-        <span class="legend-item">
-          <span class="legend-color" style="background:#FDE2E1" aria-hidden="true"></span> 
-          Flagged
-        </span>
-        <span class="legend-item">
-          <span class="legend-color" style="background:#F9FAFB" aria-hidden="true"></span> 
-          Answered
-        </span>
+      <h3>Review Questions</h3>
+      <div class="legend">
+        <span class="legend-item"><span class="legend-color" style="background:#FFF3CD"></span> Unanswered</span>
+        <span class="legend-item"><span class="legend-color" style="background:#FDE2E1"></span> Flagged</span>
+        <span class="legend-item"><span class="legend-color" style="background:#F9FAFB"></span> Answered</span>
       </div>
-      <div id="review-grid" class="review-grid" role="grid" aria-label="Question review grid"></div>
+      <div id="review-grid" class="review-grid"></div>
       <div class="review-actions">
-        <button id="close-review" type="button" aria-label="Close review modal">Close</button>
+        <button id="close-review">Close</button>
       </div>
     </div>
   </div>
 
   <!-- Section Review Modal -->
-  <div class="review-modal" id="section-review-modal" role="dialog" aria-labelledby="section-review-title" aria-hidden="true">
+  <div class="review-modal" id="section-review-modal">
     <div class="review-card">
-      <h3 id="section-review-title">Section Review</h3>
-      <div class="legend" role="img" aria-label="Question status legend">
-        <span class="legend-item">
-          <span class="legend-color" style="background:#FFF3CD" aria-hidden="true"></span> 
-          Unanswered
-        </span>
-        <span class="legend-item">
-          <span class="legend-color" style="background:#FDE2E1" aria-hidden="true"></span> 
-          Flagged
-        </span>
-        <span class="legend-item">
-          <span class="legend-color" style="background:#F9FAFB" aria-hidden="true"></span> 
-          Answered
-        </span>
+      <h3>Section Review</h3>
+      <div class="legend">
+        <span class="legend-item"><span class="legend-color" style="background:#FFF3CD"></span> Unanswered</span>
+        <span class="legend-item"><span class="legend-color" style="background:#FDE2E1"></span> Flagged</span>
+        <span class="legend-item"><span class="legend-color" style="background:#F9FAFB"></span> Answered</span>
       </div>
-      <div id="section-review-grid" class="review-grid" role="grid" aria-label="Section question review grid"></div>
+      <div id="section-review-grid" class="review-grid"></div>
       <div class="review-actions">
-        <button id="section-review-back" type="button" aria-label="Return to exam">Return</button>
-        <button id="section-review-end" type="button" aria-label="End section and continue">End Section</button>
+        <button id="section-review-back">Return</button>
+        <button id="section-review-end">End Section</button>
       </div>
     </div>
   </div>
 
   <!-- Exam Review Modal -->
-  <div class="review-modal" id="exam-review-modal" role="dialog" aria-labelledby="exam-review-title" aria-hidden="true">
+  <div class="review-modal" id="exam-review-modal">
     <div class="review-card">
-      <h3 id="exam-review-title">Exam Review</h3>
-      <div class="legend" role="img" aria-label="Question status legend">
-        <span class="legend-item">
-          <span class="legend-color" style="background:#FFF3CD" aria-hidden="true"></span> 
-          Unanswered
-        </span>
-        <span class="legend-item">
-          <span class="legend-color" style="background:#FDE2E1" aria-hidden="true"></span> 
-          Flagged
-        </span>
-        <span class="legend-item">
-          <span class="legend-color" style="background:#F9FAFB" aria-hidden="true"></span> 
-          Answered
-        </span>
+      <h3>Exam Review</h3>
+      <div class="legend">
+        <span class="legend-item"><span class="legend-color" style="background:#FFF3CD"></span> Unanswered</span>
+        <span class="legend-item"><span class="legend-color" style="background:#FDE2E1"></span> Flagged</span>
+        <span class="legend-item"><span class="legend-color" style="background:#F9FAFB"></span> Answered</span>
       </div>
-      <div id="exam-review-content" role="region" aria-label="Complete exam review"></div>
+      <div id="exam-review-content"></div>
       <div class="review-actions">
-        <button id="exam-review-close" type="button" aria-label="Close exam review">Close</button>
-        <button id="exam-review-finish" type="button" aria-label="Finish and export results">Finish & Export Results</button>
+        <button id="exam-review-close">Close</button>
+        <button id="exam-review-finish">Finish & Export Results</button>
       </div>
     </div>
   </div>
 
   <!-- Final Submit Confirmation Modal -->
-  <div class="review-modal" id="submit-confirm-modal" role="dialog" aria-labelledby="submit-confirm-title" aria-describedby="submit-confirm-desc" aria-hidden="true">
+  <div class="review-modal" id="submit-confirm-modal">
     <div class="review-card">
-      <h3 id="submit-confirm-title">Confirm Exam Submission</h3>
-      <p id="submit-confirm-desc">Are you sure you want to submit your exam? Once submitted, you cannot return to review or change your answers.</p>
+      <h3>Confirm Exam Submission</h3>
+      <p>Are you sure you want to submit your exam? Once submitted, you cannot return to review or change your answers.</p>
       <div class="review-actions">
-        <button id="cancel-submit" type="button" aria-label="Cancel submission">Cancel</button>
-        <button id="confirm-submit" type="button" aria-label="Confirm exam submission">Submit & End Exam</button>
+        <button id="cancel-submit">Cancel</button>
+        <button id="confirm-submit">Submit & End Exam</button>
       </div>
     </div>
   </div>
 
   <!-- Section End Confirmation Modal -->
-  <div class="review-modal" id="section-end-confirm-modal" role="dialog" aria-labelledby="section-end-title" aria-describedby="section-end-desc" aria-hidden="true">
+  <div class="review-modal" id="section-end-confirm-modal">
     <div class="review-card">
-      <h3 id="section-end-title">Confirm End Section</h3>
-      <p id="section-end-desc">Are you sure you want to end this section and move to the next one? Once you proceed, you cannot return to review or change your answers in this section.</p>
+      <h3>Confirm End Section</h3>
+      <p>Are you sure you want to end this section and move to the next one? Once you proceed, you cannot return to review or change your answers in this section.</p>
       <div class="review-actions">
-        <button id="cancel-section-end" type="button" aria-label="Cancel section end">Cancel</button>
-        <button id="confirm-section-end" type="button" aria-label="Confirm end section">End Section</button>
+        <button id="cancel-section-end">Cancel</button>
+        <button id="confirm-section-end">End Section</button>
       </div>
     </div>
   </div>
 
   <!-- Image Modal -->
-  <div class="image-modal hidden" id="image-modal" role="dialog" aria-labelledby="image-modal-title" aria-hidden="true" onclick="closeImageModal()">
-    <h3 id="image-modal-title" class="sr-only">Question Image - Full Size</h3>
-    <img id="image-modal-content" class="image-modal-content" alt="Full size question image" />
-  </div>
-
-  <!-- Screen reader only content -->
-  <div class="sr-only">
-    <div id="sr-notifications" aria-live="assertive" aria-atomic="true"></div>
+  <div class="image-modal hidden" id="image-modal">
+    <img id="image-modal-content" class="image-modal-content" />
   </div>
 
   <script src="script.js"></script>
-  
-  <script>
-    // Initialize when page is fully loaded
-    window.addEventListener('load', function() {
-      console.log('Page fully loaded, starting initialization...');
-      
-      // Initialize mobile optimizations first
-      if (typeof initMobileOptimizations === 'function') {
-        initMobileOptimizations();
-      }
-      
-      // Load the exam
-      if (typeof loadExam === 'function') {
-        loadExam();
-      } else {
-        console.error('loadExam function not found');
-        setTimeout(function() {
-          if (typeof loadExam === 'function') {
-            loadExam();
-          } else {
-            alert('Failed to load exam. Please refresh the page.');
-          }
-        }, 1000);
-      }
-      
-      // Mobile device detection and optimizations
-      const isMobile = window.innerWidth <= 767 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-      console.log('Mobile device detected:', isMobile);
-      
-      if (isMobile) {
-        document.body.classList.add('mobile-device');
-        console.log('Mobile optimizations applied');
-        
-        // 移动端答案选择增强函数 - 修正版本，解决变量引用问题
-        function enhanceMobileAnswerOptions() {
-          const answerOptions = document.querySelectorAll('.answers li');
-          console.log('Enhancing mobile answer options, found:', answerOptions.length, 'items');
-          
-          answerOptions.forEach(function(li, index) {
-            // 移除现有监听器以避免重复
-            const newLi = li.cloneNode(true);
-            li.parentNode.replaceChild(newLi, li);
-            
-            const radio = newLi.querySelector('input[type="radio"]');
-            if (radio) {
-              // 确保radio input有正确的值
-              radio.value = index;
-              
-              // 创建保存答案的函数，每次都获取当前的全局变量值
-              const saveCurrentAnswer = function(answerIndex) {
-                console.log('Mobile saving answer:', answerIndex, 'for current section:', window.CURRENT_SECTION, 'question:', window.CURRENT_INDEX);
-                
-                // 直接使用全局变量而不是window.CURRENT_SECTION（可能未更新）
-                if (typeof CURRENT_SECTION !== 'undefined' && typeof CURRENT_INDEX !== 'undefined' && typeof ANSWERS !== 'undefined') {
-                  ANSWERS[CURRENT_SECTION][CURRENT_INDEX] = answerIndex;
-                  console.log('Answer successfully saved to ANSWERS[' + CURRENT_SECTION + '][' + CURRENT_INDEX + '] = ' + answerIndex);
-                  
-                  if (typeof updateStatus === 'function') {
-                    updateStatus();
-                  }
-                  
-                  if (typeof autoSave === 'function') {
-                    setTimeout(autoSave, 1000);
-                  }
-                } else {
-                  console.error('Global variables not accessible:', {
-                    CURRENT_SECTION: typeof CURRENT_SECTION,
-                    CURRENT_INDEX: typeof CURRENT_INDEX,
-                    ANSWERS: typeof ANSWERS
-                  });
-                }
-              };
-              
-              // 重新绑定onchange事件处理程序
-              radio.onchange = function() {
-                saveCurrentAnswer(index);
-              };
-            }
-            
-            // 移动端触摸事件处理 - 改进版本
-            newLi.addEventListener('touchend', function(e) {
-              e.preventDefault();
-              e.stopPropagation();
-              
-              const radioInput = this.querySelector('input[type="radio"]');
-              if (radioInput && !radioInput.checked) {
-                console.log('Mobile touch selection for index:', index, 'current section:', CURRENT_SECTION, 'current question:', CURRENT_INDEX);
-                
-                // 清除其他选择
-                const allRadios = document.querySelectorAll('.answers input[type="radio"]');
-                allRadios.forEach(r => r.checked = false);
-                
-                // 设置当前选择
-                radioInput.checked = true;
-                
-                // 使用当前的全局变量值保存答案
-                saveCurrentAnswer(index);
-                
-                // 视觉反馈
-                this.style.backgroundColor = '#e3f2fd';
-                this.style.transition = 'background-color 0.3s ease';
-                setTimeout(() => {
-                  this.style.backgroundColor = '';
-                }, 300);
-              }
-            
-            // 桌面端备用点击事件
-            newLi.addEventListener('click', function(e) {
-              if (!isMobile && e.target.tagName !== 'INPUT') {
-                e.preventDefault();
-                const radioInput = this.querySelector('input[type="radio"]');
-                if (radioInput && !radioInput.checked) {
-                  console.log('Desktop click selection for index:', index, 'current section:', CURRENT_SECTION, 'current question:', CURRENT_INDEX);
-                  
-                  const allRadios = document.querySelectorAll('.answers input[type="radio"]');
-                  allRadios.forEach(r => r.checked = false);
-                  radioInput.checked = true;
-                  
-                  saveCurrentAnswer(index);
-                }
-              }
-            });
-          });
-        }
-        
-        // 重写renderQuestion函数以包含移动端增强 - 修正版本
-        const originalRenderQuestion = window.renderQuestion;
-        if (originalRenderQuestion) {
-          window.renderQuestion = function() {
-            console.log('Enhanced renderQuestion called for section:', CURRENT_SECTION, 'question:', CURRENT_INDEX);
-            originalRenderQuestion.call(this);
-            
-            // 延迟执行移动端优化以确保DOM已更新
-            setTimeout(function() {
-              console.log('Applying mobile enhancements for section:', CURRENT_SECTION, 'question:', CURRENT_INDEX);
-              enhanceMobileAnswerOptions();
-              
-              // 确保全局变量可访问
-              if (typeof ANSWERS !== 'undefined') {
-                window.ANSWERS = ANSWERS;
-                window.FLAGS = FLAGS;
-                window.CURRENT_SECTION = CURRENT_SECTION;
-                window.CURRENT_INDEX = CURRENT_INDEX;
-                window.updateStatus = updateStatus;
-                window.autoSave = autoSave;
-                
-                console.log('Global variables refreshed:', {
-                  section: CURRENT_SECTION,
-                  index: CURRENT_INDEX,
-                  hasAnswers: !!ANSWERS,
-                  currentQuestionAnswer: ANSWERS[CURRENT_SECTION][CURRENT_INDEX]
-                });
-              }
-            }, 100);
-          };
-          console.log('renderQuestion function enhanced for mobile');
-        } else {
-          console.warn('Original renderQuestion function not found');
-        }
-        
-        // 定期刷新全局变量引用以防止失效
-        setInterval(function() {
-          if (typeof ANSWERS !== 'undefined') {
-            window.ANSWERS = ANSWERS;
-            window.FLAGS = FLAGS;
-            window.CURRENT_SECTION = CURRENT_SECTION;
-            window.CURRENT_INDEX = CURRENT_INDEX;
-            window.updateStatus = updateStatus;
-            window.autoSave = autoSave;
-          }
-        }, 2000);
-      }
-      
-      // 图片模态框功能
-      window.openImageModal = function(img) {
-        const modal = document.getElementById('image-modal');
-        const modalImg = document.getElementById('image-modal-content');
-        
-        if (modal && modalImg && img) {
-          modalImg.src = img.src;
-          modalImg.alt = img.alt || 'Question image';
-          modal.classList.remove('hidden');
-          modal.classList.add('show');
-        }
-      };
-      
-      window.closeImageModal = function() {
-        const modal = document.getElementById('image-modal');
-        if (modal) {
-          modal.classList.add('hidden');
-          modal.classList.remove('show');
-        }
-      };
-      
-      // 点击背景关闭图片模态框
-      document.addEventListener('click', function(e) {
-        if (e.target && e.target.id === 'image-modal') {
-          window.closeImageModal();
-        }
-      });
-      
-      // 桌面端键盘支持
-      if (!isMobile) {
-        document.addEventListener('keydown', function(e) {
-          if (e.key === 'Escape') {
-            // 关闭任何打开的模态框
-            const openModal = document.querySelector('.review-modal.show');
-            if (openModal) {
-              const closeBtn = openModal.querySelector('.review-actions button:first-child');
-              if (closeBtn) closeBtn.click();
-            }
-            
-            // 关闭图片模态框
-            const imageModal = document.getElementById('image-modal');
-            if (imageModal && !imageModal.classList.contains('hidden')) {
-              window.closeImageModal();
-            }
-          }
-        });
-      }
-      
-      console.log('Initialization complete');
-    });
-    
-    // 脚本加载错误处理
-    window.addEventListener('error', function(e) {
-      console.error('Script error:', e.error);
-      if (e.error && e.error.message && e.error.message.includes('resumeExam')) {
-        console.warn('Resume function error - attempting manual fix');
-        
-        // 手动恢复备用方案
-        window.resumeExam = function() {
-          console.log('Manual resume fallback called');
-          
-          // 基本恢复逻辑
-          if (typeof window.isPaused !== 'undefined') {
-            window.isPaused = false;
-          }
-          
-          const pauseBtn = document.getElementById('pause-button');
-          if (pauseBtn) {
-            pauseBtn.textContent = 'Pause';
-            pauseBtn.classList.remove('paused');
-          }
-          
-          const overlay = document.getElementById('pause-overlay');
-          if (overlay) {
-            overlay.remove();
-          }
-          
-          // 尝试重新启动计时器
-          if (typeof window.startTimer === 'function') {
-            window.startTimer();
-          }
-        };
-      }
-    });
-    
-    // 额外的移动端支持函数 - 确保答案保存
-    window.addEventListener('DOMContentLoaded', function() {
-      // 监听全局变量变化，确保移动端能访问
-      let checkGlobalVars = setInterval(function() {
-        if (typeof ANSWERS !== 'undefined' && typeof CURRENT_SECTION !== 'undefined') {
-          window.ANSWERS = ANSWERS;
-          window.FLAGS = FLAGS;
-          window.CURRENT_SECTION = CURRENT_SECTION;
-          window.CURRENT_INDEX = CURRENT_INDEX;
-          window.updateStatus = updateStatus;
-          window.autoSave = autoSave;
-          
-          console.log('Global variables successfully exported:', {
-            ANSWERS: !!window.ANSWERS,
-            CURRENT_SECTION: window.CURRENT_SECTION,
-            CURRENT_INDEX: window.CURRENT_INDEX,
-            updateStatus: !!window.updateStatus,
-            autoSave: !!window.autoSave
-          });
-          
-          clearInterval(checkGlobalVars);
-        }
-      }, 500);
-      
-      // 10秒后停止检查
-      setTimeout(function() {
-        clearInterval(checkGlobalVars);
-      }, 10000);
-    });
-  </script>
 </body>
 </html>
