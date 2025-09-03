@@ -212,94 +212,7 @@
       
       if (isMobile) {
         document.body.classList.add('mobile-device');
-        
-        // Enhanced mobile answer option handling
-        function enhanceMobileAnswerOptions() {
-          const answerOptions = document.querySelectorAll('.answers li');
-          
-          answerOptions.forEach(function(li, index) {
-            // Remove existing listeners to avoid duplicates
-            const newLi = li.cloneNode(true);
-            li.parentNode.replaceChild(newLi, li);
-            
-            // Add optimized touch events
-            newLi.addEventListener('touchend', function(e) {
-              e.preventDefault();
-              e.stopPropagation();
-              
-              const radio = this.querySelector('input[type="radio"]');
-              if (radio && !radio.checked) {
-                // Clear other selections
-                const allRadios = document.querySelectorAll('.answers input[type="radio"]');
-                allRadios.forEach(r => r.checked = false);
-                
-                // Set current selection
-                radio.checked = true;
-                
-                // Update answer data
-                if (typeof window.ANSWERS !== 'undefined' && 
-                    typeof window.CURRENT_SECTION !== 'undefined' && 
-                    typeof window.CURRENT_INDEX !== 'undefined') {
-                  window.ANSWERS[window.CURRENT_SECTION][window.CURRENT_INDEX] = index;
-                  
-                  // Update status display
-                  if (typeof window.updateStatus === 'function') {
-                    window.updateStatus();
-                  }
-                  
-                  // Trigger auto-save
-                  if (typeof window.autoSave === 'function') {
-                    setTimeout(window.autoSave, 1000);
-                  }
-                  
-                  console.log('Mobile answer selected:', index);
-                }
-                
-                // Visual feedback
-                this.style.backgroundColor = '#e3f2fd';
-                setTimeout(() => {
-                  this.style.backgroundColor = '';
-                }, 300);
-              }
-            }, { passive: false });
-            
-            // Fallback click event
-            newLi.addEventListener('click', function(e) {
-              if (e.target.tagName !== 'INPUT') {
-                e.preventDefault();
-                const radio = this.querySelector('input[type="radio"]');
-                if (radio && !radio.checked) {
-                  const allRadios = document.querySelectorAll('.answers input[type="radio"]');
-                  allRadios.forEach(r => r.checked = false);
-                  radio.checked = true;
-                  
-                  if (typeof window.ANSWERS !== 'undefined' && 
-                      typeof window.CURRENT_SECTION !== 'undefined' && 
-                      typeof window.CURRENT_INDEX !== 'undefined') {
-                    window.ANSWERS[window.CURRENT_SECTION][window.CURRENT_INDEX] = index;
-                    
-                    if (typeof window.updateStatus === 'function') {
-                      window.updateStatus();
-                    }
-                    
-                    if (typeof window.autoSave === 'function') {
-                      setTimeout(window.autoSave, 1000);
-                    }
-                  }
-                }
-              }
-            });
-          });
-        }
-        
-        // Override renderQuestion to include mobile enhancements
-        const originalRenderQuestion = window.renderQuestion;
-        if (originalRenderQuestion) {
-          window.renderQuestion = function() {
-            originalRenderQuestion.call(this);
-            setTimeout(enhanceMobileAnswerOptions, 100);
-          };
-        }
+        console.log('Mobile optimizations applied');
       }
       
       // Image modal functionality
@@ -353,7 +266,7 @@
       console.log('Initialization complete');
     });
     
-    // Error handling for script loading
+    // Enhanced error handling for script loading
     window.addEventListener('error', function(e) {
       console.error('Script error:', e.error);
       if (e.error && e.error.message && e.error.message.includes('resumeExam')) {
@@ -384,6 +297,60 @@
             window.startTimer();
           }
         };
+      }
+    });
+
+    // FIXED: Additional mobile answer selection handling
+    document.addEventListener('DOMContentLoaded', function() {
+      // Debug logging for mobile events
+      let debugMobile = false;
+      
+      // Enhanced mobile answer selection debugging
+      function addMobileAnswerDebug() {
+        const answerOptions = document.querySelectorAll('.answers li');
+        if (debugMobile) console.log('Found answer options:', answerOptions.length);
+        
+        answerOptions.forEach((li, index) => {
+          if (debugMobile) console.log('Setting up mobile touch for option', index);
+          
+          li.addEventListener('touchend', function(e) {
+            if (debugMobile) {
+              console.log('Touch end on option', index);
+              console.log('Current ANSWERS state:', window.examState?.ANSWERS);
+              console.log('Current section/index:', window.examState?.CURRENT_SECTION, window.examState?.CURRENT_INDEX);
+            }
+          }, { passive: false });
+          
+          // Fallback click handler for mobile
+          li.addEventListener('click', function(e) {
+            if (debugMobile) console.log('Click on option', index, 'target:', e.target.tagName);
+          });
+        });
+      }
+      
+      // Set up mobile debugging if needed
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('debug') === 'mobile') {
+        debugMobile = true;
+        console.log('Mobile debugging enabled');
+      }
+      
+      // Monitor for answer option changes
+      const answerContainer = document.getElementById('answer-options');
+      if (answerContainer) {
+        const observer = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+              if (debugMobile) console.log('Answer options changed, reapplying mobile handlers');
+              setTimeout(addMobileAnswerDebug, 100);
+            }
+          });
+        });
+        
+        observer.observe(answerContainer, { 
+          childList: true, 
+          subtree: false 
+        });
       }
     });
   </script>
