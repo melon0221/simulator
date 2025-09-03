@@ -214,7 +214,7 @@
         document.body.classList.add('mobile-device');
         console.log('Mobile optimizations applied');
         
-        // 移动端答案选择增强函数 - 修正版本
+        // 移动端答案选择增强函数 - 修正版本，解决变量引用问题
         function enhanceMobileAnswerOptions() {
           const answerOptions = document.querySelectorAll('.answers li');
           console.log('Enhancing mobile answer options, found:', answerOptions.length, 'items');
@@ -228,29 +228,35 @@
             if (radio) {
               // 确保radio input有正确的值
               radio.value = index;
-              console.log('Set radio value for index:', index);
               
-              // 重新绑定onchange事件处理程序
-              radio.onchange = function() {
-                console.log('Radio onchange fired for index:', index);
-                if (window.ANSWERS && window.CURRENT_SECTION !== undefined && window.CURRENT_INDEX !== undefined) {
-                  window.ANSWERS[window.CURRENT_SECTION][window.CURRENT_INDEX] = index;
-                  console.log('Answer saved:', index, 'for section:', window.CURRENT_SECTION, 'question:', window.CURRENT_INDEX);
+              // 创建保存答案的函数，每次都获取当前的全局变量值
+              const saveCurrentAnswer = function(answerIndex) {
+                console.log('Mobile saving answer:', answerIndex, 'for current section:', window.CURRENT_SECTION, 'question:', window.CURRENT_INDEX);
+                
+                // 直接使用全局变量而不是window.CURRENT_SECTION（可能未更新）
+                if (typeof CURRENT_SECTION !== 'undefined' && typeof CURRENT_INDEX !== 'undefined' && typeof ANSWERS !== 'undefined') {
+                  ANSWERS[CURRENT_SECTION][CURRENT_INDEX] = answerIndex;
+                  console.log('Answer successfully saved to ANSWERS[' + CURRENT_SECTION + '][' + CURRENT_INDEX + '] = ' + answerIndex);
                   
-                  if (window.updateStatus) {
-                    window.updateStatus();
+                  if (typeof updateStatus === 'function') {
+                    updateStatus();
                   }
                   
-                  if (window.autoSave) {
-                    setTimeout(window.autoSave, 1000);
+                  if (typeof autoSave === 'function') {
+                    setTimeout(autoSave, 1000);
                   }
                 } else {
                   console.error('Global variables not accessible:', {
-                    ANSWERS: !!window.ANSWERS,
-                    CURRENT_SECTION: window.CURRENT_SECTION,
-                    CURRENT_INDEX: window.CURRENT_INDEX
+                    CURRENT_SECTION: typeof CURRENT_SECTION,
+                    CURRENT_INDEX: typeof CURRENT_INDEX,
+                    ANSWERS: typeof ANSWERS
                   });
                 }
+              };
+              
+              // 重新绑定onchange事件处理程序
+              radio.onchange = function() {
+                saveCurrentAnswer(index);
               };
             }
             
@@ -261,7 +267,7 @@
               
               const radioInput = this.querySelector('input[type="radio"]');
               if (radioInput && !radioInput.checked) {
-                console.log('Mobile touch selection for index:', index);
+                console.log('Mobile touch selection for index:', index, 'current section:', CURRENT_SECTION, 'current question:', CURRENT_INDEX);
                 
                 // 清除其他选择
                 const allRadios = document.querySelectorAll('.answers input[type="radio"]');
@@ -270,30 +276,8 @@
                 // 设置当前选择
                 radioInput.checked = true;
                 
-                // 手动触发保存逻辑
-                if (window.ANSWERS && window.CURRENT_SECTION !== undefined && window.CURRENT_INDEX !== undefined) {
-                  window.ANSWERS[window.CURRENT_SECTION][window.CURRENT_INDEX] = index;
-                  console.log('Mobile answer manually saved:', index);
-                  
-                  // 触发状态更新
-                  if (window.updateStatus) {
-                    window.updateStatus();
-                    console.log('Status updated after mobile selection');
-                  }
-                  
-                  // 触发自动保存
-                  if (window.autoSave) {
-                    setTimeout(window.autoSave, 1000);
-                    console.log('Auto-save triggered after mobile selection');
-                  }
-                } else {
-                  console.error('Failed to save mobile answer - global variables not accessible');
-                }
-                
-                // 触发onchange事件作为备用
-                if (radioInput.onchange) {
-                  radioInput.onchange();
-                }
+                // 使用当前的全局变量值保存答案
+                saveCurrentAnswer(index);
                 
                 // 视觉反馈
                 this.style.backgroundColor = '#e3f2fd';
@@ -302,7 +286,6 @@
                   this.style.backgroundColor = '';
                 }, 300);
               }
-            }, { passive: false });
             
             // 桌面端备用点击事件
             newLi.addEventListener('click', function(e) {
@@ -310,32 +293,47 @@
                 e.preventDefault();
                 const radioInput = this.querySelector('input[type="radio"]');
                 if (radioInput && !radioInput.checked) {
-                  console.log('Desktop click selection for index:', index);
+                  console.log('Desktop click selection for index:', index, 'current section:', CURRENT_SECTION, 'current question:', CURRENT_INDEX);
                   
                   const allRadios = document.querySelectorAll('.answers input[type="radio"]');
                   allRadios.forEach(r => r.checked = false);
                   radioInput.checked = true;
                   
-                  if (radioInput.onchange) {
-                    radioInput.onchange();
-                  }
+                  saveCurrentAnswer(index);
                 }
               }
             });
           });
         }
         
-        // 重写renderQuestion函数以包含移动端增强
+        // 重写renderQuestion函数以包含移动端增强 - 修正版本
         const originalRenderQuestion = window.renderQuestion;
         if (originalRenderQuestion) {
           window.renderQuestion = function() {
-            console.log('Enhanced renderQuestion called');
+            console.log('Enhanced renderQuestion called for section:', CURRENT_SECTION, 'question:', CURRENT_INDEX);
             originalRenderQuestion.call(this);
             
             // 延迟执行移动端优化以确保DOM已更新
             setTimeout(function() {
-              console.log('Applying mobile enhancements...');
+              console.log('Applying mobile enhancements for section:', CURRENT_SECTION, 'question:', CURRENT_INDEX);
               enhanceMobileAnswerOptions();
+              
+              // 确保全局变量可访问
+              if (typeof ANSWERS !== 'undefined') {
+                window.ANSWERS = ANSWERS;
+                window.FLAGS = FLAGS;
+                window.CURRENT_SECTION = CURRENT_SECTION;
+                window.CURRENT_INDEX = CURRENT_INDEX;
+                window.updateStatus = updateStatus;
+                window.autoSave = autoSave;
+                
+                console.log('Global variables refreshed:', {
+                  section: CURRENT_SECTION,
+                  index: CURRENT_INDEX,
+                  hasAnswers: !!ANSWERS,
+                  currentQuestionAnswer: ANSWERS[CURRENT_SECTION][CURRENT_INDEX]
+                });
+              }
             }, 100);
           };
           console.log('renderQuestion function enhanced for mobile');
@@ -343,8 +341,8 @@
           console.warn('Original renderQuestion function not found');
         }
         
-        // 确保全局变量可访问性
-        setTimeout(function() {
+        // 定期刷新全局变量引用以防止失效
+        setInterval(function() {
           if (typeof ANSWERS !== 'undefined') {
             window.ANSWERS = ANSWERS;
             window.FLAGS = FLAGS;
@@ -352,7 +350,6 @@
             window.CURRENT_INDEX = CURRENT_INDEX;
             window.updateStatus = updateStatus;
             window.autoSave = autoSave;
-            console.log('Global variables exported for mobile compatibility');
           }
         }, 2000);
       }
