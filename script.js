@@ -128,7 +128,7 @@ function handleTouchMove(e) {
   }
 }
 
-// 修正后的答案选项优化函数
+// 修正后的答案选项优化函数 - 解决变量引用问题
 function optimizeAnswerOptions() {
   const answerItems = document.querySelectorAll('.answers li');
   
@@ -144,12 +144,17 @@ function optimizeAnswerOptions() {
       // 重新设置正确的value值
       input.value = index;
       
-      // 重新添加onchange处理程序
-      input.onchange = function() {
-        console.log('Answer changed to index:', index);
-        ANSWERS[CURRENT_SECTION][CURRENT_INDEX] = index;
+      // 创建保存答案的函数，使用当前的全局变量值
+      const saveAnswer = function(answerIndex) {
+        console.log('Saving answer:', answerIndex, 'for section:', CURRENT_SECTION, 'question:', CURRENT_INDEX);
+        ANSWERS[CURRENT_SECTION][CURRENT_INDEX] = answerIndex;
         updateStatus();
         setTimeout(autoSave, 1000);
+      };
+      
+      // 重新添加onchange处理程序
+      input.onchange = function() {
+        saveAnswer(index);
       };
       
       // 添加移动端触摸事件
@@ -168,7 +173,7 @@ function optimizeAnswerOptions() {
             e.preventDefault();
             const radioInput = this.querySelector('input[type="radio"]');
             if (radioInput && !radioInput.checked) {
-              console.log('Mobile touch answer selection, index:', index);
+              console.log('Mobile touch selection - Section:', CURRENT_SECTION, 'Question:', CURRENT_INDEX, 'Answer:', index);
               
               // 清除所有单选按钮选择
               const allInputs = document.querySelectorAll('.answers input[type="radio"]');
@@ -177,16 +182,8 @@ function optimizeAnswerOptions() {
               // 选择当前单选按钮
               radioInput.checked = true;
               
-              // 手动触发onchange事件
-              if (radioInput.onchange) {
-                radioInput.onchange();
-              } else {
-                // 备用触发方法
-                ANSWERS[CURRENT_SECTION][CURRENT_INDEX] = index;
-                updateStatus();
-                setTimeout(autoSave, 1000);
-                console.log('Backup answer save triggered, index:', index);
-              }
+              // 使用当前的全局变量值保存答案
+              saveAnswer(index);
               
               // 添加视觉反馈
               this.style.backgroundColor = '#e3f2fd';
@@ -208,7 +205,7 @@ function optimizeAnswerOptions() {
       if (!isMobile && e.target.tagName !== 'INPUT') {
         const radioInput = this.querySelector('input[type="radio"]');
         if (radioInput && !radioInput.checked) {
-          console.log('Desktop click answer selection, index:', index);
+          console.log('Desktop click selection - Section:', CURRENT_SECTION, 'Question:', CURRENT_INDEX, 'Answer:', index);
           
           // 清除所有单选按钮
           const allInputs = document.querySelectorAll('.answers input[type="radio"]');
@@ -217,10 +214,8 @@ function optimizeAnswerOptions() {
           // 选择当前单选按钮
           radioInput.checked = true;
           
-          // 触发onchange事件
-          if (radioInput.onchange) {
-            radioInput.onchange();
-          }
+          // 使用当前的全局变量值保存答案
+          saveAnswer(index);
         }
       }
     });
