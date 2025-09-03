@@ -128,7 +128,7 @@ function handleTouchMove(e) {
   }
 }
 
-// Fixed answer option optimization for mobile
+// FIXED: Improved answer option optimization for mobile
 function optimizeAnswerOptions() {
   const answerItems = document.querySelectorAll('.answers li');
   
@@ -141,27 +141,34 @@ function optimizeAnswerOptions() {
     const input = newLi.querySelector('input[type="radio"]');
     
     if (input) {
-      // Re-attach the original onchange handler with proper variable access
-      input.onchange = () => {
-        ANSWERS[CURRENT_SECTION][CURRENT_INDEX] = parseInt(input.value);
+      // FIXED: Re-attach the original onchange handler with proper context
+      input.addEventListener('change', function() {
+        console.log('Radio button changed:', index, 'to value:', this.value);
+        ANSWERS[CURRENT_SECTION][CURRENT_INDEX] = parseInt(this.value);
         updateStatus();
         setTimeout(autoSave, 1000);
-      };
+      });
       
       // Add enhanced touch events for mobile
       if (isMobile) {
+        let touchStarted = false;
+        
         newLi.addEventListener('touchstart', function(e) {
+          touchStarted = true;
           if (!isScrolling) {
             this.style.transform = 'scale(0.98)';
             this.style.transition = 'transform 0.1s ease';
           }
         }, { passive: true });
         
+        // FIXED: Improved mobile touch selection
         newLi.addEventListener('touchend', function(e) {
           this.style.transform = '';
           
-          if (!isScrolling && e.target.tagName !== 'INPUT') {
+          if (touchStarted && !isScrolling) {
             e.preventDefault();
+            e.stopPropagation();
+            
             const radioInput = this.querySelector('input[type="radio"]');
             if (radioInput && !radioInput.checked) {
               // Clear all radio buttons in this group
@@ -171,22 +178,27 @@ function optimizeAnswerOptions() {
               // Select this radio button
               radioInput.checked = true;
               
-              // Trigger the onchange event manually
-              if (radioInput.onchange) {
-                radioInput.onchange();
-              }
+              // FIXED: Manually update the answer data and trigger events
+              const selectedValue = parseInt(radioInput.value);
+              console.log('Mobile touch: selecting answer', selectedValue, 'for section', CURRENT_SECTION, 'index', CURRENT_INDEX);
+              
+              ANSWERS[CURRENT_SECTION][CURRENT_INDEX] = selectedValue;
+              updateStatus();
+              setTimeout(autoSave, 1000);
               
               // Add visual feedback
               this.style.backgroundColor = '#e3f2fd';
               setTimeout(() => {
                 this.style.backgroundColor = '';
-              }, 200);
+              }, 300);
             }
           }
+          touchStarted = false;
         }, { passive: false });
         
         newLi.addEventListener('touchcancel', function(e) {
           this.style.transform = '';
+          touchStarted = false;
         });
       }
     }
@@ -203,10 +215,11 @@ function optimizeAnswerOptions() {
           // Select this radio button
           radioInput.checked = true;
           
-          // Trigger the onchange event
-          if (radioInput.onchange) {
-            radioInput.onchange();
-          }
+          // Update answer data
+          const selectedValue = parseInt(radioInput.value);
+          ANSWERS[CURRENT_SECTION][CURRENT_INDEX] = selectedValue;
+          updateStatus();
+          setTimeout(autoSave, 1000);
         }
       }
     });
@@ -610,12 +623,13 @@ function renderQuestion() {
       input.checked = true;
     }
     
-    // Set up the onchange handler
-    input.onchange = () => {
+    // FIXED: Set up the onchange handler with proper event listener
+    input.addEventListener('change', function() {
+      console.log('Answer changed to:', idx);
       ANSWERS[CURRENT_SECTION][CURRENT_INDEX] = idx;
       updateStatus();
       setTimeout(autoSave, 1000);
-    };
+    });
     
     li.appendChild(input);
     li.append(" " + opt);
@@ -630,17 +644,28 @@ function renderQuestion() {
   updateStatus();
 }
 
+// FIXED: Enhanced updateStatus function with better logging
 function updateStatus() {
   let ans = ANSWERS[CURRENT_SECTION][CURRENT_INDEX];
   let flag = FLAGS[CURRENT_SECTION][CURRENT_INDEX];
-  if (ans == null) {
+  
+  console.log('Updating status - Answer:', ans, 'Flag:', flag, 'Section:', CURRENT_SECTION, 'Index:', CURRENT_INDEX);
+  
+  if (ans == null || ans === undefined) {
     statusPill.textContent = "Unanswered";
     statusPill.style.background = "#FFF3CD";
+    console.log('Status updated to: Unanswered');
   } else {
     statusPill.textContent = "Answered";
     statusPill.style.background = "#F9FAFB";
+    console.log('Status updated to: Answered');
   }
-  flag ? flagPill.classList.remove("hidden") : flagPill.classList.add("hidden");
+  
+  if (flag) {
+    flagPill.classList.remove("hidden");
+  } else {
+    flagPill.classList.add("hidden");
+  }
 }
 
 // ========== NAVIGATION ==========
@@ -1191,5 +1216,7 @@ window.examState = {
   get totalTime() { return totalTime; },
   get isPaused() { return isPaused; },
   get CURRENT_SECTION() { return CURRENT_SECTION; },
-  get CURRENT_INDEX() { return CURRENT_INDEX; }
+  get CURRENT_INDEX() { return CURRENT_INDEX; },
+  get ANSWERS() { return ANSWERS; },
+  get FLAGS() { return FLAGS; }
 };
