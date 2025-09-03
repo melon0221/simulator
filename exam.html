@@ -213,7 +213,96 @@
       if (isMobile) {
         document.body.classList.add('mobile-device');
         
-        // Image modal functionality
+        // Enhanced mobile answer option handling
+        function enhanceMobileAnswerOptions() {
+          const answerOptions = document.querySelectorAll('.answers li');
+          
+          answerOptions.forEach(function(li, index) {
+            // Remove existing listeners to avoid duplicates
+            const newLi = li.cloneNode(true);
+            li.parentNode.replaceChild(newLi, li);
+            
+            // Add optimized touch events
+            newLi.addEventListener('touchend', function(e) {
+              e.preventDefault();
+              e.stopPropagation();
+              
+              const radio = this.querySelector('input[type="radio"]');
+              if (radio && !radio.checked) {
+                // Clear other selections
+                const allRadios = document.querySelectorAll('.answers input[type="radio"]');
+                allRadios.forEach(r => r.checked = false);
+                
+                // Set current selection
+                radio.checked = true;
+                
+                // Update answer data
+                if (typeof window.ANSWERS !== 'undefined' && 
+                    typeof window.CURRENT_SECTION !== 'undefined' && 
+                    typeof window.CURRENT_INDEX !== 'undefined') {
+                  window.ANSWERS[window.CURRENT_SECTION][window.CURRENT_INDEX] = index;
+                  
+                  // Update status display
+                  if (typeof window.updateStatus === 'function') {
+                    window.updateStatus();
+                  }
+                  
+                  // Trigger auto-save
+                  if (typeof window.autoSave === 'function') {
+                    setTimeout(window.autoSave, 1000);
+                  }
+                  
+                  console.log('Mobile answer selected:', index);
+                }
+                
+                // Visual feedback
+                this.style.backgroundColor = '#e3f2fd';
+                setTimeout(() => {
+                  this.style.backgroundColor = '';
+                }, 300);
+              }
+            }, { passive: false });
+            
+            // Fallback click event
+            newLi.addEventListener('click', function(e) {
+              if (e.target.tagName !== 'INPUT') {
+                e.preventDefault();
+                const radio = this.querySelector('input[type="radio"]');
+                if (radio && !radio.checked) {
+                  const allRadios = document.querySelectorAll('.answers input[type="radio"]');
+                  allRadios.forEach(r => r.checked = false);
+                  radio.checked = true;
+                  
+                  if (typeof window.ANSWERS !== 'undefined' && 
+                      typeof window.CURRENT_SECTION !== 'undefined' && 
+                      typeof window.CURRENT_INDEX !== 'undefined') {
+                    window.ANSWERS[window.CURRENT_SECTION][window.CURRENT_INDEX] = index;
+                    
+                    if (typeof window.updateStatus === 'function') {
+                      window.updateStatus();
+                    }
+                    
+                    if (typeof window.autoSave === 'function') {
+                      setTimeout(window.autoSave, 1000);
+                    }
+                  }
+                }
+              }
+            });
+          });
+        }
+        
+        // Override renderQuestion to include mobile enhancements
+        const originalRenderQuestion = window.renderQuestion;
+        if (originalRenderQuestion) {
+          window.renderQuestion = function() {
+            originalRenderQuestion.call(this);
+            setTimeout(enhanceMobileAnswerOptions, 100);
+          };
+        }
+      }
+      
+      // Image modal functionality
       window.openImageModal = function(img) {
         const modal = document.getElementById('image-modal');
         const modalImg = document.getElementById('image-modal-content');
