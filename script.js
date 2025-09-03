@@ -604,6 +604,7 @@ function renderQuestion() {
     input.type = "radio";
     input.name = "answer";
     input.value = idx;
+    input.id = `answer-${idx}`;
     
     // Check if this answer was previously selected
     if (ANSWERS[CURRENT_SECTION][CURRENT_INDEX] == idx) {
@@ -618,7 +619,13 @@ function renderQuestion() {
     };
     
     li.appendChild(input);
-    li.append(" " + opt);
+    
+    // Add label for better mobile accessibility
+    let label = document.createElement("label");
+    label.htmlFor = `answer-${idx}`;
+    label.textContent = opt;
+    li.appendChild(label);
+    
     answerOptions.appendChild(li);
   });
 
@@ -1115,81 +1122,106 @@ function exportResults() {
   // Add detailed question grids for each section
   for (let s = 0; s < 4; s++) {
     pdfContent += `
-        <div class="section-header">Section ${s + 1} Questions (1-50)</div>
+        <div class="section-header">SECTION ${s + 1}</div>
         <div class="question-grid">`;
     
     for (let q = 0; q < 50; q++) {
-      let userAnswer = ANSWERS[s][q];
-      let correctAnswer = QUESTIONS[s][q].correct;
-      let flagged = FLAGS[s][q];
-      let className = 'question-cell';
+      let status = '';
+      let isAnswered = ANSWERS[s][q] != null;
+      let isFlagged = FLAGS[s][q];
+      let isCorrect = isAnswered && ANSWERS[s][q] === QUESTIONS[s][q].correct;
       
-      if (flagged) {
-        className += ' flagged';
-      } else if (userAnswer != null) {
-        className += ' answered';
+      if (isFlagged) {
+        status = 'flagged';
+      } else if (isAnswered) {
+        status = isCorrect ? 'answered' : 'incorrect';
       } else {
-        className += ' unanswered';
+        status = 'unanswered';
       }
       
-      let symbol = '';
-      if (userAnswer == null) {
-        symbol = 'U';
-      } else if (userAnswer === correctAnswer) {
-        symbol = '✓'; // Check mark for correct
-      } else {
-        symbol = '✗'; // X mark for incorrect
-      }
-      
-      pdfContent += `<div class="${className}">${q + 1}<br/>${symbol}</div>`;
+      pdfContent += `<div class="question-cell ${status}">${q + 1}</div>`;
     }
     
-    pdfContent += `</div>`;
+    pdfContent += `
+        </div>
+        <div style="margin: 10px 0; font-size: 9pt;">
+          <span style="display: inline-block; width: 12px; height: 12px; background: #fff3cd; border: 1px solid #666; margin-right: 5px;"></span> Answered
+          <span style="display: inline-block; width: 12px; height: 12px; background: #f8d7da; border: 1px solid #666; margin: 0 5px 0 15px;"></span> Flagged
+          <span style="display: inline-block; width: 12px; height: 12px; background: #f8f9fa; border: 1px solid #666; margin: 0 5px 0 15px;"></span> Unanswered
+        </div>`;
   }
   
   pdfContent += `
       </div>
       
       <div class="disclaimer">
-        <p><strong>Legend:</strong> ✓ = Correct Answer, ✗ = Incorrect Answer, U = Unanswered</p>
-        <p><strong>Color Code:</strong> Yellow = Answered, Gray = Unanswered, Red = Flagged</p>
-        <p><strong>Note:</strong> This is a practice examination report showing your performance and response patterns.</p>
+        This is a practice examination report generated for educational purposes only. 
+        The scores and results presented here are not official and should not be used for 
+        actual assessment or certification purposes.
       </div>
       
       <div class="footer">
-        <p>NBME Comprehensive Basic Science Examination Simulator</p>
-        <p>Generated on ${now.toLocaleString('en-US')}</p>
+        Generated on ${now.toLocaleString()} | NBME Practice Exam System
       </div>
     </body>
-    </html>`;
+    </html>
+  `;
   
-  // Create and download PDF
-  let printWindow = window.open('', '_blank');
-  printWindow.document.write(pdfContent);
-  printWindow.document.close();
-  
-  // Wait for content to load then trigger print
-  setTimeout(() => {
-    printWindow.focus();
-    printWindow.print();
-  }, 500);
+  // Create a blob and download the PDF
+  let blob = new Blob([pdfContent], { type: 'text/html' });
+  let a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `NBME_Exam_${BANK}_Results_${now.getFullYear()}${(now.getMonth()+1).toString().padStart(2, '0')}${now.getDate().toString().padStart(2, '0')}.html`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
 }
 
-// Make key functions globally accessible
-window.resumeExam = window.resumeExam || function() {
-  console.log('Global resumeExam called');
-  isPaused = false;
-  pauseBtn.textContent = 'Pause';
-  pauseBtn.classList.remove('paused');
-  hidePauseOverlay();
-  startTimer();
-};
-
-// Expose necessary variables and functions to window object for debugging
-window.examState = {
-  get sectionTime() { return sectionTime; },
-  get totalTime() { return totalTime; },
-  get isPaused() { return isPaused; },
-  get CURRENT_SECTION() { return CURRENT_SECTION; },
-  get CURRENT_INDEX() { return CURRENT_INDEX; }
-};
+// ========== INITIALIZATION ==========
+document.addEventListener("DOMContentLoaded", function() {
+  // Initialize mobile optimizations
+  initMobileOptimizations();
+  
+  // Initialize modals
+  const modalCloseButtons = document.querySelectorAll(".modal-close");
+  modalCloseButtons.forEach(btn => {
+    btn.addEventListener("click", function() {
+      const modal = this.closest(".modal");
+      hideModal(modal);
+    });
+  });
+  
+  // Initialize image modal
+  const imageModal = document.getElementById("image-modal");
+  if (imageModal) {
+    imageModal.addEventListener("click", function(e) {
+      if (e.target === this) {
+        this.classList.add("hidden");
+        this.classList.remove("show");
+      }
+    });
+  }
+  
+  // Start loading the exam
+  loadExam();
+  
+  // Add keyboard shortcuts
+  document.addEventListener("keydown", function(e) {
+    if (e.key === "ArrowRight") {
+      document.getElementById("next-button").click();
+    } else if (e.key === "ArrowLeft") {
+      document.getElementById("prev-button").click();
+    } else if (e.key === "f" || e.key === "F") {
+      document.getElementById("flag-button").click();
+    } else if (e.key === "r" || e.key === "R") {
+      document.getElementById("review-button").click();
+    } else if (e.key === "Escape") {
+      const openModal = document.querySelector(".modal.show");
+      if (openModal) {
+        hideModal(openModal);
+      }
+    }
+  });
+  
+  console.log("Exam system initialized");
+});
