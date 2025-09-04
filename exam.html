@@ -169,7 +169,7 @@
     </div>
   </div>
 
-  <!-- Image Modal -->
+  <!-- Image Modal - MODIFIED FOR MOBILE -->
   <div class="image-modal hidden" id="image-modal" role="dialog" aria-labelledby="image-modal-title" aria-hidden="true" onclick="closeImageModal()">
     <h3 id="image-modal-title" class="sr-only">Question Image - Full Size</h3>
     <img id="image-modal-content" class="image-modal-content" alt="Full size question image" />
@@ -212,38 +212,58 @@
       
       if (isMobile) {
         document.body.classList.add('mobile-device');
-        console.log('Mobile optimizations applied');
+        console.log('Mobile optimizations applied - images will be non-clickable');
       }
       
-      // Image modal functionality
-      window.openImageModal = function(img) {
-        const modal = document.getElementById('image-modal');
-        const modalImg = document.getElementById('image-modal-content');
+      // MODIFIED: Image modal functionality - only for non-mobile devices
+      if (!isMobile) {
+        window.openImageModal = function(img) {
+          const modal = document.getElementById('image-modal');
+          const modalImg = document.getElementById('image-modal-content');
+          
+          if (modal && modalImg && img) {
+            modalImg.src = img.src;
+            modalImg.alt = img.alt || 'Question image';
+            modal.classList.remove('hidden');
+            modal.classList.add('show');
+          }
+        };
         
-        if (modal && modalImg && img) {
-          modalImg.src = img.src;
-          modalImg.alt = img.alt || 'Question image';
-          modal.classList.remove('hidden');
-          modal.classList.add('show');
+        window.closeImageModal = function() {
+          const modal = document.getElementById('image-modal');
+          if (modal) {
+            modal.classList.add('hidden');
+            modal.classList.remove('show');
+          }
+        };
+        
+        // Close image modal when clicking background (desktop only)
+        document.addEventListener('click', function(e) {
+          if (e.target && e.target.id === 'image-modal') {
+            window.closeImageModal();
+          }
+        });
+      } else {
+        // Mobile: disable image modal functions completely
+        window.openImageModal = function(img) {
+          console.log('Image modal disabled on mobile devices');
+          return false;
+        };
+        
+        window.closeImageModal = function() {
+          console.log('Image modal disabled on mobile devices');
+          return false;
+        };
+        
+        // Hide image modal completely on mobile
+        const imageModal = document.getElementById('image-modal');
+        if (imageModal) {
+          imageModal.style.display = 'none !important';
+          imageModal.setAttribute('aria-hidden', 'true');
         }
-      };
+      }
       
-      window.closeImageModal = function() {
-        const modal = document.getElementById('image-modal');
-        if (modal) {
-          modal.classList.add('hidden');
-          modal.classList.remove('show');
-        }
-      };
-      
-      // Close image modal when clicking background
-      document.addEventListener('click', function(e) {
-        if (e.target && e.target.id === 'image-modal') {
-          window.closeImageModal();
-        }
-      });
-      
-      // Keyboard support for desktop
+      // Keyboard support for desktop only
       if (!isMobile) {
         document.addEventListener('keydown', function(e) {
           if (e.key === 'Escape') {
