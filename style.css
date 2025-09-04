@@ -555,7 +555,7 @@ body {
     border-left: 4px solid #2a4365;
   }
   
-  /* MIDDLE SECTION: Image */
+  /* MIDDLE SECTION: Image - MODIFIED FOR MOBILE */
   .question-image-wrapper {
     flex: none;
     order: 2;
@@ -567,12 +567,34 @@ body {
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   }
   
+  /* MOBILE IMAGE OPTIMIZATION - MAKE IMAGES NON-CLICKABLE */
   .question-image {
     max-height: 250px;
     max-width: 100%;
     width: auto;
     height: auto;
     border-radius: 6px;
+    cursor: default !important; /* Override pointer cursor */
+    pointer-events: none !important; /* Disable all pointer events */
+    user-select: none; /* Prevent text selection */
+    -webkit-user-select: none;
+    -webkit-touch-callout: none !important; /* Disable iOS callout */
+    -webkit-tap-highlight-color: transparent; /* Remove tap highlight */
+  }
+  
+  /* Ensure image wrapper doesn't show pointer either */
+  .question-image-wrapper {
+    cursor: default !important;
+    pointer-events: auto; /* Allow wrapper to have pointer events for layout */
+  }
+  
+  /* Remove any hover effects on mobile images */
+  .question-image:hover,
+  .question-image:active,
+  .question-image:focus {
+    transform: none !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+    cursor: default !important;
   }
   
   /* BOTTOM SECTION: Answer options */
@@ -782,7 +804,11 @@ body {
     border-radius: 6px;
   }
   
-  /* Mobile image modal */
+  /* Mobile image modal - DISABLED */
+  .image-modal {
+    display: none !important; /* Force hide image modal on mobile */
+  }
+  
   .image-modal img {
     max-width: 95%;
     max-height: 80%;
@@ -808,8 +834,14 @@ body {
     padding: 12px;
   }
   
+  /* MOBILE IMAGE - EXTRA SMALL SCREENS */
   .question-image {
-    max-height: 220px;
+    max-height: 220px !important;
+    cursor: default !important;
+    pointer-events: none !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    -webkit-touch-callout: none !important;
   }
   
   .answers li {
@@ -851,8 +883,14 @@ body {
     font-size: 15px;
   }
   
+  /* LANDSCAPE MOBILE IMAGE */
   .question-image {
-    max-height: 160px;
+    max-height: 160px !important;
+    cursor: default !important;
+    pointer-events: none !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    -webkit-touch-callout: none !important;
   }
   
   .question-image-wrapper {
