@@ -593,16 +593,31 @@ function renderQuestion() {
     if (imageWrapper) imageWrapper.classList.remove("hidden");
     if (questionTop) questionTop.classList.remove("no-image");
     
-    // Add click event for image modal
-    questionImage.onclick = () => {
-      const modal = document.getElementById("image-modal");
-      const modalImg = document.getElementById("image-modal-content");
-      if (modal && modalImg) {
-        modalImg.src = questionImage.src;
-        modal.classList.remove("hidden");
-        modal.classList.add("show");
-      }
-    };
+    // MODIFIED: Only add click event for image modal on non-mobile devices
+    if (!isMobile) {
+      questionImage.onclick = () => {
+        const modal = document.getElementById("image-modal");
+        const modalImg = document.getElementById("image-modal-content");
+        if (modal && modalImg) {
+          modalImg.src = questionImage.src;
+          modal.classList.remove("hidden");
+          modal.classList.add("show");
+        }
+      };
+      
+      // Add cursor pointer style for desktop
+      questionImage.style.cursor = 'pointer';
+    } else {
+      // Remove click handler and cursor pointer for mobile
+      questionImage.onclick = null;
+      questionImage.style.cursor = 'default';
+      
+      // Add mobile-specific styling
+      questionImage.style.pointerEvents = 'none';
+      questionImage.style.userSelect = 'none';
+      questionImage.style.webkitUserSelect = 'none';
+      questionImage.style.webkitTouchCallout = 'none';
+    }
   } else {
     questionImage.classList.add("hidden");
     if (imageWrapper) imageWrapper.classList.add("hidden");
