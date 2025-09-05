@@ -128,90 +128,128 @@ function handleTouchMove(e) {
   }
 }
 
-// ========== IMAGE MODAL FUNCTIONALITY - FIXED CENTERING ==========
+// ========== 图片模态框功能 - 修复版本 ==========
 function openImageModal(imageSrc) {
   if (isMobile) {
     console.log('Image modal disabled on mobile');
     return;
   }
   
-  // Create or get modal elements
-  let modal = document.getElementById('image-modal');
-  let modalImg = document.getElementById('image-modal-content');
+  // 检查现有模态框
+  let modal = document.getElementById('desktop-image-modal');
   
+  // 如果模态框不存在，创建它
   if (!modal) {
-    // Create modal if it doesn't exist
     modal = document.createElement('div');
-    modal.id = 'image-modal';
-    modal.className = 'image-modal';
-    modal.innerHTML = '<img id="image-modal-content" alt="Full size question image">';
+    modal.id = 'desktop-image-modal';
+    modal.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.9);
+      z-index: 10000;
+      cursor: pointer;
+      display: none;
+    `;
+    
+    const closeHint = document.createElement('div');
+    closeHint.style.cssText = `
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: white;
+      font-size: 14px;
+      background: rgba(0,0,0,0.7);
+      padding: 8px 16px;
+      border-radius: 4px;
+      pointer-events: none;
+      z-index: 10001;
+    `;
+    closeHint.textContent = 'Click anywhere to close';
+    
+    const imgContainer = document.createElement('div');
+    imgContainer.style.cssText = `
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      max-width: 90vw;
+      max-height: 90vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    `;
+    
+    const img = document.createElement('img');
+    img.id = 'desktop-modal-image';
+    img.style.cssText = `
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      border-radius: 8px;
+      box-shadow: 0 4px 30px rgba(0,0,0,0.8);
+      cursor: default;
+    `;
+    
+    imgContainer.appendChild(img);
+    modal.appendChild(closeHint);
+    modal.appendChild(imgContainer);
     document.body.appendChild(modal);
-    modalImg = modal.querySelector('img');
+    
+    // 添加点击关闭事件
+    modal.addEventListener('click', function(e) {
+      if (e.target === modal || e.target === imgContainer) {
+        closeImageModal();
+      }
+    });
+    
+    // 添加键盘关闭事件
+    const escHandler = function(e) {
+      if (e.key === 'Escape') {
+        closeImageModal();
+      }
+    };
+    
+    modal._escHandler = escHandler;
   }
   
-  // Set up modal styles
-  modal.style.cssText = `
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0,0,0,0.9);
-    z-index: 9999;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  `;
+  const img = modal.querySelector('#desktop-modal-image');
+  if (img) {
+    img.src = imageSrc;
+    img.onload = function() {
+      console.log('Image loaded successfully in modal');
+    };
+    img.onerror = function() {
+      console.error('Failed to load image in modal:', imageSrc);
+      img.alt = 'Image failed to load';
+    };
+  }
   
-  // Set up image styles
-  modalImg.style.cssText = `
-    max-width: 90vw;
-    max-height: 90vh;
-    width: auto;
-    height: auto;
-    object-fit: contain;
-    border-radius: 8px;
-    box-shadow: 0 4px 30px rgba(0,0,0,0.8);
-    cursor: default;
-  `;
+  // 显示模态框
+  modal.style.display = 'block';
   
-  // Set image source and show modal
-  modalImg.src = imageSrc;
-  modal.style.display = 'flex';
+  // 添加键盘事件监听器
+  if (modal._escHandler) {
+    document.addEventListener('keydown', modal._escHandler);
+  }
   
-  // Add close handlers
-  modal.onclick = function(e) {
-    if (e.target === modal) {
-      closeImageModal();
-    }
-  };
-  
-  // Add escape key handler
-  const escHandler = function(e) {
-    if (e.key === 'Escape') {
-      closeImageModal();
-      document.removeEventListener('keydown', escHandler);
-    }
-  };
-  document.addEventListener('keydown', escHandler);
-  
-  // Store handler for cleanup
-  modal._escHandler = escHandler;
-  
-  console.log('Image modal opened with centering');
+  console.log('Desktop image modal opened for:', imageSrc);
 }
 
 function closeImageModal() {
-  const modal = document.getElementById('image-modal');
+  const modal = document.getElementById('desktop-image-modal');
   if (modal) {
     modal.style.display = 'none';
     
-    // Clean up escape handler
+    // 移除键盘事件监听器
     if (modal._escHandler) {
       document.removeEventListener('keydown', modal._escHandler);
-      delete modal._escHandler;
     }
+    
+    console.log('Image modal closed');
   }
 }
 
@@ -664,7 +702,7 @@ function formatTime(sec) {
   return `${h} hr ${m} min ${s.toString().padStart(2, "0")} sec`;
 }
 
-// ========== RENDER QUESTION ==========
+// ========== 渲染问题 - 修复图片加载 ==========
 function renderQuestion() {
   let q = QUESTIONS[CURRENT_SECTION][CURRENT_INDEX];
   examSection.textContent = `Exam Section ${CURRENT_SECTION+1}: Item ${CURRENT_INDEX+1} of 50`;
@@ -675,32 +713,50 @@ function renderQuestion() {
   const questionTop = document.querySelector(".question-top");
 
   if (q.image) {
+    // 构建图片源路径
     const imageSrc = q.image.includes("/") ? q.image : `images/${BANK}/${q.image}`;
+    
+    // 设置图片源并处理加载
     questionImage.src = imageSrc;
     questionImage.classList.remove("hidden");
     if (imageWrapper) imageWrapper.classList.remove("hidden");
     if (questionTop) questionTop.classList.remove("no-image");
     
-    // MODIFIED: Only add click event for image modal on non-mobile devices
+    // 添加图片加载事件监听器
+    questionImage.onload = function() {
+      console.log('Question image loaded successfully:', imageSrc);
+    };
+    
+    questionImage.onerror = function() {
+      console.error('Failed to load question image:', imageSrc);
+      // 可以在这里设置默认图片或隐藏图片容器
+      this.style.display = 'none';
+      if (imageWrapper) {
+        imageWrapper.style.display = 'none';
+      }
+    };
+    
+    // 桌面端：添加点击事件打开模态框
     if (!isMobile) {
       questionImage.onclick = () => {
         openImageModal(imageSrc);
       };
       
-      // Add cursor pointer style for desktop
+      // 添加指针样式
       questionImage.style.cursor = 'pointer';
     } else {
-      // Remove click handler and cursor pointer for mobile
+      // 移动端：移除点击处理程序
       questionImage.onclick = null;
       questionImage.style.cursor = 'default';
       
-      // Add mobile-specific styling
+      // 添加移动端特定样式
       questionImage.style.pointerEvents = 'none';
       questionImage.style.userSelect = 'none';
       questionImage.style.webkitUserSelect = 'none';
       questionImage.style.webkitTouchCallout = 'none';
     }
   } else {
+    // 没有图片时隐藏相关元素
     questionImage.classList.add("hidden");
     if (imageWrapper) imageWrapper.classList.add("hidden");
     if (questionTop) questionTop.classList.add("no-image");
@@ -793,46 +849,6 @@ pauseBtn.onclick = pauseExam;
 // ========== REVIEW ==========
 function populateReviewGrid() {
   let grid = document.getElementById("review-grid");
-  grid.innerHTML = "";
-  QUESTIONS[CURRENT_SECTION].forEach((q, idx) => {
-    let chip = document.createElement("div");
-    chip.className = "review-chip";
-    let ans = ANSWERS[CURRENT_SECTION][idx];
-    let flag = FLAGS[CURRENT_SECTION][idx];
-    if (ans == null) chip.classList.add("unanswered");
-    if (flag) chip.classList.add("flagged");
-    chip.textContent = `Q${idx+1}`;
-    chip.onclick = () => {
-      CURRENT_INDEX = idx;
-      renderQuestion();
-      hideModal(reviewModal);
-    };
-    
-    // Add touch support for mobile
-    if (isMobile) {
-      chip.addEventListener('touchstart', function() {
-        this.style.transform = 'scale(0.95)';
-      });
-      chip.addEventListener('touchend', function() {
-        this.style.transform = '';
-      });
-    }
-    
-    grid.appendChild(chip);
-  });
-}
-
-reviewBtn.onclick = () => { 
-  populateReviewGrid(); 
-  showModal(reviewModal);
-};
-reviewCloseBtn.onclick = () => { 
-  hideModal(reviewModal); 
-};
-
-// ========== SECTION REVIEW ==========
-function populateSectionReview() {
-  let grid = document.getElementById("section-review-grid");
   grid.innerHTML = "";
   QUESTIONS[CURRENT_SECTION].forEach((q, idx) => {
     let chip = document.createElement("div");
@@ -1258,9 +1274,9 @@ function exportResults() {
       if (userAnswer == null) {
         symbol = 'U';
       } else if (userAnswer === correctAnswer) {
-        symbol = '✓'; // Check mark for correct
+        symbol = '✓';
       } else {
-        symbol = '✗'; // X mark for incorrect
+        symbol = '✗';
       }
       
       pdfContent += `<div class="${className}">${q + 1}<br/>${symbol}</div>`;
@@ -1320,4 +1336,44 @@ window.examState = {
   get CURRENT_INDEX() { return CURRENT_INDEX; },
   get ANSWERS() { return ANSWERS; },
   get FLAGS() { return FLAGS; }
+};.add("unanswered");
+    if (flag) chip.classList.add("flagged");
+    chip.textContent = `Q${idx+1}`;
+    chip.onclick = () => {
+      CURRENT_INDEX = idx;
+      renderQuestion();
+      hideModal(reviewModal);
+    };
+    
+    // Add touch support for mobile
+    if (isMobile) {
+      chip.addEventListener('touchstart', function() {
+        this.style.transform = 'scale(0.95)';
+      });
+      chip.addEventListener('touchend', function() {
+        this.style.transform = '';
+      });
+    }
+    
+    grid.appendChild(chip);
+  });
+}
+
+reviewBtn.onclick = () => { 
+  populateReviewGrid(); 
+  showModal(reviewModal);
 };
+reviewCloseBtn.onclick = () => { 
+  hideModal(reviewModal); 
+};
+
+// ========== SECTION REVIEW ==========
+function populateSectionReview() {
+  let grid = document.getElementById("section-review-grid");
+  grid.innerHTML = "";
+  QUESTIONS[CURRENT_SECTION].forEach((q, idx) => {
+    let chip = document.createElement("div");
+    chip.className = "review-chip";
+    let ans = ANSWERS[CURRENT_SECTION][idx];
+    let flag = FLAGS[CURRENT_SECTION][idx];
+    if (ans == null) chip.classList
