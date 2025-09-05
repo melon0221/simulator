@@ -128,6 +128,93 @@ function handleTouchMove(e) {
   }
 }
 
+// ========== IMAGE MODAL FUNCTIONALITY - FIXED CENTERING ==========
+function openImageModal(imageSrc) {
+  if (isMobile) {
+    console.log('Image modal disabled on mobile');
+    return;
+  }
+  
+  // Create or get modal elements
+  let modal = document.getElementById('image-modal');
+  let modalImg = document.getElementById('image-modal-content');
+  
+  if (!modal) {
+    // Create modal if it doesn't exist
+    modal = document.createElement('div');
+    modal.id = 'image-modal';
+    modal.className = 'image-modal';
+    modal.innerHTML = '<img id="image-modal-content" alt="Full size question image">';
+    document.body.appendChild(modal);
+    modalImg = modal.querySelector('img');
+  }
+  
+  // Set up modal styles
+  modal.style.cssText = `
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.9);
+    z-index: 9999;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  `;
+  
+  // Set up image styles
+  modalImg.style.cssText = `
+    max-width: 90vw;
+    max-height: 90vh;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 4px 30px rgba(0,0,0,0.8);
+    cursor: default;
+  `;
+  
+  // Set image source and show modal
+  modalImg.src = imageSrc;
+  modal.style.display = 'flex';
+  
+  // Add close handlers
+  modal.onclick = function(e) {
+    if (e.target === modal) {
+      closeImageModal();
+    }
+  };
+  
+  // Add escape key handler
+  const escHandler = function(e) {
+    if (e.key === 'Escape') {
+      closeImageModal();
+      document.removeEventListener('keydown', escHandler);
+    }
+  };
+  document.addEventListener('keydown', escHandler);
+  
+  // Store handler for cleanup
+  modal._escHandler = escHandler;
+  
+  console.log('Image modal opened with centering');
+}
+
+function closeImageModal() {
+  const modal = document.getElementById('image-modal');
+  if (modal) {
+    modal.style.display = 'none';
+    
+    // Clean up escape handler
+    if (modal._escHandler) {
+      document.removeEventListener('keydown', modal._escHandler);
+      delete modal._escHandler;
+    }
+  }
+}
+
 // FIXED: Improved answer option optimization for mobile
 function optimizeAnswerOptions() {
   const answerItems = document.querySelectorAll('.answers li');
@@ -588,7 +675,8 @@ function renderQuestion() {
   const questionTop = document.querySelector(".question-top");
 
   if (q.image) {
-    questionImage.src = q.image.includes("/") ? q.image : `images/${BANK}/${q.image}`;
+    const imageSrc = q.image.includes("/") ? q.image : `images/${BANK}/${q.image}`;
+    questionImage.src = imageSrc;
     questionImage.classList.remove("hidden");
     if (imageWrapper) imageWrapper.classList.remove("hidden");
     if (questionTop) questionTop.classList.remove("no-image");
@@ -596,13 +684,7 @@ function renderQuestion() {
     // MODIFIED: Only add click event for image modal on non-mobile devices
     if (!isMobile) {
       questionImage.onclick = () => {
-        const modal = document.getElementById("image-modal");
-        const modalImg = document.getElementById("image-modal-content");
-        if (modal && modalImg) {
-          modalImg.src = questionImage.src;
-          modal.classList.remove("hidden");
-          modal.classList.add("show");
-        }
+        openImageModal(imageSrc);
       };
       
       // Add cursor pointer style for desktop
@@ -1224,6 +1306,10 @@ window.resumeExam = window.resumeExam || function() {
   hidePauseOverlay();
   startTimer();
 };
+
+// Make image modal functions globally accessible
+window.openImageModal = openImageModal;
+window.closeImageModal = closeImageModal;
 
 // Expose necessary variables and functions to window object for debugging
 window.examState = {
