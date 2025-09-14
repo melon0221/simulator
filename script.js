@@ -5,8 +5,8 @@ let CURRENT_INDEX = 0;
 let ANSWERS = {};
 let FLAGS = {};
 let timerInterval = null;
-let sectionTime = 75 * 60;
-let totalTime = 315 * 60;
+let sectionTime = 75 * 60; // 75 minutes per section
+let totalTime = 300 * 60; // 300 minutes total (5 hours)
 
 // Pause related variables
 let isPaused = false;
@@ -45,6 +45,23 @@ const endBlockBtn = document.getElementById("end-block-button");
 const sectionReviewBackBtn = document.getElementById("section-review-back");
 const examReviewCloseBtn = document.getElementById("exam-review-close");
 const pauseBtn = document.getElementById("pause-button");
+
+// ========== TIMER INITIALIZATION FUNCTION ==========
+function initializeTimers() {
+  // Set section timer to 75 minutes (always reset for new section)
+  sectionTime = 75 * 60;
+  
+  // Set total timer based on current section
+  // Section 0 (1st): 300 minutes (5 hours)
+  // Section 1 (2nd): 225 minutes (3.75 hours) 
+  // Section 2 (3rd): 150 minutes (2.5 hours)
+  // Section 3 (4th): 75 minutes (1.25 hours)
+  totalTime = (4 - CURRENT_SECTION) * 75 * 60;
+  
+  console.log(`Timer initialized for Section ${CURRENT_SECTION + 1}:`);
+  console.log(`- Section time: ${Math.floor(sectionTime / 60)} minutes`);
+  console.log(`- Total time remaining: ${Math.floor(totalTime / 60)} minutes`);
+}
 
 // ========== MOBILE DETECTION AND INITIALIZATION ==========
 function detectMobile() {
@@ -509,6 +526,16 @@ async function loadExam() {
 
     const restored = loadAutoSave();
     
+    // Initialize timers based on current section
+    if (!restored) {
+      // Starting fresh - reset to section 0
+      CURRENT_SECTION = 0;
+      CURRENT_INDEX = 0;
+    }
+    
+    // FIXED: Initialize timers properly for current section
+    initializeTimers();
+    
     renderQuestion();
     startTimer();
     startAutoSave();
@@ -872,8 +899,14 @@ function endSection() {
     finishExam();
   } else {
     CURRENT_INDEX = 0;
-    sectionTime = 75 * 60;
+    // FIXED: Use initializeTimers() to properly set both timers
+    initializeTimers();
     renderQuestion();
+    
+    // Restart the timer for the new section
+    startTimer();
+    
+    console.log(`Started Section ${CURRENT_SECTION + 1} with ${Math.floor(sectionTime / 60)} minutes section time and ${Math.floor(totalTime / 60)} minutes total time remaining`);
   }
 }
 
