@@ -1065,6 +1065,8 @@ function exportResults() {
         .answered { background-color: #fff3cd; }
         .unanswered { background-color: #f8f9fa; }
         .flagged { background-color: #f8d7da; }
+        .correct { background-color: #d4edda; }
+        .incorrect { background-color: #f8d7da; }
         .footer {
           margin-top: 40px;
           font-size: 9pt;
@@ -1195,26 +1197,25 @@ function exportResults() {
       let userAnswer = ANSWERS[s][q];
       let correctAnswer = QUESTIONS[s][q].correct;
       let flagged = FLAGS[s][q];
-      let className = 'question-cell';
-      
-      if (flagged) {
-        className += ' flagged';
-      } else if (userAnswer != null) {
-        className += ' answered';
-      } else {
-        className += ' unanswered';
-      }
       
       let symbol = '';
-      if (userAnswer == null) {
-        symbol = 'U';
+      let cellClass = 'question-cell';
+      
+      if (flagged) {
+        symbol = 'Flag';
+        cellClass += ' flagged';
+      } else if (userAnswer == null) {
+        symbol = '';  // Empty for unanswered
+        cellClass += ' unanswered';
       } else if (userAnswer === correctAnswer) {
-        symbol = '✓'; // Check mark for correct
+        symbol = '';  // Empty for correct answers
+        cellClass += ' correct';
       } else {
-        symbol = '✗'; // X mark for incorrect
+        symbol = '';  // Empty for incorrect answers  
+        cellClass += ' incorrect';
       }
       
-      pdfContent += `<div class="${className}">${q + 1}<br/>${symbol}</div>`;
+      pdfContent += `<div class="${cellClass}">${q + 1}${symbol ? '<br/>' + symbol : ''}</div>`;
     }
     
     pdfContent += `</div>`;
@@ -1224,8 +1225,12 @@ function exportResults() {
       </div>
       
       <div class="disclaimer">
-        <p><strong>Legend:</strong> ✓ = Correct Answer, ✗ = Incorrect Answer, U = Unanswered</p>
-        <p><strong>Color Code:</strong> Yellow = Answered, Gray = Unanswered, Red = Flagged</p>
+        <p><strong>  ***Note：</strong></p>
+        <p>  • Flag = Marked Question </p>
+        <p><strong>Color Note：</strong></p>
+        <p>  • Green = Answered/Correct</p>
+        <p>  • Gray = Unanswered</p>
+        <p>  • Red = Incorrect/No points</p>
         <p><strong>Note:</strong> This is a practice examination report showing your performance and response patterns.</p>
       </div>
       
