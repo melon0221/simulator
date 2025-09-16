@@ -46,6 +46,98 @@ const sectionReviewBackBtn = document.getElementById("section-review-back");
 const examReviewCloseBtn = document.getElementById("exam-review-close");
 const pauseBtn = document.getElementById("pause-button");
 
+// ========== SCROLL RESET FUNCTIONALITY ==========
+function scrollToTop() {
+  // Detect if we're on mobile or desktop
+  const isMobileDevice = isMobile || window.innerWidth <= 767 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  
+  if (isMobileDevice) {
+    // Mobile: Use immediate scroll with multiple fallback methods
+    try {
+      // Method 1: Standard window scroll
+      window.scrollTo(0, 0);
+      
+      // Method 2: Question wrapper scroll
+      const questionWrapper = document.querySelector('.question-wrapper');
+      if (questionWrapper) {
+        questionWrapper.scrollTop = 0;
+      }
+      
+      // Method 3: Container scroll
+      const container = document.querySelector('.container');
+      if (container) {
+        container.scrollTop = 0;
+      }
+      
+      // Method 4: Document elements (iOS Safari fallback)
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      
+      // Method 5: Force layout recalculation for stubborn browsers
+      if (document.activeElement && document.activeElement !== document.body) {
+        document.activeElement.blur();
+      }
+      
+      // Method 6: iOS specific handling
+      if (window.pageYOffset !== undefined) {
+        window.pageYOffset = 0;
+      }
+      
+    } catch (error) {
+      console.warn('Mobile scroll reset failed:', error);
+    }
+  } else {
+    // Desktop: Use smooth scroll with fallbacks
+    try {
+      // Primary method: smooth scroll
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'smooth'
+      });
+      
+      // Also reset question wrapper for desktop
+      const questionWrapper = document.querySelector('.question-wrapper');
+      if (questionWrapper && questionWrapper.scrollTop > 0) {
+        questionWrapper.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      }
+      
+    } catch (error) {
+      // Fallback for older browsers
+      console.warn('Smooth scroll not supported, using immediate scroll');
+      window.scrollTo(0, 0);
+      
+      const questionWrapper = document.querySelector('.question-wrapper');
+      if (questionWrapper) {
+        questionWrapper.scrollTop = 0;
+      }
+    }
+  }
+}
+
+// Enhanced function to ensure scroll reset works across all scenarios
+function forceScrollReset() {
+  // Multiple attempts to ensure scroll reset
+  scrollToTop();
+  
+  // Additional reset after a brief delay for slow-rendering content
+  setTimeout(() => {
+    scrollToTop();
+  }, 100);
+  
+  // Final attempt for stubborn cases
+  setTimeout(() => {
+    window.scrollTo(0, 0);
+    const questionWrapper = document.querySelector('.question-wrapper');
+    if (questionWrapper) {
+      questionWrapper.scrollTop = 0;
+    }
+  }, 200);
+}
+
 // ========== TIMER INITIALIZATION FUNCTION ==========
 function initializeTimers() {
   // Set section timer to 75 minutes (always reset for new section)
@@ -604,7 +696,7 @@ function formatTime(sec) {
   return `${h} hr ${m} min ${s.toString().padStart(2, "0")} sec`;
 }
 
-// ========== RENDER QUESTION ==========
+// ========== RENDER QUESTION WITH SCROLL RESET ==========
 function renderQuestion() {
   let q = QUESTIONS[CURRENT_SECTION][CURRENT_INDEX];
   examSection.textContent = `Exam Section ${CURRENT_SECTION+1}: Item ${CURRENT_INDEX+1} of 50`;
@@ -684,6 +776,16 @@ function renderQuestion() {
   }, 50);
 
   updateStatus();
+  
+  // CRITICAL: Reset scroll position after rendering - with multiple attempts
+  setTimeout(() => {
+    forceScrollReset();
+  }, 50);
+  
+  // Additional scroll reset for slower devices
+  setTimeout(() => {
+    scrollToTop();
+  }, 150);
 }
 
 // FIXED: Enhanced updateStatus function with better logging
@@ -710,18 +812,18 @@ function updateStatus() {
   }
 }
 
-// ========== NAVIGATION ==========
+// ========== NAVIGATION WITH SCROLL RESET ==========
 document.getElementById("next-button").onclick = () => {
   if (CURRENT_INDEX < 49) {
     CURRENT_INDEX++;
-    renderQuestion();
+    renderQuestion(); // This will now include scroll reset
   }
 };
 
 document.getElementById("prev-button").onclick = () => {
   if (CURRENT_INDEX > 0) {
     CURRENT_INDEX--;
-    renderQuestion();
+    renderQuestion(); // This will now include scroll reset
   }
 };
 
@@ -735,49 +837,9 @@ document.getElementById("flag-button").onclick = () => {
 // ========== PAUSE BUTTON EVENT ==========
 pauseBtn.onclick = pauseExam;
 
-// ========== REVIEW ==========
+// ========== REVIEW WITH SCROLL RESET ==========
 function populateReviewGrid() {
   let grid = document.getElementById("review-grid");
-  grid.innerHTML = "";
-  QUESTIONS[CURRENT_SECTION].forEach((q, idx) => {
-    let chip = document.createElement("div");
-    chip.className = "review-chip";
-    let ans = ANSWERS[CURRENT_SECTION][idx];
-    let flag = FLAGS[CURRENT_SECTION][idx];
-    if (ans == null) chip.classList.add("unanswered");
-    if (flag) chip.classList.add("flagged");
-    chip.textContent = `Q${idx+1}`;
-    chip.onclick = () => {
-      CURRENT_INDEX = idx;
-      renderQuestion();
-      hideModal(reviewModal);
-    };
-    
-    // Add touch support for mobile
-    if (isMobile) {
-      chip.addEventListener('touchstart', function() {
-        this.style.transform = 'scale(0.95)';
-      });
-      chip.addEventListener('touchend', function() {
-        this.style.transform = '';
-      });
-    }
-    
-    grid.appendChild(chip);
-  });
-}
-
-reviewBtn.onclick = () => { 
-  populateReviewGrid(); 
-  showModal(reviewModal);
-};
-reviewCloseBtn.onclick = () => { 
-  hideModal(reviewModal); 
-};
-
-// ========== SECTION REVIEW ==========
-function populateSectionReview() {
-  let grid = document.getElementById("section-review-grid");
   grid.innerHTML = "";
   QUESTIONS[CURRENT_SECTION].forEach((q, idx) => {
     let chip = document.createElement("div");
@@ -890,7 +952,7 @@ document.getElementById("confirm-section-end").onclick = () => {
   endSection();
 };
 
-// ========== SECTION FLOW ==========
+// ========== SECTION FLOW WITH SCROLL RESET ==========
 function endSection() {
   autoSave();
   
@@ -901,7 +963,7 @@ function endSection() {
     CURRENT_INDEX = 0;
     // FIXED: Use initializeTimers() to properly set both timers
     initializeTimers();
-    renderQuestion();
+    renderQuestion(); // This will include scroll reset
     
     // Restart the timer for the new section
     startTimer();
@@ -1225,9 +1287,9 @@ function exportResults() {
       </div>
       
       <div class="disclaimer">
-        <p><strong>  ***Note：</strong></p>
+        <p><strong>Note:</strong></p>
         <p>  • Flag = Marked Question </p>
-        <p><strong>Color Note：</strong></p>
+        <p><strong>Color Note:</strong></p>
         <p>  • Green = Answered/Correct</p>
         <p>  • Gray = Unanswered</p>
         <p>  • Red = Incorrect/No points</p>
@@ -1272,4 +1334,44 @@ window.examState = {
   get CURRENT_INDEX() { return CURRENT_INDEX; },
   get ANSWERS() { return ANSWERS; },
   get FLAGS() { return FLAGS; }
+};classList.add("flagged");
+    chip.textContent = `Q${idx+1}`;
+    chip.onclick = () => {
+      CURRENT_INDEX = idx;
+      renderQuestion(); // This will now include scroll reset
+      hideModal(reviewModal);
+    };
+    
+    // Add touch support for mobile
+    if (isMobile) {
+      chip.addEventListener('touchstart', function() {
+        this.style.transform = 'scale(0.95)';
+      });
+      chip.addEventListener('touchend', function() {
+        this.style.transform = '';
+      });
+    }
+    
+    grid.appendChild(chip);
+  });
+}
+
+reviewBtn.onclick = () => { 
+  populateReviewGrid(); 
+  showModal(reviewModal);
 };
+reviewCloseBtn.onclick = () => { 
+  hideModal(reviewModal); 
+};
+
+// ========== SECTION REVIEW ==========
+function populateSectionReview() {
+  let grid = document.getElementById("section-review-grid");
+  grid.innerHTML = "";
+  QUESTIONS[CURRENT_SECTION].forEach((q, idx) => {
+    let chip = document.createElement("div");
+    chip.className = "review-chip";
+    let ans = ANSWERS[CURRENT_SECTION][idx];
+    let flag = FLAGS[CURRENT_SECTION][idx];
+    if (ans == null) chip.classList.add("unanswered");
+    if (flag) chip.
