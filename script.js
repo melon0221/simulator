@@ -603,46 +603,82 @@ function stopAutoSave() {
 
 // ========== LOAD EXAM ==========
 async function loadExam() {
+  console.log('loadExam function called');
+  
   const urlParams = new URLSearchParams(window.location.search);
   BANK = urlParams.get("bank") || "25";
   
+  console.log('Loading bank:', BANK);
+  
   try {
+    // Clear previous data
+    QUESTIONS = [];
+    ANSWERS = {};
+    FLAGS = {};
+    
     let res = await fetch(`questionBanks/${BANK}.json`);
+    
+    if (!res.ok) {
+      throw new Error(`HTTP error! status: ${res.status}`);
+    }
+    
     let data = await res.json();
+    
+    console.log('Question data loaded:', data.length, 'questions');
 
+    // Split questions into 4 sections of 50 each
     for (let i = 0; i < 4; i++) {
       QUESTIONS.push(data.slice(i * 50, (i + 1) * 50));
     }
+    
+    // Initialize answer and flag arrays
     ANSWERS = QUESTIONS.map(() => ({}));
     FLAGS = QUESTIONS.map(() => ({}));
 
+    console.log('Questions organized into sections:', QUESTIONS.length);
+
+    // Try to load auto-save data
     const restored = loadAutoSave();
     
-    // Initialize timers based on current section
+    // Initialize current position
     if (!restored) {
       // Starting fresh - reset to section 0
       CURRENT_SECTION = 0;
       CURRENT_INDEX = 0;
+      console.log('Starting fresh exam');
+    } else {
+      console.log('Restored previous session');
     }
     
-    // FIXED: Initialize timers properly for current section
+    // Initialize mobile optimizations
+    initMobileOptimizations();
+    
+    // Initialize timers properly for current section
     initializeTimers();
     
+    // Render first question
     renderQuestion();
+    
+    // Start timer
     startTimer();
+    
+    // Start auto-save
     startAutoSave();
     
+    // Initial auto-save for new sessions
     if (!restored) {
       setTimeout(autoSave, 5000);
     }
     
+    console.log('Exam initialization completed successfully');
+    
   } catch (error) {
     console.error('Failed to load exam:', error);
-    alert('Failed to load exam. Please check your network connection or contact administrator.');
+    alert(`Failed to load exam: ${error.message}\n\nPlease check:\n1. Your internet connection\n2. The question bank file exists\n3. Try refreshing the page`);
   }
 }
 
-// Make loadExam globally accessible
+// Make loadExam globally accessible - CRITICAL
 window.loadExam = loadExam;
 
 // ========== TIMER ==========
@@ -698,15 +734,36 @@ function formatTime(sec) {
 
 // ========== RENDER QUESTION WITH SCROLL RESET ==========
 function renderQuestion() {
+  console.log('renderQuestion called - Section:', CURRENT_SECTION, 'Index:', CURRENT_INDEX);
+  
+  // Safety check
+  if (!QUESTIONS || !QUESTIONS[CURRENT_SECTION] || !QUESTIONS[CURRENT_SECTION][CURRENT_INDEX]) {
+    console.error('Question data not available:', {
+      QUESTIONS: !!QUESTIONS,
+      section: CURRENT_SECTION,
+      sectionExists: !!(QUESTIONS && QUESTIONS[CURRENT_SECTION]),
+      questionExists: !!(QUESTIONS && QUESTIONS[CURRENT_SECTION] && QUESTIONS[CURRENT_SECTION][CURRENT_INDEX])
+    });
+    return;
+  }
+  
   let q = QUESTIONS[CURRENT_SECTION][CURRENT_INDEX];
-  examSection.textContent = `Exam Section ${CURRENT_SECTION+1}: Item ${CURRENT_INDEX+1} of 50`;
-  questionText.textContent = q.question;
+  
+  // Update section info
+  if (examSection) {
+    examSection.textContent = `Exam Section ${CURRENT_SECTION+1}: Item ${CURRENT_INDEX+1} of 50`;
+  }
+  
+  // Update question text
+  if (questionText) {
+    questionText.textContent = q.question;
+  }
 
   // Handle image display
   const imageWrapper = document.querySelector(".question-image-wrapper");
   const questionTop = document.querySelector(".question-top");
 
-  if (q.image) {
+  if (q.image && questionImage) {
     questionImage.src = q.image.includes("/") ? q.image : `images/${BANK}/${q.image}`;
     questionImage.classList.remove("hidden");
     if (imageWrapper) imageWrapper.classList.remove("hidden");
@@ -738,42 +795,46 @@ function renderQuestion() {
       questionImage.style.webkitTouchCallout = 'none';
     }
   } else {
-    questionImage.classList.add("hidden");
+    if (questionImage) {
+      questionImage.classList.add("hidden");
+    }
     if (imageWrapper) imageWrapper.classList.add("hidden");
     if (questionTop) questionTop.classList.add("no-image");
   }
 
   // Render answer options
-  answerOptions.innerHTML = "";
-  q.options.forEach((opt, idx) => {
-    let li = document.createElement("li");
-    let input = document.createElement("input");
-    input.type = "radio";
-    input.name = "answer";
-    input.value = idx;
-    
-    // Check if this answer was previously selected
-    if (ANSWERS[CURRENT_SECTION][CURRENT_INDEX] == idx) {
-      input.checked = true;
-    }
-    
-    // FIXED: Set up the onchange handler with proper event listener
-    input.addEventListener('change', function() {
-      console.log('Answer changed to:', idx);
-      ANSWERS[CURRENT_SECTION][CURRENT_INDEX] = idx;
-      updateStatus();
-      setTimeout(autoSave, 1000);
+  if (answerOptions && q.options) {
+    answerOptions.innerHTML = "";
+    q.options.forEach((opt, idx) => {
+      let li = document.createElement("li");
+      let input = document.createElement("input");
+      input.type = "radio";
+      input.name = "answer";
+      input.value = idx;
+      
+      // Check if this answer was previously selected
+      if (ANSWERS[CURRENT_SECTION][CURRENT_INDEX] == idx) {
+        input.checked = true;
+      }
+      
+      // FIXED: Set up the onchange handler with proper event listener
+      input.addEventListener('change', function() {
+        console.log('Answer changed to:', idx);
+        ANSWERS[CURRENT_SECTION][CURRENT_INDEX] = idx;
+        updateStatus();
+        setTimeout(autoSave, 1000);
+      });
+      
+      li.appendChild(input);
+      li.append(" " + opt);
+      answerOptions.appendChild(li);
     });
-    
-    li.appendChild(input);
-    li.append(" " + opt);
-    answerOptions.appendChild(li);
-  });
 
-  // Apply mobile optimizations to new answer options
-  setTimeout(() => {
-    optimizeAnswerOptions();
-  }, 50);
+    // Apply mobile optimizations to new answer options
+    setTimeout(() => {
+      optimizeAnswerOptions();
+    }, 50);
+  }
 
   updateStatus();
   
@@ -786,6 +847,8 @@ function renderQuestion() {
   setTimeout(() => {
     scrollToTop();
   }, 150);
+  
+  console.log('renderQuestion completed');
 }
 
 // FIXED: Enhanced updateStatus function with better logging
