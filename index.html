@@ -292,19 +292,19 @@
 
   <div class="welcome-container">
     <h1>Step 1 Exam Simulator</h1>
-    <p>Welcome! This simulator replicates the NBME Comprehensive Basic Science exam experience.</p>
+    <p>Welcome! This simulator replicates the Comprehensive Basic Science exam experience.</p>
     
     <div class="exam-details">
-      <p>The exam consists of <strong>4 sections</strong>, each with <strong>50 questions</strong>, timed at <strong>75 minutes</strong> per section.</p>
+      <p>The exam consists of <strong>4 sections</strong>, each with <strong>40 to 50 questions</strong>, timed at <strong>75 minutes</strong> per section.</p>
       <p>Total exam time: <strong>5 hours</strong> (300 minutes)</p>
     </div>
     
     <label for="bank">Select Question Bank:</label>
     <select id="bank" aria-label="Select Question Bank">
+      <option value="01">UWSA 1</option>
       <option value="25">NBME Form 25</option>
       <option value="26">NBME Form 26</option>
-     <!--   <option value="27">Form 27</option>
-      <option value="28">Form 28</option> -->
+     <!--    <option value="28">Form 28</option> -->
     </select>
     
     <button onclick="startExam()" id="start-button" aria-label="Start Examination">
@@ -496,6 +496,7 @@
 
 </body>
 </html>
+
 
 
 
