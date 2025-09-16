@@ -46,98 +46,6 @@ const sectionReviewBackBtn = document.getElementById("section-review-back");
 const examReviewCloseBtn = document.getElementById("exam-review-close");
 const pauseBtn = document.getElementById("pause-button");
 
-// ========== SCROLL RESET FUNCTIONALITY ==========
-function scrollToTop() {
-  // Detect if we're on mobile or desktop
-  const isMobileDevice = isMobile || window.innerWidth <= 767 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-  
-  if (isMobileDevice) {
-    // Mobile: Use immediate scroll with multiple fallback methods
-    try {
-      // Method 1: Standard window scroll
-      window.scrollTo(0, 0);
-      
-      // Method 2: Question wrapper scroll
-      const questionWrapper = document.querySelector('.question-wrapper');
-      if (questionWrapper) {
-        questionWrapper.scrollTop = 0;
-      }
-      
-      // Method 3: Container scroll
-      const container = document.querySelector('.container');
-      if (container) {
-        container.scrollTop = 0;
-      }
-      
-      // Method 4: Document elements (iOS Safari fallback)
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
-      
-      // Method 5: Force layout recalculation for stubborn browsers
-      if (document.activeElement && document.activeElement !== document.body) {
-        document.activeElement.blur();
-      }
-      
-      // Method 6: iOS specific handling
-      if (window.pageYOffset !== undefined) {
-        window.pageYOffset = 0;
-      }
-      
-    } catch (error) {
-      console.warn('Mobile scroll reset failed:', error);
-    }
-  } else {
-    // Desktop: Use smooth scroll with fallbacks
-    try {
-      // Primary method: smooth scroll
-      window.scrollTo({
-        top: 0,
-        left: 0,
-        behavior: 'smooth'
-      });
-      
-      // Also reset question wrapper for desktop
-      const questionWrapper = document.querySelector('.question-wrapper');
-      if (questionWrapper && questionWrapper.scrollTop > 0) {
-        questionWrapper.scrollTo({
-          top: 0,
-          behavior: 'smooth'
-        });
-      }
-      
-    } catch (error) {
-      // Fallback for older browsers
-      console.warn('Smooth scroll not supported, using immediate scroll');
-      window.scrollTo(0, 0);
-      
-      const questionWrapper = document.querySelector('.question-wrapper');
-      if (questionWrapper) {
-        questionWrapper.scrollTop = 0;
-      }
-    }
-  }
-}
-
-// Enhanced function to ensure scroll reset works across all scenarios
-function forceScrollReset() {
-  // Multiple attempts to ensure scroll reset
-  scrollToTop();
-  
-  // Additional reset after a brief delay for slow-rendering content
-  setTimeout(() => {
-    scrollToTop();
-  }, 100);
-  
-  // Final attempt for stubborn cases
-  setTimeout(() => {
-    window.scrollTo(0, 0);
-    const questionWrapper = document.querySelector('.question-wrapper');
-    if (questionWrapper) {
-      questionWrapper.scrollTop = 0;
-    }
-  }, 200);
-}
-
 // ========== TIMER INITIALIZATION FUNCTION ==========
 function initializeTimers() {
   // Set section timer to 75 minutes (always reset for new section)
@@ -603,82 +511,46 @@ function stopAutoSave() {
 
 // ========== LOAD EXAM ==========
 async function loadExam() {
-  console.log('loadExam function called');
-  
   const urlParams = new URLSearchParams(window.location.search);
   BANK = urlParams.get("bank") || "25";
   
-  console.log('Loading bank:', BANK);
-  
   try {
-    // Clear previous data
-    QUESTIONS = [];
-    ANSWERS = {};
-    FLAGS = {};
-    
     let res = await fetch(`questionBanks/${BANK}.json`);
-    
-    if (!res.ok) {
-      throw new Error(`HTTP error! status: ${res.status}`);
-    }
-    
     let data = await res.json();
-    
-    console.log('Question data loaded:', data.length, 'questions');
 
-    // Split questions into 4 sections of 50 each
     for (let i = 0; i < 4; i++) {
       QUESTIONS.push(data.slice(i * 50, (i + 1) * 50));
     }
-    
-    // Initialize answer and flag arrays
     ANSWERS = QUESTIONS.map(() => ({}));
     FLAGS = QUESTIONS.map(() => ({}));
 
-    console.log('Questions organized into sections:', QUESTIONS.length);
-
-    // Try to load auto-save data
     const restored = loadAutoSave();
     
-    // Initialize current position
+    // Initialize timers based on current section
     if (!restored) {
       // Starting fresh - reset to section 0
       CURRENT_SECTION = 0;
       CURRENT_INDEX = 0;
-      console.log('Starting fresh exam');
-    } else {
-      console.log('Restored previous session');
     }
     
-    // Initialize mobile optimizations
-    initMobileOptimizations();
-    
-    // Initialize timers properly for current section
+    // FIXED: Initialize timers properly for current section
     initializeTimers();
     
-    // Render first question
     renderQuestion();
-    
-    // Start timer
     startTimer();
-    
-    // Start auto-save
     startAutoSave();
     
-    // Initial auto-save for new sessions
     if (!restored) {
       setTimeout(autoSave, 5000);
     }
     
-    console.log('Exam initialization completed successfully');
-    
   } catch (error) {
     console.error('Failed to load exam:', error);
-    alert(`Failed to load exam: ${error.message}\n\nPlease check:\n1. Your internet connection\n2. The question bank file exists\n3. Try refreshing the page`);
+    alert('Failed to load exam. Please check your network connection or contact administrator.');
   }
 }
 
-// Make loadExam globally accessible - CRITICAL
+// Make loadExam globally accessible
 window.loadExam = loadExam;
 
 // ========== TIMER ==========
@@ -732,38 +604,17 @@ function formatTime(sec) {
   return `${h} hr ${m} min ${s.toString().padStart(2, "0")} sec`;
 }
 
-// ========== RENDER QUESTION WITH SCROLL RESET ==========
+// ========== RENDER QUESTION ==========
 function renderQuestion() {
-  console.log('renderQuestion called - Section:', CURRENT_SECTION, 'Index:', CURRENT_INDEX);
-  
-  // Safety check
-  if (!QUESTIONS || !QUESTIONS[CURRENT_SECTION] || !QUESTIONS[CURRENT_SECTION][CURRENT_INDEX]) {
-    console.error('Question data not available:', {
-      QUESTIONS: !!QUESTIONS,
-      section: CURRENT_SECTION,
-      sectionExists: !!(QUESTIONS && QUESTIONS[CURRENT_SECTION]),
-      questionExists: !!(QUESTIONS && QUESTIONS[CURRENT_SECTION] && QUESTIONS[CURRENT_SECTION][CURRENT_INDEX])
-    });
-    return;
-  }
-  
   let q = QUESTIONS[CURRENT_SECTION][CURRENT_INDEX];
-  
-  // Update section info
-  if (examSection) {
-    examSection.textContent = `Exam Section ${CURRENT_SECTION+1}: Item ${CURRENT_INDEX+1} of 50`;
-  }
-  
-  // Update question text
-  if (questionText) {
-    questionText.textContent = q.question;
-  }
+  examSection.textContent = `Exam Section ${CURRENT_SECTION+1}: Item ${CURRENT_INDEX+1} of 50`;
+  questionText.textContent = q.question;
 
   // Handle image display
   const imageWrapper = document.querySelector(".question-image-wrapper");
   const questionTop = document.querySelector(".question-top");
 
-  if (q.image && questionImage) {
+  if (q.image) {
     questionImage.src = q.image.includes("/") ? q.image : `images/${BANK}/${q.image}`;
     questionImage.classList.remove("hidden");
     if (imageWrapper) imageWrapper.classList.remove("hidden");
@@ -795,60 +646,44 @@ function renderQuestion() {
       questionImage.style.webkitTouchCallout = 'none';
     }
   } else {
-    if (questionImage) {
-      questionImage.classList.add("hidden");
-    }
+    questionImage.classList.add("hidden");
     if (imageWrapper) imageWrapper.classList.add("hidden");
     if (questionTop) questionTop.classList.add("no-image");
   }
 
   // Render answer options
-  if (answerOptions && q.options) {
-    answerOptions.innerHTML = "";
-    q.options.forEach((opt, idx) => {
-      let li = document.createElement("li");
-      let input = document.createElement("input");
-      input.type = "radio";
-      input.name = "answer";
-      input.value = idx;
-      
-      // Check if this answer was previously selected
-      if (ANSWERS[CURRENT_SECTION][CURRENT_INDEX] == idx) {
-        input.checked = true;
-      }
-      
-      // FIXED: Set up the onchange handler with proper event listener
-      input.addEventListener('change', function() {
-        console.log('Answer changed to:', idx);
-        ANSWERS[CURRENT_SECTION][CURRENT_INDEX] = idx;
-        updateStatus();
-        setTimeout(autoSave, 1000);
-      });
-      
-      li.appendChild(input);
-      li.append(" " + opt);
-      answerOptions.appendChild(li);
+  answerOptions.innerHTML = "";
+  q.options.forEach((opt, idx) => {
+    let li = document.createElement("li");
+    let input = document.createElement("input");
+    input.type = "radio";
+    input.name = "answer";
+    input.value = idx;
+    
+    // Check if this answer was previously selected
+    if (ANSWERS[CURRENT_SECTION][CURRENT_INDEX] == idx) {
+      input.checked = true;
+    }
+    
+    // FIXED: Set up the onchange handler with proper event listener
+    input.addEventListener('change', function() {
+      console.log('Answer changed to:', idx);
+      ANSWERS[CURRENT_SECTION][CURRENT_INDEX] = idx;
+      updateStatus();
+      setTimeout(autoSave, 1000);
     });
+    
+    li.appendChild(input);
+    li.append(" " + opt);
+    answerOptions.appendChild(li);
+  });
 
-    // Apply mobile optimizations to new answer options
-    setTimeout(() => {
-      optimizeAnswerOptions();
-    }, 50);
-  }
+  // Apply mobile optimizations to new answer options
+  setTimeout(() => {
+    optimizeAnswerOptions();
+  }, 50);
 
   updateStatus();
-  
-  // CRITICAL: Reset scroll position after rendering - with multiple attempts
-  setTimeout(() => {
-    forceScrollReset();
-  }, 50);
-  
-  // Additional scroll reset for slower devices
-  setTimeout(() => {
-    scrollToTop();
-  }, 150);
-  
-  console.log('renderQuestion completed');
 }
 
 // FIXED: Enhanced updateStatus function with better logging
@@ -875,18 +710,18 @@ function updateStatus() {
   }
 }
 
-// ========== NAVIGATION WITH SCROLL RESET ==========
+// ========== NAVIGATION ==========
 document.getElementById("next-button").onclick = () => {
   if (CURRENT_INDEX < 49) {
     CURRENT_INDEX++;
-    renderQuestion(); // This will now include scroll reset
+    renderQuestion();
   }
 };
 
 document.getElementById("prev-button").onclick = () => {
   if (CURRENT_INDEX > 0) {
     CURRENT_INDEX--;
-    renderQuestion(); // This will now include scroll reset
+    renderQuestion();
   }
 };
 
@@ -900,9 +735,49 @@ document.getElementById("flag-button").onclick = () => {
 // ========== PAUSE BUTTON EVENT ==========
 pauseBtn.onclick = pauseExam;
 
-// ========== REVIEW WITH SCROLL RESET ==========
+// ========== REVIEW ==========
 function populateReviewGrid() {
   let grid = document.getElementById("review-grid");
+  grid.innerHTML = "";
+  QUESTIONS[CURRENT_SECTION].forEach((q, idx) => {
+    let chip = document.createElement("div");
+    chip.className = "review-chip";
+    let ans = ANSWERS[CURRENT_SECTION][idx];
+    let flag = FLAGS[CURRENT_SECTION][idx];
+    if (ans == null) chip.classList.add("unanswered");
+    if (flag) chip.classList.add("flagged");
+    chip.textContent = `Q${idx+1}`;
+    chip.onclick = () => {
+      CURRENT_INDEX = idx;
+      renderQuestion();
+      hideModal(reviewModal);
+    };
+    
+    // Add touch support for mobile
+    if (isMobile) {
+      chip.addEventListener('touchstart', function() {
+        this.style.transform = 'scale(0.95)';
+      });
+      chip.addEventListener('touchend', function() {
+        this.style.transform = '';
+      });
+    }
+    
+    grid.appendChild(chip);
+  });
+}
+
+reviewBtn.onclick = () => { 
+  populateReviewGrid(); 
+  showModal(reviewModal);
+};
+reviewCloseBtn.onclick = () => { 
+  hideModal(reviewModal); 
+};
+
+// ========== SECTION REVIEW ==========
+function populateSectionReview() {
+  let grid = document.getElementById("section-review-grid");
   grid.innerHTML = "";
   QUESTIONS[CURRENT_SECTION].forEach((q, idx) => {
     let chip = document.createElement("div");
@@ -1015,7 +890,7 @@ document.getElementById("confirm-section-end").onclick = () => {
   endSection();
 };
 
-// ========== SECTION FLOW WITH SCROLL RESET ==========
+// ========== SECTION FLOW ==========
 function endSection() {
   autoSave();
   
@@ -1026,7 +901,7 @@ function endSection() {
     CURRENT_INDEX = 0;
     // FIXED: Use initializeTimers() to properly set both timers
     initializeTimers();
-    renderQuestion(); // This will include scroll reset
+    renderQuestion();
     
     // Restart the timer for the new section
     startTimer();
@@ -1350,9 +1225,9 @@ function exportResults() {
       </div>
       
       <div class="disclaimer">
-        <p><strong>Note:</strong></p>
+        <p><strong>  ***Note：</strong></p>
         <p>  • Flag = Marked Question </p>
-        <p><strong>Color Note:</strong></p>
+        <p><strong>Color Note：</strong></p>
         <p>  • Green = Answered/Correct</p>
         <p>  • Gray = Unanswered</p>
         <p>  • Red = Incorrect/No points</p>
@@ -1397,44 +1272,4 @@ window.examState = {
   get CURRENT_INDEX() { return CURRENT_INDEX; },
   get ANSWERS() { return ANSWERS; },
   get FLAGS() { return FLAGS; }
-};classList.add("flagged");
-    chip.textContent = `Q${idx+1}`;
-    chip.onclick = () => {
-      CURRENT_INDEX = idx;
-      renderQuestion(); // This will now include scroll reset
-      hideModal(reviewModal);
-    };
-    
-    // Add touch support for mobile
-    if (isMobile) {
-      chip.addEventListener('touchstart', function() {
-        this.style.transform = 'scale(0.95)';
-      });
-      chip.addEventListener('touchend', function() {
-        this.style.transform = '';
-      });
-    }
-    
-    grid.appendChild(chip);
-  });
-}
-
-reviewBtn.onclick = () => { 
-  populateReviewGrid(); 
-  showModal(reviewModal);
 };
-reviewCloseBtn.onclick = () => { 
-  hideModal(reviewModal); 
-};
-
-// ========== SECTION REVIEW ==========
-function populateSectionReview() {
-  let grid = document.getElementById("section-review-grid");
-  grid.innerHTML = "";
-  QUESTIONS[CURRENT_SECTION].forEach((q, idx) => {
-    let chip = document.createElement("div");
-    chip.className = "review-chip";
-    let ans = ANSWERS[CURRENT_SECTION][idx];
-    let flag = FLAGS[CURRENT_SECTION][idx];
-    if (ans == null) chip.classList.add("unanswered");
-    if (flag) chip.
