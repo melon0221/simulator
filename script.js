@@ -8,6 +8,9 @@ let timerInterval = null;
 let sectionTime = 75 * 60; // 75 minutes per section
 let totalTime = 300 * 60; // 300 minutes total (5 hours)
 
+// NEW: Store questions per section for dynamic handling
+let QUESTIONS_PER_SECTION = 50; // Default, will be set dynamically
+
 // Pause related variables
 let isPaused = false;
 let pauseStartTime = 0;
@@ -45,6 +48,17 @@ const endBlockBtn = document.getElementById("end-block-button");
 const sectionReviewBackBtn = document.getElementById("section-review-back");
 const examReviewCloseBtn = document.getElementById("exam-review-close");
 const pauseBtn = document.getElementById("pause-button");
+
+// ========== HELPER FUNCTIONS ==========
+// NEW: Get current section size
+function getCurrentSectionSize() {
+  return QUESTIONS[CURRENT_SECTION] ? QUESTIONS[CURRENT_SECTION].length : QUESTIONS_PER_SECTION;
+}
+
+// NEW: Get total questions count
+function getTotalQuestions() {
+  return QUESTIONS.reduce((total, section) => total + section.length, 0);
+}
 
 // ========== TIMER INITIALIZATION FUNCTION ==========
 function initializeTimers() {
@@ -451,7 +465,8 @@ function autoSave() {
       totalTime: totalTime,
       isPaused: isPaused,
       timestamp: Date.now(),
-      version: '1.2'
+      questionsPerSection: QUESTIONS_PER_SECTION, // NEW: Save questions per section
+      version: '1.3'
     };
     
     examAutoSave = examData;
@@ -481,6 +496,11 @@ function loadAutoSave() {
         FLAGS = examAutoSave.flags;
         sectionTime = examAutoSave.sectionTime;
         totalTime = examAutoSave.totalTime;
+        
+        // NEW: Restore questions per section if available
+        if (examAutoSave.questionsPerSection) {
+          QUESTIONS_PER_SECTION = examAutoSave.questionsPerSection;
+        }
         
         console.log('Previous exam progress restored');
         showAutoSaveIndicator(true);
@@ -518,9 +538,28 @@ async function loadExam() {
     let res = await fetch(`questionBanks/${BANK}.json`);
     let data = await res.json();
 
+    // NEW: Dynamically determine questions per section based on data length
+    const totalQuestions = data.length;
+    QUESTIONS_PER_SECTION = Math.floor(totalQuestions / 4);
+    
+    console.log(`Loading bank ${BANK}: ${totalQuestions} total questions, ${QUESTIONS_PER_SECTION} per section`);
+
+    // NEW: Dynamically split questions into sections
     for (let i = 0; i < 4; i++) {
-      QUESTIONS.push(data.slice(i * 50, (i + 1) * 50));
+      const startIdx = i * QUESTIONS_PER_SECTION;
+      let endIdx = (i + 1) * QUESTIONS_PER_SECTION;
+      
+      // Handle remainder questions in the last section
+      if (i === 3) {
+        endIdx = totalQuestions; // Include all remaining questions in the last section
+      }
+      
+      const sectionQuestions = data.slice(startIdx, endIdx);
+      QUESTIONS.push(sectionQuestions);
+      
+      console.log(`Section ${i + 1}: ${sectionQuestions.length} questions (${startIdx + 1}-${endIdx})`);
     }
+    
     ANSWERS = QUESTIONS.map(() => ({}));
     FLAGS = QUESTIONS.map(() => ({}));
 
@@ -607,7 +646,10 @@ function formatTime(sec) {
 // ========== RENDER QUESTION ==========
 function renderQuestion() {
   let q = QUESTIONS[CURRENT_SECTION][CURRENT_INDEX];
-  examSection.textContent = `Exam Section ${CURRENT_SECTION+1}: Item ${CURRENT_INDEX+1} of 50`;
+  const currentSectionSize = getCurrentSectionSize();
+  
+  // NEW: Dynamic section display with actual question count
+  examSection.textContent = `Exam Section ${CURRENT_SECTION+1}: Item ${CURRENT_INDEX+1} of ${currentSectionSize}`;
   questionText.textContent = q.question;
 
   // Handle image display
@@ -712,7 +754,8 @@ function updateStatus() {
 
 // ========== NAVIGATION ==========
 document.getElementById("next-button").onclick = () => {
-  if (CURRENT_INDEX < 49) {
+  const currentSectionSize = getCurrentSectionSize();
+  if (CURRENT_INDEX < currentSectionSize - 1) { // NEW: Use dynamic section size
     CURRENT_INDEX++;
     renderQuestion();
   }
@@ -912,8 +955,8 @@ function endSection() {
 
 // ========== EXPORT PDF RESULTS ==========
 function exportResults() {
-  // Calculate statistics
-  let totalQuestions = 200;
+  // NEW: Calculate statistics dynamically based on actual question counts
+  const totalQuestions = getTotalQuestions();
   let answeredCount = 0;
   let flaggedCount = 0;
   let correctCount = 0;
@@ -949,6 +992,10 @@ function exportResults() {
     month: 'long', 
     day: 'numeric' 
   });
+  
+  // NEW: Dynamic question counts display
+  const sectionSizes = QUESTIONS.map(section => section.length);
+  const sectionSizesText = sectionSizes.map((size, idx) => `Section ${idx + 1}: ${size} questions`).join(', ');
   
   // Create PDF content as HTML
   let pdfContent = `
@@ -1107,7 +1154,7 @@ function exportResults() {
       
       <div class="score-section">
         <div class="score-label">TOTAL SCORE</div>
-        <div class="total-score">${totalScore} / 200</div>
+        <div class="total-score">${totalScore} / ${totalQuestions}</div>
         <div class="score-details">Correct Rate: ${correctRate}%</div>
         <div class="score-details">Questions Answered: ${answeredCount} / ${totalQuestions} (${completionRate}%)</div>
       </div>
@@ -1119,6 +1166,7 @@ function exportResults() {
           <div class="info-row">Date: ${examDate}</div>
           <div class="info-row">Total Questions: ${totalQuestions}</div>
           <div class="info-row">Duration: 5 hours</div>
+          <div class="info-row">${sectionSizesText}</div>
         </div>
         <div class="info-section">
           <div class="info-title">PERFORMANCE SUMMARY</div>
@@ -1146,12 +1194,13 @@ function exportResults() {
         </thead>
         <tbody>`;
   
-  // Add section statistics
+  // NEW: Add section statistics with dynamic question counts
   for (let s = 0; s < 4; s++) {
     let sectionAnswered = 0;
     let sectionCorrect = 0;
     let sectionIncorrect = 0;
     let sectionFlagged = Object.keys(FLAGS[s]).filter(qIdx => FLAGS[s][qIdx]).length;
+    let sectionTotalQuestions = QUESTIONS[s].length;
     
     Object.keys(ANSWERS[s]).forEach(qIdx => {
       if (ANSWERS[s][qIdx] != null) {
@@ -1164,13 +1213,13 @@ function exportResults() {
       }
     });
     
-    let sectionUnanswered = 50 - sectionAnswered;
-    let sectionCorrectRate = ((sectionCorrect / 50) * 100).toFixed(1);
+    let sectionUnanswered = sectionTotalQuestions - sectionAnswered;
+    let sectionCorrectRate = ((sectionCorrect / sectionTotalQuestions) * 100).toFixed(1);
     
     pdfContent += `
           <tr>
             <td>Section ${s + 1}</td>
-            <td>50</td>
+            <td>${sectionTotalQuestions}</td>
             <td>${sectionAnswered}</td>
             <td>${sectionCorrect}</td>
             <td>${sectionIncorrect}</td>
@@ -1187,13 +1236,14 @@ function exportResults() {
       <div class="section-detail">
         <div class="section-header">DETAILED RESPONSE PATTERN</div>`;
   
-  // Add detailed question grids for each section
+  // NEW: Add detailed question grids for each section with dynamic sizing
   for (let s = 0; s < 4; s++) {
+    const sectionQuestionCount = QUESTIONS[s].length;
     pdfContent += `
-        <div class="section-header">Section ${s + 1} Questions (1-50)</div>
+        <div class="section-header">Section ${s + 1} Questions (1-${sectionQuestionCount})</div>
         <div class="question-grid">`;
     
-    for (let q = 0; q < 50; q++) {
+    for (let q = 0; q < sectionQuestionCount; q++) {
       let userAnswer = ANSWERS[s][q];
       let correctAnswer = QUESTIONS[s][q].correct;
       let flagged = FLAGS[s][q];
@@ -1225,7 +1275,7 @@ function exportResults() {
       </div>
       
       <div class="disclaimer">
-        <p><strong>  ***Note：</strong></p>
+        <p><strong>***Note：</strong></p>
         <p>  • Flag = Marked Question </p>
         <p><strong>Color Note：</strong></p>
         <p>  • Green = Answered/Correct</p>
@@ -1271,5 +1321,8 @@ window.examState = {
   get CURRENT_SECTION() { return CURRENT_SECTION; },
   get CURRENT_INDEX() { return CURRENT_INDEX; },
   get ANSWERS() { return ANSWERS; },
-  get FLAGS() { return FLAGS; }
+  get FLAGS() { return FLAGS; },
+  get QUESTIONS_PER_SECTION() { return QUESTIONS_PER_SECTION; },
+  get totalQuestions() { return getTotalQuestions(); },
+  get sectionSizes() { return QUESTIONS.map(section => section.length); }
 };
