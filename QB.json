@@ -1,0 +1,1126 @@
+[
+  {
+    "question": "A 55-year-old man with long-standing type 2 diabetes develops proteinuria and declining renal function. Biopsy shows mesangial expansion and thickened glomerular basement membranes. Which mechanism is responsible?",
+    "options": [
+      "Immune complex deposition",
+      "Nonenzymatic glycosylation of basement membrane proteins",
+      "Amyloid deposition",
+      "Loss of podocyte slit diaphragms",
+      "Anti-GBM antibodies"
+    ],
+    "correct": 1,
+    "block": 1,
+    "question_number": 1,
+    "reasoning": "Chronic hyperglycemia causes nonenzymatic glycosylation of basement membrane proteins, leading to mesangial expansion and GBM thickening in diabetic nephropathy."
+  },
+  {
+    "question": "A patient with bilateral renal artery stenosis is started on an ACE inhibitor. Shortly after, serum creatinine increases significantly. Why?",
+    "options": [
+      "Afferent arteriole constriction",
+      "Efferent arteriole dilation reducing GFR",
+      "Increased aldosterone secretion",
+      "Increased renal blood flow",
+      "Increased filtration fraction"
+    ],
+    "correct": 1,
+    "block": 1,
+    "question_number": 2,
+    "reasoning": "Angiotensin II constricts efferent arterioles to maintain GFR. ACE inhibitors remove this effect, causing efferent dilation and decreased GFR."
+  },
+  {
+    "question": "A patient with head trauma develops polyuria and polydipsia. Water deprivation does not increase urine osmolality, but desmopressin does. Diagnosis?",
+    "options": [
+      "Nephrogenic diabetes insipidus",
+      "Central diabetes insipidus",
+      "Primary polydipsia",
+      "SIADH",
+      "Psychogenic polydipsia"
+    ],
+    "correct": 1,
+    "block": 1,
+    "question_number": 3,
+    "reasoning": "Central DI is due to lack of ADH production. Desmopressin restores urine concentrating ability."
+  },
+  {
+    "question": "Increased NaCl delivery to the macula densa causes which change in GFR?",
+    "options": [
+      "Afferent arteriole dilation",
+      "Afferent arteriole constriction",
+      "Efferent arteriole dilation",
+      "Increased renin secretion",
+      "Increased GFR"
+    ],
+    "correct": 1,
+    "block": 1,
+    "question_number": 4,
+    "reasoning": "Macula densa sensing high NaCl releases adenosine causing afferent arteriole constriction and decreased GFR."
+  },
+  {
+    "question": "Which diuretic acts on the thick ascending limb and abolishes the medullary concentration gradient?",
+    "options": [
+      "Acetazolamide",
+      "Furosemide",
+      "Hydrochlorothiazide",
+      "Spironolactone",
+      "Amiloride"
+    ],
+    "correct": 1,
+    "block": 1,
+    "question_number": 5,
+    "reasoning": "Loop diuretics inhibit Na/K/2Cl in the thick ascending limb, eliminating the corticomedullary gradient."
+  },
+  {
+    "question": "A patient develops hyperkalemia after starting a potassium-sparing diuretic. Which drug is responsible?",
+    "options": [
+      "Furosemide",
+      "Hydrochlorothiazide",
+      "Spironolactone",
+      "Mannitol",
+      "Acetazolamide"
+    ],
+    "correct": 2,
+    "block": 1,
+    "question_number": 6,
+    "reasoning": "Spironolactone antagonizes aldosterone, reducing K+ secretion in collecting ducts."
+  },
+  {
+    "question": "Patients with nephrotic syndrome are at increased risk of thrombosis due to loss of which protein?",
+    "options": [
+      "Albumin",
+      "Transferrin",
+      "Antithrombin III",
+      "Immunoglobulins",
+      "Ceruloplasmin"
+    ],
+    "correct": 2,
+    "block": 1,
+    "question_number": 7,
+    "reasoning": "Loss of antithrombin III causes a hypercoagulable state in nephrotic syndrome."
+  },
+  {
+    "question": "A child develops nephrotic syndrome after an upper respiratory infection. EM shows foot process effacement. Diagnosis?",
+    "options": [
+      "FSGS",
+      "Membranous nephropathy",
+      "Minimal change disease",
+      "IgA nephropathy",
+      "Poststreptococcal GN"
+    ],
+    "correct": 2,
+    "block": 1,
+    "question_number": 8,
+    "reasoning": "Minimal change disease is caused by T-cell cytokines leading to podocyte effacement and selective albuminuria."
+  },
+  {
+    "question": "A man with BPH develops bilateral hydronephrosis. What is the underlying mechanism?",
+    "options": [
+      "Prerenal hypoperfusion",
+      "Intrinsic tubular injury",
+      "Postrenal obstruction",
+      "Renal infarction",
+      "Interstitial nephritis"
+    ],
+    "correct": 2,
+    "block": 1,
+    "question_number": 9,
+    "reasoning": "Lower urinary tract obstruction causes back pressure and bilateral hydronephrosis."
+  },
+  {
+    "question": "Chronic kidney disease commonly causes which electrolyte abnormality?",
+    "options": [
+      "Hypophosphatemia",
+      "Hyperphosphatemia",
+      "Hypercalcemia",
+      "Hypokalemia",
+      "Metabolic alkalosis"
+    ],
+    "correct": 1,
+    "block": 1,
+    "question_number": 10,
+    "reasoning": "Decreased phosphate excretion causes hyperphosphatemia leading to secondary hyperparathyroidism."
+  },
+  {
+    "question": "Chronic diarrhea most commonly causes which acid-base disturbance?",
+    "options": [
+      "High anion gap metabolic acidosis",
+      "Non-anion gap metabolic acidosis",
+      "Respiratory acidosis",
+      "Metabolic alkalosis",
+      "Respiratory alkalosis"
+    ],
+    "correct": 1,
+    "block": 1,
+    "question_number": 11,
+    "reasoning": "Loss of bicarbonate in stool causes non-anion gap metabolic acidosis."
+  },
+  {
+    "question": "Kussmaul respirations are seen in which condition?",
+    "options": [
+      "Asthma",
+      "DKA",
+      "COPD",
+      "Opioid overdose",
+      "Pulmonary embolism"
+    ],
+    "correct": 1,
+    "block": 1,
+    "question_number": 12,
+    "reasoning": "Metabolic acidosis triggers deep, rapid breathing to blow off CO2."
+  },
+  {
+    "question": "Which nephron segment is impermeable to water but reabsorbs solutes?",
+    "options": [
+      "Proximal tubule",
+      "Thin descending limb",
+      "Thick ascending limb",
+      "Collecting duct",
+      "Distal convoluted tubule"
+    ],
+    "correct": 2,
+    "block": 1,
+    "question_number": 13,
+    "reasoning": "The thick ascending limb reabsorbs solute without water, creating a hypertonic medulla."
+  },
+  {
+    "question": "A patient with polycystic kidneys also has berry aneurysms. Which mutation is responsible?",
+    "options": [
+      "PKD1",
+      "WT1",
+      "COL4A5",
+      "NPHS1",
+      "ACE"
+    ],
+    "correct": 0,
+    "block": 1,
+    "question_number": 14,
+    "reasoning": "ADPKD is caused by PKD1 mutations encoding polycystin-1."
+  },
+  {
+    "question": "A patient with antifreeze ingestion develops renal failure with calcium oxalate crystals. Toxin?",
+    "options": [
+      "Methanol",
+      "Ethylene glycol",
+      "Isopropanol",
+      "Salicylates",
+      "Cyanide"
+    ],
+    "correct": 1,
+    "block": 1,
+    "question_number": 15,
+    "reasoning": "Ethylene glycol is metabolized to oxalic acid causing Ca oxalate crystal deposition."
+  },
+  {
+    "question": "ADH increases water reabsorption via which mechanism?",
+    "options": [
+      "Insertion of aquaporin-2 channels",
+      "Inhibition of Na/K ATPase",
+      "Blocking ENaC channels",
+      "Decreasing cAMP",
+      "Opening calcium channels"
+    ],
+    "correct": 0,
+    "block": 1,
+    "question_number": 16,
+    "reasoning": "ADH activates V2 receptors → cAMP → aquaporin-2 insertion in collecting ducts."
+  },
+  {
+    "question": "A burn patient develops azotemia due to decreased renal perfusion. Type of AKI?",
+    "options": [
+      "Prerenal",
+      "Intrinsic renal",
+      "Postrenal",
+      "Chronic renal failure",
+      "Renal infarction"
+    ],
+    "correct": 0,
+    "block": 1,
+    "question_number": 17,
+    "reasoning": "Hypovolemia decreases renal perfusion causing prerenal azotemia."
+  },
+  {
+    "question": "Urinalysis shows muddy brown granular casts after hypotension. Diagnosis?",
+    "options": [
+      "Acute interstitial nephritis",
+      "Acute tubular necrosis",
+      "RPGN",
+      "Minimal change disease",
+      "Postrenal obstruction"
+    ],
+    "correct": 1,
+    "block": 1,
+    "question_number": 18,
+    "reasoning": "Ischemic or toxic tubular injury causes necrosis and granular casts."
+  },
+  {
+    "question": "A patient has hemoptysis and RPGN with linear immunofluorescence. Diagnosis?",
+    "options": [
+      "IgA nephropathy",
+      "Goodpasture syndrome",
+      "Lupus nephritis",
+      "Polyarteritis nodosa",
+      "Poststreptococcal GN"
+    ],
+    "correct": 1,
+    "block": 1,
+    "question_number": 19,
+    "reasoning": "Anti–type IV collagen antibodies attack GBM and alveoli causing hemoptysis and RPGN."
+  },
+  {
+    "question": "A child forms hexagonal crystals in urine and recurrent stones. Defect?",
+    "options": [
+      "Purine metabolism defect",
+      "COLA transporter defect",
+      "Hyperparathyroidism",
+      "Oxalate metabolism defect",
+      "Low urine pH"
+    ],
+    "correct": 1,
+    "block": 1,
+    "question_number": 20,
+    "reasoning": "Cystinuria is due to defective COLA amino acid transporter leading to cystine stones."
+  },
+
+  {
+    "question": "A 35-year-old man presents with cola-colored urine and hypertension 2 weeks after a sore throat. Biopsy shows subepithelial humps on EM. Diagnosis?",
+    "options": [
+      "IgA nephropathy",
+      "Poststreptococcal glomerulonephritis",
+      "Membranous nephropathy",
+      "Focal segmental glomerulosclerosis",
+      "Minimal change disease"
+    ],
+    "correct": 1,
+    "block": 2,
+    "question_number": 1,
+    "reasoning": "Poststreptococcal GN is due to immune complex deposition with subepithelial humps after streptococcal infection."
+  },
+  {
+    "question": "A patient with SLE develops nephritic syndrome. IF shows \"full house\" granular deposits. Which mechanism?",
+    "options": [
+      "Anti-GBM antibodies",
+      "Immune complex deposition",
+      "Podocyte injury",
+      "Amyloid deposition",
+      "Complement deficiency"
+    ],
+    "correct": 1,
+    "block": 2,
+    "question_number": 2,
+    "reasoning": "Lupus nephritis is due to immune complex deposition causing granular immunofluorescence."
+  },
+  {
+    "question": "A man with HIV develops nephrotic syndrome. Biopsy shows segmental sclerosis and foot process effacement. Diagnosis?",
+    "options": [
+      "Minimal change disease",
+      "Membranous nephropathy",
+      "FSGS",
+      "IgA nephropathy",
+      "Poststreptococcal GN"
+    ],
+    "correct": 2,
+    "block": 2,
+    "question_number": 3,
+    "reasoning": "FSGS is associated with HIV, heroin use, obesity, and shows segmental sclerosis."
+  },
+  {
+    "question": "A 60-year-old man with solid tumor develops nephrotic syndrome. Subepithelial immune complex deposition with spike and dome pattern. Diagnosis?",
+    "options": [
+      "Minimal change disease",
+      "Membranous nephropathy",
+      "FSGS",
+      "Amyloidosis",
+      "IgA nephropathy"
+    ],
+    "correct": 1,
+    "block": 2,
+    "question_number": 4,
+    "reasoning": "Membranous nephropathy is associated with malignancy, SLE, hepatitis B/C, and drugs."
+  },
+  {
+    "question": "A diabetic patient has Kimmelstiel-Wilson nodules on biopsy. Which pathology?",
+    "options": [
+      "Diffuse proliferative GN",
+      "Nodular glomerulosclerosis",
+      "Crescentic GN",
+      "Amyloid deposition",
+      "Membranous nephropathy"
+    ],
+    "correct": 1,
+    "block": 2,
+    "question_number": 5,
+    "reasoning": "Diabetic nephropathy causes nodular glomerulosclerosis due to glycosylation damage."
+  },
+  {
+    "question": "Rapidly progressive glomerulonephritis shows crescents in Bowman's space. Crescents consist of?",
+    "options": [
+      "Neutrophils",
+      "Mesangial cells",
+      "Parietal epithelial cells and macrophages",
+      "Podocytes",
+      "Fibroblasts"
+    ],
+    "correct": 2,
+    "block": 2,
+    "question_number": 6,
+    "reasoning": "Crescents are formed by proliferation of parietal epithelial cells with macrophage infiltration."
+  },
+  {
+    "question": "A patient with Henoch-Schönlein purpura develops hematuria. Renal pathology?",
+    "options": [
+      "Linear IF",
+      "Granular IgA deposition in mesangium",
+      "Subepithelial humps",
+      "Spike and dome pattern",
+      "Foot process effacement"
+    ],
+    "correct": 1,
+    "block": 2,
+    "question_number": 7,
+    "reasoning": "IgA nephropathy and HSP show mesangial IgA deposition after mucosal infections."
+  },
+  {
+    "question": "A patient with chronic osteomyelitis develops nephrotic syndrome. Congo red positive deposits. Diagnosis?",
+    "options": [
+      "Membranous nephropathy",
+      "Amyloidosis",
+      "Minimal change disease",
+      "FSGS",
+      "Lupus nephritis"
+    ],
+    "correct": 1,
+    "block": 2,
+    "question_number": 8,
+    "reasoning": "Secondary amyloidosis from chronic inflammatory states deposits AA amyloid."
+  },
+  {
+    "question": "A man with analgesic abuse develops papillary necrosis. Which pathology is responsible?",
+    "options": [
+      "Acute tubular necrosis",
+      "Chronic interstitial nephritis",
+      "Postrenal obstruction",
+      "Renal infarction",
+      "Glomerulonephritis"
+    ],
+    "correct": 1,
+    "block": 2,
+    "question_number": 9,
+    "reasoning": "NSAIDs cause chronic interstitial nephritis and papillary necrosis."
+  },
+  {
+    "question": "A patient with eosinophils in urine and recent drug exposure develops AKI. Diagnosis?",
+    "options": [
+      "ATN",
+      "Acute interstitial nephritis",
+      "RPGN",
+      "Prerenal azotemia",
+      "Postrenal obstruction"
+    ],
+    "correct": 1,
+    "block": 2,
+    "question_number": 10,
+    "reasoning": "AIN is a hypersensitivity reaction with eosinophils, rash, fever, and drug exposure."
+  },
+  {
+    "question": "A newborn has Potter sequence. Cause?",
+    "options": [
+      "Maternal diabetes",
+      "Renal agenesis",
+      "Polycystic kidney disease",
+      "Posterior urethral valves",
+      "Congenital nephrotic syndrome"
+    ],
+    "correct": 1,
+    "block": 2,
+    "question_number": 11,
+    "reasoning": "Renal agenesis causes oligohydramnios leading to Potter sequence."
+  },
+  {
+    "question": "A child with recurrent UTIs has unilateral hydronephrosis. Most likely cause?",
+    "options": [
+      "Renal artery stenosis",
+      "Vesicoureteral reflux",
+      "Renal infarction",
+      "Minimal change disease",
+      "IgA nephropathy"
+    ],
+    "correct": 1,
+    "block": 2,
+    "question_number": 12,
+    "reasoning": "VUR causes reflux nephropathy and recurrent infections leading to scarring."
+  },
+  {
+    "question": "A man develops malignant hypertension with onion-skin arteriolosclerosis. Which pathology?",
+    "options": [
+      "Hyaline arteriolosclerosis",
+      "Hyperplastic arteriolosclerosis",
+      "Atherosclerosis",
+      "Fibromuscular dysplasia",
+      "Polyarteritis nodosa"
+    ],
+    "correct": 1,
+    "block": 2,
+    "question_number": 13,
+    "reasoning": "Malignant HTN causes concentric smooth muscle hyperplasia (onion-skin)."
+  },
+  {
+    "question": "A chronic hypertensive patient has hyaline arteriolosclerosis. Mechanism?",
+    "options": [
+      "Immune complex deposition",
+      "Leakage of plasma proteins into vessel walls",
+      "Amyloid deposition",
+      "Smooth muscle hyperplasia",
+      "Calcification"
+    ],
+    "correct": 1,
+    "block": 2,
+    "question_number": 14,
+    "reasoning": "Benign HTN causes plasma protein leakage leading to hyaline thickening."
+  },
+  {
+    "question": "A patient with multiple myeloma develops renal failure. Which mechanism?",
+    "options": [
+      "Immune complex deposition",
+      "Light chain cast nephropathy",
+      "Amyloid deposition only",
+      "Podocyte injury",
+      "Anti-GBM antibodies"
+    ],
+    "correct": 1,
+    "block": 2,
+    "question_number": 15,
+    "reasoning": "Light chains precipitate in tubules causing cast nephropathy."
+  },
+  {
+    "question": "A patient with TB develops secondary amyloidosis. Amyloid derived from?",
+    "options": [
+      "AL light chains",
+      "AA protein",
+      "Beta-amyloid",
+      "Transthyretin",
+      "Insulin"
+    ],
+    "correct": 1,
+    "block": 2,
+    "question_number": 16,
+    "reasoning": "Chronic inflammation produces AA amyloid from SAA protein."
+  },
+  {
+    "question": "A man with renal cell carcinoma most likely risk factor?",
+    "options": [
+      "Smoking",
+      "Strep throat",
+      "Childhood asthma",
+      "Obesity only",
+      "NSAID use"
+    ],
+    "correct": 0,
+    "block": 2,
+    "question_number": 17,
+    "reasoning": "Smoking is the strongest risk factor for RCC."
+  },
+  {
+    "question": "Wilms tumor is associated with which mutation?",
+    "options": [
+      "PKD1",
+      "WT1",
+      "COL4A5",
+      "VHL",
+      "NPHS2"
+    ],
+    "correct": 1,
+    "block": 2,
+    "question_number": 18,
+    "reasoning": "WT1 mutation causes Wilms tumor and genitourinary anomalies."
+  },
+  {
+    "question": "Clear cell renal carcinoma is associated with mutation of which gene?",
+    "options": [
+      "WT1",
+      "VHL",
+      "PKD1",
+      "COL4A5",
+      "RET"
+    ],
+    "correct": 1,
+    "block": 2,
+    "question_number": 19,
+    "reasoning": "VHL mutation causes increased VEGF and RCC development."
+  },
+  {
+    "question": "A patient with chronic reflux nephropathy develops shrunken kidneys with scarring. Diagnosis?",
+    "options": [
+      "Acute interstitial nephritis",
+      "Chronic pyelonephritis",
+      "RPGN",
+      "FSGS",
+      "Minimal change disease"
+    ],
+    "correct": 1,
+    "block": 2,
+    "question_number": 20,
+    "reasoning": "Chronic reflux causes interstitial fibrosis and scarring—chronic pyelonephritis."
+  },
+
+  {
+    "question": "A patient with acute pulmonary edema is given a diuretic that inhibits the Na-K-2Cl cotransporter in the thick ascending limb. Which drug was given?",
+    "options": [
+      "Hydrochlorothiazide",
+      "Furosemide",
+      "Amiloride",
+      "Acetazolamide",
+      "Spironolactone"
+    ],
+    "correct": 1,
+    "block": 3,
+    "question_number": 1,
+    "reasoning": "Loop diuretics like furosemide inhibit Na-K-2Cl in the thick ascending limb and are used for pulmonary edema."
+  },
+  {
+    "question": "Which diuretic causes ototoxicity and hypokalemia?",
+    "options": [
+      "Acetazolamide",
+      "Furosemide",
+      "Amiloride",
+      "Spironolactone",
+      "Mannitol"
+    ],
+    "correct": 1,
+    "block": 3,
+    "question_number": 2,
+    "reasoning": "Loop diuretics cause ototoxicity, hypokalemia, metabolic alkalosis, and hypocalcemia."
+  },
+  {
+    "question": "A diuretic that inhibits carbonic anhydrase in the proximal tubule is used to treat glaucoma. Which drug?",
+    "options": [
+      "Acetazolamide",
+      "Furosemide",
+      "Chlorthalidone",
+      "Spironolactone",
+      "Amiloride"
+    ],
+    "correct": 0,
+    "block": 3,
+    "question_number": 3,
+    "reasoning": "Acetazolamide inhibits carbonic anhydrase, increasing bicarbonate excretion and treating glaucoma."
+  },
+  {
+    "question": "Which diuretic decreases urinary calcium excretion and is used to prevent kidney stones?",
+    "options": [
+      "Furosemide",
+      "Hydrochlorothiazide",
+      "Amiloride",
+      "Acetazolamide",
+      "Mannitol"
+    ],
+    "correct": 1,
+    "block": 3,
+    "question_number": 4,
+    "reasoning": "Thiazides increase calcium reabsorption in the distal tubule."
+  },
+  {
+    "question": "A patient on spironolactone develops gynecomastia. Mechanism?",
+    "options": [
+      "Aldosterone agonism",
+      "Androgen receptor antagonism",
+      "Inhibition of carbonic anhydrase",
+      "Na channel blockade",
+      "Prostaglandin inhibition"
+    ],
+    "correct": 1,
+    "block": 3,
+    "question_number": 5,
+    "reasoning": "Spironolactone antagonizes androgen receptors causing gynecomastia."
+  },
+  {
+    "question": "Which potassium-sparing diuretic blocks epithelial sodium channels in the collecting duct?",
+    "options": [
+      "Spironolactone",
+      "Eplerenone",
+      "Amiloride",
+      "Furosemide",
+      "Acetazolamide"
+    ],
+    "correct": 2,
+    "block": 3,
+    "question_number": 6,
+    "reasoning": "Amiloride and triamterene block ENaC channels directly."
+  },
+  {
+    "question": "A patient with hyponatremia after marathon running most likely has which condition?",
+    "options": [
+      "SIADH",
+      "Cerebral salt wasting",
+      "Primary polydipsia",
+      "Hypovolemic hyponatremia",
+      "Diabetes insipidus"
+    ],
+    "correct": 2,
+    "block": 3,
+    "question_number": 7,
+    "reasoning": "Excess water intake causes dilutional hyponatremia (primary polydipsia)."
+  },
+  {
+    "question": "A patient with small cell lung cancer has hyponatremia and high urine osmolality. Diagnosis?",
+    "options": [
+      "Primary polydipsia",
+      "SIADH",
+      "Diabetes insipidus",
+      "Adrenal insufficiency",
+      "Cerebral salt wasting"
+    ],
+    "correct": 1,
+    "block": 3,
+    "question_number": 8,
+    "reasoning": "SIADH causes euvolemic hyponatremia with concentrated urine."
+  },
+  {
+    "question": "A patient with severe hyponatremia treated too rapidly develops dysarthria and quadriplegia. Diagnosis?",
+    "options": [
+      "Cerebral edema",
+      "Central pontine myelinolysis",
+      "Stroke",
+      "Guillain-Barré syndrome",
+      "Seizure disorder"
+    ],
+    "correct": 1,
+    "block": 3,
+    "question_number": 9,
+    "reasoning": "Rapid correction of chronic hyponatremia causes osmotic demyelination syndrome."
+  },
+  {
+    "question": "A patient with hyperkalemia and ECG changes is given calcium gluconate. Purpose?",
+    "options": [
+      "Lower serum potassium",
+      "Shift potassium intracellularly",
+      "Stabilize cardiac membranes",
+      "Increase potassium excretion",
+      "Block aldosterone"
+    ],
+    "correct": 2,
+    "block": 3,
+    "question_number": 10,
+    "reasoning": "Calcium stabilizes myocardial membranes but does not lower potassium."
+  },
+  {
+    "question": "Which therapy shifts potassium into cells in hyperkalemia?",
+    "options": [
+      "Furosemide",
+      "Insulin with glucose",
+      "Calcium gluconate",
+      "Spironolactone",
+      "Kayexalate"
+    ],
+    "correct": 1,
+    "block": 3,
+    "question_number": 11,
+    "reasoning": "Insulin increases Na/K ATPase activity shifting potassium intracellularly."
+  },
+  {
+    "question": "Which therapy removes potassium from the body?",
+    "options": [
+      "Calcium gluconate",
+      "Insulin",
+      "Kayexalate",
+      "Albuterol",
+      "Sodium bicarbonate"
+    ],
+    "correct": 2,
+    "block": 3,
+    "question_number": 12,
+    "reasoning": "Kayexalate exchanges sodium for potassium in the gut, removing potassium."
+  },
+  {
+    "question": "A patient with chronic kidney disease develops secondary hyperparathyroidism. Mechanism?",
+    "options": [
+      "Increased vitamin D activation",
+      "Decreased phosphate retention",
+      "Hypocalcemia from phosphate retention",
+      "Hypercalcemia from bone resorption",
+      "Primary parathyroid adenoma"
+    ],
+    "correct": 2,
+    "block": 3,
+    "question_number": 13,
+    "reasoning": "CKD causes phosphate retention, decreasing calcium and stimulating PTH."
+  },
+  {
+    "question": "A patient with diabetes insipidus treated with desmopressin. Which receptor is activated?",
+    "options": [
+      "V1 receptor",
+      "V2 receptor",
+      "Alpha-1 receptor",
+      "Beta-1 receptor",
+      "AT1 receptor"
+    ],
+    "correct": 1,
+    "block": 3,
+    "question_number": 14,
+    "reasoning": "Desmopressin selectively activates V2 receptors in collecting ducts."
+  },
+  {
+    "question": "A patient with nephrogenic diabetes insipidus should be treated with?",
+    "options": [
+      "Desmopressin",
+      "Thiazide diuretics",
+      "Loop diuretics",
+      "Spironolactone",
+      "Acetazolamide"
+    ],
+    "correct": 1,
+    "block": 3,
+    "question_number": 15,
+    "reasoning": "Thiazides paradoxically decrease polyuria in nephrogenic DI."
+  },
+  {
+    "question": "Which drug commonly causes nephrogenic diabetes insipidus?",
+    "options": [
+      "Lithium",
+      "Ibuprofen",
+      "Furosemide",
+      "Spironolactone",
+      "ACE inhibitors"
+    ],
+    "correct": 0,
+    "block": 3,
+    "question_number": 16,
+    "reasoning": "Lithium damages collecting duct responsiveness to ADH."
+  },
+  {
+    "question": "A patient with metabolic acidosis and high chloride has which condition?",
+    "options": [
+      "Diabetic ketoacidosis",
+      "Lactic acidosis",
+      "Renal tubular acidosis",
+      "Salicylate toxicity",
+      "Uremia"
+    ],
+    "correct": 2,
+    "block": 3,
+    "question_number": 17,
+    "reasoning": "RTA causes normal anion gap (hyperchloremic) metabolic acidosis."
+  },
+  {
+    "question": "Type 1 renal tubular acidosis is associated with which complication?",
+    "options": [
+      "Kidney stones",
+      "Hyperkalemia",
+      "Hypertension",
+      "Proteinuria",
+      "Pulmonary edema"
+    ],
+    "correct": 0,
+    "block": 3,
+    "question_number": 18,
+    "reasoning": "Type 1 RTA increases urine pH leading to calcium phosphate stones."
+  },
+  {
+    "question": "Type 4 renal tubular acidosis is associated with which electrolyte abnormality?",
+    "options": [
+      "Hypokalemia",
+      "Hyperkalemia",
+      "Hypercalcemia",
+      "Hypophosphatemia",
+      "Hyponatremia"
+    ],
+    "correct": 1,
+    "block": 3,
+    "question_number": 19,
+    "reasoning": "Type 4 RTA is due to aldosterone deficiency or resistance causing hyperkalemia."
+  },
+  {
+    "question": "ACE inhibitors lower GFR by affecting which structure?",
+    "options": [
+      "Afferent arteriole constriction",
+      "Efferent arteriole dilation",
+      "Mesangial cell proliferation",
+      "Proximal tubule reabsorption",
+      "Collecting duct permeability"
+    ],
+    "correct": 1,
+    "block": 3,
+    "question_number": 20,
+    "reasoning": "ACE inhibitors dilate the efferent arteriole, lowering intraglomerular pressure and GFR."
+  },
+
+  {
+    "question": "Which segment of the nephron is impermeable to water but actively reabsorbs solutes to generate the medullary concentration gradient?",
+    "options": [
+      "Proximal tubule",
+      "Thin descending limb",
+      "Thick ascending limb",
+      "Collecting duct",
+      "Distal convoluted tubule"
+    ],
+    "correct": 2,
+    "block": 4,
+    "question_number": 1,
+    "reasoning": "The thick ascending limb is impermeable to water and actively reabsorbs solute, creating the corticomedullary gradient."
+  },
+  {
+    "question": "Countercurrent multiplication primarily depends on which mechanism?",
+    "options": [
+      "Passive diffusion in proximal tubule",
+      "Active transport in thick ascending limb",
+      "Filtration in Bowman's capsule",
+      "Secretion in collecting duct",
+      "Vasa recta fenestration"
+    ],
+    "correct": 1,
+    "block": 4,
+    "question_number": 2,
+    "reasoning": "Active solute reabsorption in the thick ascending limb generates the gradient amplified by countercurrent flow."
+  },
+  {
+    "question": "The vasa recta primarily functions to:",
+    "options": [
+      "Generate medullary hypertonicity",
+      "Prevent washout of medullary gradient",
+      "Filter plasma",
+      "Secrete potassium",
+      "Reabsorb glucose"
+    ],
+    "correct": 1,
+    "block": 4,
+    "question_number": 3,
+    "reasoning": "The vasa recta acts as a countercurrent exchanger preventing solute washout."
+  },
+  {
+    "question": "Which hormone increases urea reabsorption in the inner medullary collecting duct?",
+    "options": [
+      "Aldosterone",
+      "ADH",
+      "Angiotensin II",
+      "ANP",
+      "PTH"
+    ],
+    "correct": 1,
+    "block": 4,
+    "question_number": 4,
+    "reasoning": "ADH increases urea transporter expression, contributing to medullary hypertonicity."
+  },
+  {
+    "question": "Clearance of a substance that is freely filtered and neither reabsorbed nor secreted equals:",
+    "options": [
+      "Renal plasma flow",
+      "Filtration fraction",
+      "Glomerular filtration rate",
+      "Tubular secretion rate",
+      "Effective renal blood flow"
+    ],
+    "correct": 2,
+    "block": 4,
+    "question_number": 5,
+    "reasoning": "Inulin clearance equals GFR because it is neither reabsorbed nor secreted."
+  },
+  {
+    "question": "Which substance is best for estimating renal plasma flow?",
+    "options": [
+      "Creatinine",
+      "Inulin",
+      "Para-aminohippurate (PAH)",
+      "Urea",
+      "Glucose"
+    ],
+    "correct": 2,
+    "block": 4,
+    "question_number": 6,
+    "reasoning": "PAH is almost completely cleared by filtration and secretion, approximating renal plasma flow."
+  },
+  {
+    "question": "Filtration fraction equals:",
+    "options": [
+      "GFR / RBF",
+      "GFR / RPF",
+      "RPF / GFR",
+      "Urine flow / GFR",
+      "Plasma flow / Blood flow"
+    ],
+    "correct": 1,
+    "block": 4,
+    "question_number": 7,
+    "reasoning": "Filtration fraction = GFR divided by renal plasma flow."
+  },
+  {
+    "question": "Constriction of the efferent arteriole will have which effect?",
+    "options": [
+      "Decreased GFR and decreased RPF",
+      "Increased GFR and decreased RPF",
+      "Decreased GFR and increased RPF",
+      "Increased GFR and increased RPF",
+      "No change in GFR"
+    ],
+    "correct": 1,
+    "block": 4,
+    "question_number": 8,
+    "reasoning": "Efferent constriction increases glomerular pressure, raising GFR but decreasing RPF."
+  },
+  {
+    "question": "Constriction of the afferent arteriole causes which change?",
+    "options": [
+      "Increased GFR",
+      "Decreased GFR",
+      "No change in GFR",
+      "Increased filtration fraction",
+      "Increased RPF"
+    ],
+    "correct": 1,
+    "block": 4,
+    "question_number": 9,
+    "reasoning": "Afferent constriction reduces glomerular pressure, decreasing GFR."
+  },
+  {
+    "question": "Which Starling force favors filtration in the glomerulus?",
+    "options": [
+      "Plasma oncotic pressure",
+      "Bowman's space hydrostatic pressure",
+      "Glomerular capillary hydrostatic pressure",
+      "Afferent arteriolar resistance",
+      "Efferent arteriolar resistance"
+    ],
+    "correct": 2,
+    "block": 4,
+    "question_number": 10,
+    "reasoning": "Glomerular capillary hydrostatic pressure is the main force driving filtration."
+  },
+  {
+    "question": "Which force opposes filtration in the glomerulus?",
+    "options": [
+      "Glomerular hydrostatic pressure",
+      "Plasma oncotic pressure",
+      "Afferent arteriole pressure",
+      "Efferent arteriole pressure",
+      "Renal blood flow"
+    ],
+    "correct": 1,
+    "block": 4,
+    "question_number": 11,
+    "reasoning": "Plasma oncotic pressure pulls fluid back into capillaries, opposing filtration."
+  },
+  {
+    "question": "Tubular reabsorption of glucose occurs primarily in which segment?",
+    "options": [
+      "Proximal tubule",
+      "Thick ascending limb",
+      "Distal convoluted tubule",
+      "Collecting duct",
+      "Thin descending limb"
+    ],
+    "correct": 0,
+    "block": 4,
+    "question_number": 12,
+    "reasoning": "Glucose is reabsorbed in the proximal tubule via SGLT transporters."
+  },
+  {
+    "question": "Which transporter is responsible for secondary active glucose reabsorption?",
+    "options": [
+      "GLUT2",
+      "Na+/K+ ATPase",
+      "SGLT2",
+      "Aquaporin-2",
+      "Na+/H+ exchanger"
+    ],
+    "correct": 2,
+    "block": 4,
+    "question_number": 13,
+    "reasoning": "SGLT2 uses sodium gradient to reabsorb glucose in proximal tubule."
+  },
+  {
+    "question": "Tm for glucose refers to:",
+    "options": [
+      "Maximum glucose filtered",
+      "Maximum glucose reabsorbed",
+      "Maximum glucose secreted",
+      "Threshold plasma glucose",
+      "Renal plasma flow"
+    ],
+    "correct": 1,
+    "block": 4,
+    "question_number": 14,
+    "reasoning": "Transport maximum (Tm) is the maximum rate of glucose reabsorption."
+  },
+  {
+    "question": "Which condition decreases the threshold for glucose in urine?",
+    "options": [
+      "Pregnancy",
+      "Diabetes mellitus",
+      "Chronic kidney disease",
+      "ACE inhibitor use",
+      "Hypertension"
+    ],
+    "correct": 0,
+    "block": 4,
+    "question_number": 15,
+    "reasoning": "Pregnancy increases GFR, causing glucosuria at lower plasma glucose levels."
+  },
+  {
+    "question": "Fractional excretion of sodium (FeNa) is most useful to distinguish:",
+    "options": [
+      "Nephrotic vs nephritic syndrome",
+      "Prerenal vs intrinsic renal failure",
+      "Acute vs chronic kidney disease",
+      "Metabolic vs respiratory acidosis",
+      "SIADH vs DI"
+    ],
+    "correct": 1,
+    "block": 4,
+    "question_number": 16,
+    "reasoning": "Low FeNa indicates prerenal azotemia; high FeNa indicates intrinsic renal failure."
+  },
+  {
+    "question": "ADH increases water permeability by inserting which channels?",
+    "options": [
+      "Aquaporin-1",
+      "Aquaporin-2",
+      "Na+/K+ ATPase",
+      "SGLT2",
+      "ENaC"
+    ],
+    "correct": 1,
+    "block": 4,
+    "question_number": 17,
+    "reasoning": "ADH inserts aquaporin-2 channels into collecting duct membranes."
+  },
+  {
+    "question": "A patient with low effective circulating volume will have which change in aldosterone?",
+    "options": [
+      "Decreased aldosterone",
+      "Increased aldosterone",
+      "No change",
+      "Increased ANP",
+      "Decreased renin"
+    ],
+    "correct": 1,
+    "block": 4,
+    "question_number": 18,
+    "reasoning": "Low volume activates RAAS, increasing aldosterone to retain sodium and water."
+  },
+  {
+    "question": "Which hormone decreases renin release?",
+    "options": [
+      "Angiotensin II",
+      "Prostaglandins",
+      "Beta-1 agonists",
+      "Low blood pressure",
+      "Macula densa low NaCl"
+    ],
+    "correct": 0,
+    "block": 4,
+    "question_number": 19,
+    "reasoning": "Angiotensin II provides negative feedback on renin release."
+  },
+  {
+    "question": "Which condition increases ANP release?",
+    "options": [
+      "Hypovolemia",
+      "Hyponatremia",
+      "Atrial stretch from volume overload",
+      "Renal artery stenosis",
+      "Dehydration"
+    ],
+    "correct": 2,
+    "block": 4,
+    "question_number": 20,
+    "reasoning": "ANP is released in response to atrial stretch and promotes natriuresis."
+  }
+
+]
