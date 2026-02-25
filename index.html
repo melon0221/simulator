@@ -304,6 +304,7 @@
       <option value="01">UWSA 1</option>
       <option value="25">NBME Form 25</option>
       <option value="26">NBME Form 26</option>
+      <option value="FQ">Flashcard Quick Review</option>
      <!--    <option value="28">Form 28</option> -->
     </select>
     
@@ -361,6 +362,18 @@
       const bank = document.getElementById('bank').value;
       const startButton = document.getElementById('start-button');
       const container = document.querySelector('.welcome-container');
+
+    // 如果是 FQ（Flashcard Quick Review），直接跳转
+    if (bank === 'FQ') {
+      startButton.textContent = 'Loading Flashcards...';
+      container.classList.add('loading');
+      startButton.disabled = true;
+      
+      setTimeout(() => {
+        window.location.href = 'FQ.html';
+      }, 500);
+      return;
+    }
       
       // 检查网络连接
       if (!navigator.onLine) {
@@ -496,6 +509,7 @@
 
 </body>
 </html>
+
 
 
 
