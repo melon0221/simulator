@@ -363,17 +363,23 @@
       const startButton = document.getElementById('start-button');
       const container = document.querySelector('.welcome-container');
 
-    // 如果是 FQ（Flashcard Quick Review），直接跳转
-    if (bank === 'FQ') {
-      startButton.textContent = 'Loading Flashcards...';
-      container.classList.add('loading');
-      startButton.disabled = true;
+      // 定义直接跳转的页面
+      const directPages = {
+        'FQ': 'FQ.html',
+        'FQ2': 'FQ2.html'
+      };
       
-      setTimeout(() => {
-        window.location.href = 'FQ.html';
-      }, 500);
-      return;
-    }
+      // 如果是直接跳转的页面
+      if (directPages[bank]) {
+        startButton.textContent = 'Loading...';
+        container.classList.add('loading');
+        startButton.disabled = true;
+        
+        setTimeout(() => {
+          window.location.href = directPages[bank];
+        }, 500);
+        return;
+      }
       
       // 检查网络连接
       if (!navigator.onLine) {
@@ -509,6 +515,7 @@
 
 </body>
 </html>
+
 
 
 
