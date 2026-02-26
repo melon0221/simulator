@@ -43,7 +43,6 @@
             font-size: 1.1rem;
         }
 
-        /* 统计栏 */
         .stats-bar {
             display: flex;
             justify-content: center;
@@ -61,7 +60,6 @@
             backdrop-filter: blur(10px);
         }
 
-        /* 筛选按钮组 */
         .filter-bar {
             display: flex;
             justify-content: center;
@@ -111,7 +109,6 @@
             color: white;
         }
 
-        /* 进度条 */
         .progress-container {
             width: 100%;
             max-width: 800px;
@@ -130,7 +127,6 @@
             box-shadow: 0 0 10px rgba(255,255,255,0.5);
         }
 
-        /* 问题卡片 */
         .question-card {
             background: white;
             border-radius: 20px;
@@ -179,7 +175,6 @@
             text-align: left;
         }
 
-        /* 选项列表 */
         .options-list {
             display: flex;
             flex-direction: column;
@@ -228,7 +223,6 @@
             line-height: 1.5;
         }
 
-        /* 选中状态 */
         .option.selected {
             border-color: #667eea;
             background: #e6fffa;
@@ -240,7 +234,6 @@
             color: white;
         }
 
-        /* 正确状态 */
         .option.correct {
             border-color: #48bb78;
             background: #c6f6d5;
@@ -253,7 +246,6 @@
             color: white;
         }
 
-        /* 错误状态 */
         .option.incorrect {
             border-color: #f56565;
             background: #fed7d7;
@@ -283,7 +275,6 @@
             75% { transform: translateX(10px); }
         }
 
-        /* 反馈区域 - 修改样式以容纳详细解释 */
         .feedback {
             margin-top: 25px;
             padding: 20px;
@@ -329,7 +320,6 @@
             margin-bottom: 15px;
         }
 
-        /* 新增：详细解释区域样式 */
         .reasoning-box {
             margin-top: 15px;
             padding-top: 15px;
@@ -384,7 +374,6 @@
             }
         }
 
-        /* 控制按钮 */
         .controls {
             display: flex;
             justify-content: center;
@@ -433,7 +422,6 @@
             transform: none;
         }
 
-        /* 空状态 */
         .empty-state {
             text-align: center;
             color: rgba(255,255,255,0.9);
@@ -456,7 +444,6 @@
             margin-bottom: 10px;
         }
 
-        /* 完成界面 */
         .completion-screen {
             display: none;
             text-align: center;
@@ -508,7 +495,6 @@
             opacity: 0.9;
         }
 
-        /* 加载动画 */
         .loading {
             text-align: center;
             color: white;
@@ -536,7 +522,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* 响应式 */
         @media (max-width: 600px) {
             h1 {
                 font-size: 2rem;
@@ -587,13 +572,11 @@
         <h1>🩺 Medical MCQ</h1>
         <p class="subtitle">Select the best answer for each question</p>
 
-        <!-- 加载中 -->
         <div class="loading" id="loading">
             <div class="spinner"></div>
             <div>Loading questions...</div>
         </div>
 
-        <!-- 学习模式 -->
         <div id="studyMode" style="display: none;">
             <div class="stats-bar">
                 <div class="stat-item">Progress: <span id="currentIndex">0</span> / <span id="totalQuestions">0</span></div>
@@ -602,7 +585,6 @@
                 <div class="stat-item">Accuracy: <span id="accuracy">0%</span></div>
             </div>
 
-            <!-- 筛选按钮组 -->
             <div class="filter-bar">
                 <button class="filter-btn active" onclick="setFilter('all')" id="filter-all">
                     📚 All <span class="count" id="count-all">0</span>
@@ -622,7 +604,6 @@
                 <div class="progress-bar" id="progressBar" style="width: 0%"></div>
             </div>
 
-            <!-- 问题区域 -->
             <div id="questionArea">
                 <div class="question-card" id="questionCard">
                     <div class="question-header">
@@ -637,17 +618,13 @@
                     </div>
 
                     <div class="options-list" id="optionsList">
-                        <!-- 动态生成选项 -->
                     </div>
 
                     <div class="feedback" id="feedback">
                         <div class="feedback-header" id="feedbackHeader">
-                            <!-- 动态生成 -->
                         </div>
                         <div class="feedback-text" id="feedbackText">
-                            <!-- 动态生成 -->
                         </div>
-                        <!-- 新增：详细解释区域 -->
                         <div class="reasoning-box" id="reasoningBox">
                             <div class="reasoning-title">💡 Explanation</div>
                             <div class="reasoning-content" id="reasoningContent"></div>
@@ -656,7 +633,6 @@
                 </div>
             </div>
 
-            <!-- 空状态提示 -->
             <div class="empty-state" id="emptyState">
                 <div class="icon">🔍</div>
                 <h3>No questions in this category</h3>
@@ -676,7 +652,6 @@
             </div>
         </div>
 
-        <!-- 完成界面 -->
         <div class="completion-screen" id="completionScreen">
             <div class="trophy">🏆</div>
             <h2>Practice Complete!</h2>
@@ -708,30 +683,43 @@
     </div>
 
     <script>
-        // 数据存储
         let allQuestions = [];
         let filteredQuestions = [];
         let currentFilter = 'all';
         let currentIndex = 0;
-        let userAnswers = {}; // 存储用户答案: { questionIndex: { selected: 0, correct: true/false } }
+        let userAnswers = {};
 
-        // 初始化
         document.addEventListener('DOMContentLoaded', () => {
             loadQuestions();
         });
 
-        // 加载 JSON 文件
+        // 加载 JSON 文件 - 动态支持 QB, QB1, QB2, QB3...
         async function loadQuestions() {
             try {
-                // 尝试从 QB.json 加载
-                const response = await fetch('QB.json');
-                if (!response.ok) throw new Error('Failed to load');
+                // 获取 URL 参数，决定加载哪个题库
+                const urlParams = new URLSearchParams(window.location.search);
+                const bankParam = urlParams.get('bank') || 'QB';
+                
+                // 验证参数安全性（只允许 QB 或 QB+数字）
+                let fileName;
+                if (bankParam === 'QB') {
+                    fileName = 'QB.json';
+                } else if (/^QB\d+$/.test(bankParam)) {
+                    fileName = `${bankParam}.json`; // QB1.json, QB2.json, QB3.json...
+                } else {
+                    console.warn('Invalid bank parameter, using default QB.json');
+                    fileName = 'QB.json';
+                }
+                
+                // 从 questionBanks/ 文件夹加载对应题库
+                const response = await fetch(`questionBanks/${fileName}`);
+                if (!response.ok) throw new Error(`Failed to load ${fileName}`);
                 allQuestions = await response.json();
                 
                 // 初始化用户答案状态
                 allQuestions.forEach((q, idx) => {
                     if (!userAnswers[idx]) {
-                        userAnswers[idx] = null; // null = 未回答
+                        userAnswers[idx] = null;
                     }
                 });
                 
@@ -741,17 +729,17 @@
                 setFilter('all');
             } catch (error) {
                 console.error('Error loading questions:', error);
+                const currentFile = fileName || 'QB.json';
                 document.getElementById('loading').innerHTML = `
                     <div style="color: #fed7d7; font-size: 3rem; margin-bottom: 15px;">⚠️</div>
-                    <div>Failed to load questions.json</div>
+                    <div>Failed to load questionBanks/${currentFile}</div>
                     <div style="font-size: 0.9rem; margin-top: 10px; opacity: 0.8;">
-                        Please ensure the file exists and is properly formatted.
+                        Please ensure the file exists in the questionBanks folder.
                     </div>
                 `;
             }
         }
 
-        // 设置筛选器
         function setFilter(filter) {
             currentFilter = filter;
             
@@ -760,7 +748,6 @@
             });
             document.getElementById(`filter-${filter}`).classList.add('active');
             
-            // 根据筛选条件过滤题目
             if (filter === 'all') {
                 filteredQuestions = allQuestions.map((q, idx) => ({ ...q, originalIndex: idx }));
             } else if (filter === 'unanswered') {
@@ -783,7 +770,6 @@
             checkEmptyState();
         }
 
-        // 更新筛选按钮计数
         function updateFilterCounts() {
             const total = allQuestions.length;
             const unanswered = allQuestions.filter((_, idx) => userAnswers[idx] === null).length;
@@ -795,14 +781,12 @@
             document.getElementById('count-correct').textContent = correct;
             document.getElementById('count-incorrect').textContent = incorrect;
             
-            // 更新统计栏
             document.getElementById('correctCount').textContent = correct;
             document.getElementById('incorrectCount').textContent = incorrect;
             const accuracy = total > 0 ? Math.round((correct / (correct + incorrect)) * 100) || 0 : 0;
             document.getElementById('accuracy').textContent = accuracy + '%';
         }
 
-        // 检查空状态
         function checkEmptyState() {
             const questionArea = document.getElementById('questionArea');
             const emptyState = document.getElementById('emptyState');
@@ -819,7 +803,6 @@
             }
         }
 
-        // 更新显示
         function updateDisplay() {
             if (filteredQuestions.length === 0) {
                 updateStats();
@@ -830,12 +813,10 @@
             const originalIdx = question.originalIndex;
             const userAnswer = userAnswers[originalIdx];
             
-            // 更新题号和元信息
             document.getElementById('qNumber').textContent = `Q${question.question_number}`;
             document.getElementById('qBlock').textContent = `Block ${question.block}`;
             document.getElementById('qText').textContent = question.question;
             
-            // 生成选项
             const optionsList = document.getElementById('optionsList');
             optionsList.innerHTML = '';
             
@@ -846,13 +827,11 @@
                 optionEl.className = 'option';
                 optionEl.onclick = () => selectOption(idx);
                 
-                // 如果已回答，显示状态
                 if (userAnswer) {
                     optionEl.classList.add('disabled');
                     if (idx === userAnswer.selected) {
                         optionEl.classList.add(userAnswer.correct ? 'correct' : 'incorrect');
                     } else if (idx === question.correct && !userAnswer.correct) {
-                        // 如果答错了，高亮正确答案
                         optionEl.classList.add('correct');
                     }
                 }
@@ -865,7 +844,6 @@
                 optionsList.appendChild(optionEl);
             });
             
-            // 显示反馈（如果已回答）
             const feedback = document.getElementById('feedback');
             if (userAnswer) {
                 showFeedback(userAnswer.correct, question.correct, letters, question.reasoning);
@@ -877,39 +855,26 @@
             updateProgress();
         }
 
-        // 选择选项
         function selectOption(selectedIdx) {
             const question = filteredQuestions[currentIndex];
             const originalIdx = question.originalIndex;
             
-            // 如果已经回答过，不做任何操作
             if (userAnswers[originalIdx]) return;
             
             const isCorrect = selectedIdx === question.correct;
             
-            // 保存答案
             userAnswers[originalIdx] = {
                 selected: selectedIdx,
                 correct: isCorrect
             };
             
-            // 更新显示
             updateDisplay();
             updateFilterCounts();
             
-            // 显示反馈（包含详细解释）
             const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
             showFeedback(isCorrect, question.correct, letters, question.reasoning);
-            
-            // 移除：不再自动跳转，让用户自己点击"下一题"按钮
-            // if (currentIndex < filteredQuestions.length - 1) {
-            //     setTimeout(() => {
-            //         nextQuestion();
-            //     }, 2000);
-            // }
         }
 
-        // 显示反馈 - 修改以显示详细解释
         function showFeedback(isCorrect, correctIndex, letters, reasoning) {
             const feedback = document.getElementById('feedback');
             const feedbackHeader = document.getElementById('feedbackHeader');
@@ -930,7 +895,6 @@
                 `;
             }
             
-            // 显示详细解释
             if (reasoning) {
                 reasoningContent.textContent = reasoning;
                 reasoningContent.style.display = 'block';
@@ -940,19 +904,16 @@
             }
         }
 
-        // 更新统计
         function updateStats() {
             document.getElementById('currentIndex').textContent = filteredQuestions.length > 0 ? currentIndex + 1 : 0;
             document.getElementById('totalQuestions').textContent = filteredQuestions.length;
         }
 
-        // 更新进度条
         function updateProgress() {
             const progress = filteredQuestions.length > 0 ? ((currentIndex + 1) / filteredQuestions.length) * 100 : 0;
             document.getElementById('progressBar').style.width = progress + '%';
         }
 
-        // 下一题
         function nextQuestion() {
             if (filteredQuestions.length === 0) return;
             
@@ -960,12 +921,10 @@
                 currentIndex++;
                 updateDisplay();
             } else {
-                // 显示完成界面
                 showCompletion();
             }
         }
 
-        // 上一题
         function prevQuestion() {
             if (filteredQuestions.length === 0) return;
             
@@ -973,7 +932,6 @@
             updateDisplay();
         }
 
-        // 显示完成界面
         function showCompletion() {
             document.getElementById('studyMode').style.display = 'none';
             document.getElementById('completionScreen').classList.add('active');
@@ -989,7 +947,6 @@
             document.getElementById('finalAccuracy').textContent = accuracy + '%';
         }
 
-        // 重置进度
         function resetProgress() {
             if (!confirm('Reset all progress? This cannot be undone.')) return;
             
@@ -1002,14 +959,12 @@
             showToast('Progress reset!');
         }
 
-        // 重新开始
         function restartStudy() {
             document.getElementById('completionScreen').classList.remove('active');
             document.getElementById('studyMode').style.display = 'block';
             resetProgress();
         }
 
-        // 显示提示
         function showToast(message) {
             const toast = document.createElement('div');
             toast.style.cssText = `
@@ -1030,11 +985,9 @@
             setTimeout(() => toast.remove(), 2000);
         }
 
-        // 键盘控制
         document.addEventListener('keydown', (e) => {
             if (filteredQuestions.length === 0) return;
             
-            // 数字键 1-5 选择选项
             if (e.key >= '1' && e.key <= '5') {
                 const optionIndex = parseInt(e.key) - 1;
                 const question = filteredQuestions[currentIndex];
@@ -1043,7 +996,6 @@
                 }
             }
             
-            // 方向键导航
             switch(e.key) {
                 case 'ArrowLeft':
                     prevQuestion();
