@@ -126,7 +126,6 @@
       color: #1565c0;
     }
     
-    /* 新增：移动端检测和优化提示 */
     .mobile-optimization-notice {
       background: #fff3cd;
       color: #856404;
@@ -142,7 +141,6 @@
       display: block;
     }
     
-    /* 连接状态指示器 */
     .connection-status {
       position: fixed;
       top: 10px;
@@ -166,7 +164,6 @@
       border: 1px solid #f5c6cb;
     }
     
-    /* Mobile optimizations */
     @media (max-width: 767px) {
       body {
         padding: 15px;
@@ -252,7 +249,6 @@
       }
     }
     
-    /* Loading state */
     .loading {
       pointer-events: none;
       opacity: 0.7;
@@ -285,7 +281,6 @@
   </style>
 </head>
 <body>
-  <!-- 连接状态指示器 -->
   <div class="connection-status" id="connection-status">
     <span id="connection-text">Online</span>
   </div>
@@ -304,8 +299,13 @@
       <option value="01">UWSA 1</option>
       <option value="25">NBME Form 25</option>
       <option value="26">NBME Form 26</option>
-      <option value="FQ">Rapid Review - Tutor Mode</option>
-     <!--    <option value="28">Form 28</option> -->
+      <!-- Flashcard Quick Review 系列，自动映射到 QB.json, QB1.json, QB2.json... -->
+      <option value="QB">Flashcard Quick Review</option>
+      <option value="QB1">Flashcard Quick Review 2</option>
+      <!-- 以后只需要在这里添加新选项，如：
+      <option value="QB2">Flashcard Quick Review 3</option>
+      <option value="QB3">Flashcard Quick Review 4</option>
+      -->
     </select>
     
     <button onclick="startExam()" id="start-button" aria-label="Start Examination">
@@ -313,17 +313,15 @@
     </button>
     
     <div class="app-info">
-      <p><strong>💡 Mobile Tip:</strong> For the best experience, use landscape mode and ensure you have a stable internet connection.</p>
+      <p><strong>Mobile Tip:</strong> For the best experience, use landscape mode and ensure you have a stable internet connection.</p>
     </div>
     
-    <!-- 移动端优化提示 -->
     <div class="mobile-optimization-notice" id="mobile-notice">
-      <p><strong>📱 Mobile Device Detected:</strong> Touch optimizations are active. Tap answer options to select them. Your progress will be automatically saved.</p>
+      <p><strong>Mobile Device Detected:</strong> Touch optimizations are active. Tap answer options to select them. Your progress will be automatically saved.</p>
     </div>
   </div>
 
   <script>
-    // 移动端检测和初始化
     function detectMobileDevice() {
       const userAgent = navigator.userAgent || navigator.vendor || window.opera;
       const screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
@@ -334,7 +332,6 @@
       );
     }
     
-    // 连接状态监控
     function updateConnectionStatus() {
       const status = document.getElementById('connection-status');
       const text = document.getElementById('connection-text');
@@ -349,7 +346,6 @@
       
       status.style.display = 'block';
       
-      // 3秒后隐藏状态指示器（如果在线）
       if (navigator.onLine) {
         setTimeout(() => {
           status.style.display = 'none';
@@ -357,54 +353,40 @@
       }
     }
     
-    // 开始考试函数 - 增强版
     function startExam() {
       const bank = document.getElementById('bank').value;
       const startButton = document.getElementById('start-button');
       const container = document.querySelector('.welcome-container');
-
-      // 定义直接跳转的页面
-      const directPages = {
-        'FQ': 'FQ.html',
-        'FQ2': 'FQ2.html'
-      };
       
-      // 如果是直接跳转的页面
-      if (directPages[bank]) {
+      // 如果是 QB 开头的，跳转到 FQ.html 并传递参数
+      if (bank.startsWith('QB')) {
         startButton.textContent = 'Loading...';
         container.classList.add('loading');
         startButton.disabled = true;
         
         setTimeout(() => {
-          window.location.href = directPages[bank];
+          window.location.href = `FQ.html?bank=${bank}`;
         }, 500);
         return;
       }
       
-      // 检查网络连接
       if (!navigator.onLine) {
         alert('Please check your internet connection and try again.');
         return;
       }
       
-      // 添加加载状态
       startButton.textContent = 'Loading Exam...';
       container.classList.add('loading');
-      
-      // 防止重复点击
       startButton.disabled = true;
       
-      // 移动端额外提示
       if (detectMobileDevice()) {
         startButton.textContent = 'Initializing Mobile Mode...';
       }
       
-      // 预加载检查
       const testUrl = `questionBanks/${bank}.json`;
       fetch(testUrl, { method: 'HEAD' })
         .then(response => {
           if (response.ok) {
-            // 添加小延迟以显示加载状态
             setTimeout(() => {
               window.location.href = `exam.html?bank=${bank}`;
             }, 800);
@@ -416,27 +398,22 @@
           console.error('Failed to load question bank:', error);
           alert('Failed to load question bank. Please try again or select a different form.');
           
-          // 重置按钮状态
           startButton.textContent = 'Start Exam';
           startButton.disabled = false;
           container.classList.remove('loading');
         });
     }
     
-    // 页面加载完成后初始化
     document.addEventListener('DOMContentLoaded', function() {
       const isMobile = detectMobileDevice();
       console.log('Device type detected:', isMobile ? 'Mobile' : 'Desktop');
       
       if (isMobile) {
-        // 显示移动端优化提示
         const mobileNotice = document.getElementById('mobile-notice');
         mobileNotice.classList.add('show');
         
-        // 添加移动端样式类
         document.body.classList.add('mobile-device');
         
-        // 移动端选择框触摸优化
         const select = document.getElementById('bank');
         select.addEventListener('touchstart', function() {
           this.style.transform = 'scale(0.98)';
@@ -447,7 +424,6 @@
           this.style.transform = '';
         });
         
-        // 移动端按钮触摸优化
         const startButton = document.getElementById('start-button');
         startButton.addEventListener('touchstart', function() {
           if (!this.disabled) {
@@ -463,15 +439,12 @@
         console.log('Mobile optimizations applied to welcome page');
       }
       
-      // 监听网络状态变化
       window.addEventListener('online', updateConnectionStatus);
       window.addEventListener('offline', updateConnectionStatus);
       
-      // 初始连接状态检查
       setTimeout(updateConnectionStatus, 1000);
     });
     
-    // 防止表单在Enter键上提交
     document.addEventListener('keypress', function(e) {
       if (e.key === 'Enter') {
         e.preventDefault();
@@ -479,27 +452,22 @@
       }
     });
     
-    // 页面可见性变化检测（用于暂停/恢复优化）
     document.addEventListener('visibilitychange', function() {
       if (document.hidden) {
         console.log('Page hidden - user may have switched tabs');
       } else {
         console.log('Page visible - user returned to tab');
-        // 重新检查连接状态
         updateConnectionStatus();
       }
     });
     
-    // 页面卸载前的清理
     window.addEventListener('beforeunload', function() {
       console.log('Leaving welcome page');
     });
     
-    // 错误处理
     window.addEventListener('error', function(e) {
       console.error('Page error:', e.error);
       
-      // 如果是加载状态中出现错误，重置界面
       const container = document.querySelector('.welcome-container');
       const startButton = document.getElementById('start-button');
       
@@ -515,12 +483,3 @@
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
